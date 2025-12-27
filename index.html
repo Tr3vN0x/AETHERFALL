@@ -28,7 +28,7 @@
             display: none; background: #1a1a1a; border: 3px solid var(--gold);
             padding: 30px; margin: 20px auto; max-width: 1000px; color: var(--parchment);
         }
-        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--gold); color: #fff; }
+        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--gold); color: #fff; font-family: serif; }
 
         /* General Layout */
         .grimoire {
@@ -47,16 +47,11 @@
             padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
             position: relative; transition: 0.3s;
         }
-        .char-dossier:hover { background: rgba(255,255,255,0.8); transform: scale(1.01); }
-
         .char-info h2 { font-family: 'Uncial Antiqua'; font-size: 2rem; margin-bottom: 10px; }
-        .tagline { font-weight: bold; font-style: italic; color: #555; display: block; margin-bottom: 15px; }
-        
         .architect-notes {
             background: var(--note-paper); padding: 20px; border-left: 5px solid var(--gold);
             font-style: italic; font-size: 0.95rem; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
         }
-        .architect-notes::before { content: "✍️ Architect's Observation:"; display: block; font-weight: bold; margin-bottom: 5px; color: var(--ink); }
 
         /* Chronicle Area */
         .chronicle-container { position: relative; padding: 60px 10%; }
@@ -67,8 +62,13 @@
             border: 2px solid var(--gold); padding: 30px; text-align: center; color: var(--gold);
         }
 
-        /* Buttons & Reader */
+        /* Buttons & UI */
         .btn-access { background: var(--gold); color: #111; padding: 10px 20px; border: none; font-family: 'Uncial Antiqua'; cursor: pointer; }
+        .btn-admin { padding: 5px 12px; margin-right: 5px; cursor: pointer; border: none; font-family: 'Uncial Antiqua'; font-size: 0.8rem; }
+        .btn-edit { background: var(--sylva-emerald); color: white; }
+        .btn-delete { background: var(--riot-red); color: white; }
+
+        /* Reader */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%; }
         .scroll-paper { max-width: 800px; margin: 0 auto; background: var(--parchment); padding: 50px; border: 2px solid var(--gold); }
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
@@ -86,11 +86,15 @@
 </nav>
 
 <div id="architectPanel">
-    <h2 style="font-family:'Uncial Antiqua'">Architect Tools</h2>
+    <h2 id="panelTitle" style="font-family:'Uncial Antiqua'">Manifest New Act</h2>
+    <input type="hidden" id="editId">
     <input type="text" id="title" placeholder="Act Title" class="admin-input">
-    <textarea id="preview" placeholder="Preview Text" class="admin-input"></textarea>
-    <textarea id="content" placeholder="Full Story" class="admin-input" style="height:200px;"></textarea>
-    <button class="btn-access" id="saveBtn">Save to Lattice</button>
+    <textarea id="preview" placeholder="Preview Text (Visible to everyone)" class="admin-input" style="height:60px;"></textarea>
+    <textarea id="content" placeholder="Full Story (Locked content)" class="admin-input" style="height:200px;"></textarea>
+    <div style="display:flex; gap:10px;">
+        <button class="btn-access" id="saveBtn" style="flex:2;">Commit to Lattice</button>
+        <button class="btn-access" id="cancelEdit" style="flex:1; background:#444; color:white; display:none;">Cancel Edit</button>
+    </div>
 </div>
 
 <div class="grimoire">
@@ -101,45 +105,28 @@
 
     <section class="archives-section">
         <h2 style="text-align:center; font-family:'Uncial Antiqua'; color: var(--gold); margin-bottom: 40px;">The Triad Dossiers</h2>
-        
         <div class="character-dossier-grid">
-            
             <div class="char-dossier" style="border-left: 8px solid var(--riot-red);">
                 <div class="char-info">
                     <h2 style="color:var(--riot-red);">Zyra "Riot" Kade</h2>
-                    <span class="tagline">Anarchist. Volatile. Unhinged.</span>
-                    <p>Zyra stands with her weight forward, always ready to lunge. Her build is lean but hardened, muscles defined from survival rather than training. One side of her hair is shaved close, the rest swept forward in a jagged crimson-black fall. Her eyes are sharp, green, and restless—constantly scanning for threats or opportunities to cause damage.</p>
-                    <p style="margin-top:10px;"><strong>The Power:</strong> Destructive amplification. She doesn't create magic—she overdrives it. Arcane energy reacts violently around her, surging faster, burning hotter, and breaking containment.</p>
+                    <p>Anarchist. Volatile. Unhinged. She doesn't create magic—she overdrives it. Arcane energy reacts violently around her, surging faster and burning hotter.</p>
                 </div>
-                <div class="architect-notes">
-                    Zyra doesn't want control; she wants collapse. Her influence on the Lattice is like a virus—where she goes, the law of physics begins to overheat. Proceed with extreme caution.
-                </div>
+                <div class="architect-notes">Notes: Zyra doesn't want control; she wants collapse. Her influence is a virus on the Lattice.</div>
             </div>
-
             <div class="char-dossier" style="border-left: 8px solid var(--aether-blue);">
                 <div class="char-info">
                     <h2 style="color:var(--aether-blue);">Aelira Virex</h2>
-                    <span class="tagline">Water-touched. Emotionally unstable.</span>
-                    <p>Aelira's presence feels colder, heavier. Her long blue hair is braided into thick twin plaits that fall like anchors. Pale blue markings glow faintly across her skin, branching like veins or cracks in glass, pulsing softly as if responding to an unseen tide. Her eyes are large and exhausted, carrying a constant sense of detachment.</p>
-                    <p style="margin-top:10px;"><strong>The Power:</strong> Fluid arcane manipulation. Water that behaves incorrectly—moving without gravity, hardening without freezing, and flowing through solid matter.</p>
+                    <p>Water-touched. Emotionally unstable. Her magic responds to emotion first. When she loses her center, the city begins to drown.</p>
                 </div>
-                <div class="architect-notes">
-                    Aelira survives her power; she does not dominate it. Her magic responds to emotion first, intention second. When she loses her center, the city literally begins to drown around her.
-                </div>
+                <div class="architect-notes">Notes: She survives her power; she does not dominate it.</div>
             </div>
-
             <div class="char-dossier" style="border-left: 8px solid var(--gold);">
                 <div class="char-info">
                     <h2 style="color:var(--gold);">Sylva Morren</h2>
-                    <span class="tagline">Elegant. Calculated. Absolute Authority.</span>
-                    <p>The Authority is sharpened rather than fractured. Her posture is immaculate, shoulders squared, chin lifted. Her platinum hair is styled with precision, revealing a face sculpted by discipline. She wears a tailored coat in ivory and gold, cut to emphasize command. Every symbol on her seams represents ownership and consequence.</p>
-                    <p style="margin-top:10px;"><strong>The Power:</strong> Dominion-based arcane influence. She doesn't throw magic; she binds it. Contracts seal themselves when she speaks. Wards trigger at her displeasure.</p>
+                    <p>Calculated. Absolute Authority. She treats the city like a chessboard where she already owns the king.</p>
                 </div>
-                <div class="architect-notes">
-                    She is not chaotic; she is inevitable. People feel a physical pressure in their chest when they lie to her. She treats the city like a chessboard where she already owns the king.
-                </div>
+                <div class="architect-notes">Notes: She is not chaotic; she is inevitable.</div>
             </div>
-
         </div>
     </section>
 
@@ -177,7 +164,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -199,7 +186,6 @@
   document.getElementById('toggleAuth').onclick = () => {
       isLogin = !isLogin;
       document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Account";
-      document.getElementById('toggleAuth').innerText = isLogin ? "Need an account? Create one." : "Already have an account? Sign in.";
   };
   
   document.getElementById('submitAuth').onclick = async () => {
@@ -210,31 +196,87 @@
           document.getElementById('authModal').style.display = 'none';
       } catch(e) { alert(e.message); }
   };
-
   document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : openAuth();
 
-  // Admin Tools
-  document.getElementById('saveBtn').onclick = async () => {
-      const data = { title: document.getElementById('title').value, preview: document.getElementById('preview').value, content: document.getElementById('content').value, createdAt: serverTimestamp() };
-      await addDoc(collection(db, "acts"), data);
-      alert("Chronicle Updated!");
+  // --- ARCHITECT ACTIONS (CRUD) ---
+  
+  // Prep Edit
+  window.prepEdit = (id) => {
+      const act = window[`act_${id}`];
+      document.getElementById('editId').value = id;
+      document.getElementById('title').value = act.title;
+      document.getElementById('preview').value = act.preview;
+      document.getElementById('content').value = act.content;
+      document.getElementById('panelTitle').innerText = "Rewriting the Lattice...";
+      document.getElementById('saveBtn').innerText = "Update Act";
+      document.getElementById('cancelEdit').style.display = "block";
+      window.scrollTo(0,0);
+  };
+
+  // Cancel Edit
+  document.getElementById('cancelEdit').onclick = () => {
+      document.getElementById('editId').value = "";
       document.getElementById('title').value = "";
       document.getElementById('preview').value = "";
       document.getElementById('content').value = "";
+      document.getElementById('panelTitle').innerText = "Manifest New Act";
+      document.getElementById('saveBtn').innerText = "Commit to Lattice";
+      document.getElementById('cancelEdit').style.display = "none";
   };
 
-  // Render Story Acts
+  // Save / Update
+  document.getElementById('saveBtn').onclick = async () => {
+      const id = document.getElementById('editId').value;
+      const data = { 
+          title: document.getElementById('title').value, 
+          preview: document.getElementById('preview').value, 
+          content: document.getElementById('content').value,
+          updatedAt: serverTimestamp() 
+      };
+
+      try {
+          if(id) {
+              await updateDoc(doc(db, "acts", id), data);
+              alert("Lattice rewritten.");
+          } else {
+              data.createdAt = serverTimestamp();
+              await addDoc(collection(db, "acts"), data);
+              alert("Act manifested.");
+          }
+          document.getElementById('cancelEdit').click();
+      } catch(e) { alert(e.message); }
+  };
+
+  // Delete
+  window.deleteAct = async (id) => {
+      if(confirm("Erase this memory from the Chronicle permanently?")) {
+          try {
+              await deleteDoc(doc(db, "acts", id));
+              alert("Act purged.");
+          } catch(e) { alert(e.message); }
+      }
+  };
+
+  // --- RENDER ---
   onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
       const container = document.getElementById('dynamic-acts');
       container.innerHTML = "";
       snap.forEach(s => {
           const act = s.data();
           window[`act_${s.id}`] = act;
+          const isAdmin = auth.currentUser && auth.currentUser.uid === ADMIN_UID;
+
           container.innerHTML += `
               <div class="act-card">
                   <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
                   <p>${act.preview}</p>
-                  <button class="btn-access" style="margin-top:10px;" onclick="openReader('${s.id}')">Read Full Act</button>
+                  <div style="margin-top:15px; display:flex; gap:10px;">
+                      <button class="btn-access" onclick="openReader('${s.id}')">Read Full Act</button>
+                      ${isAdmin ? `
+                        <button class="btn-admin btn-edit" onclick="prepEdit('${s.id}')">Modify</button>
+                        <button class="btn-admin btn-delete" onclick="deleteAct('${s.id}')">Erase</button>
+                      ` : ''}
+                  </div>
               </div>`;
       });
   });
