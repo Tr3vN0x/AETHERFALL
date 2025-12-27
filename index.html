@@ -36,7 +36,6 @@
         }
 
         .nav-logo {
-            display: flex; align-items: center; gap: 12px;
             text-decoration: none; color: var(--gold);
             font-family: 'Uncial Antiqua', cursive; font-size: 1.4rem;
         }
@@ -115,11 +114,17 @@
 </nav>
 
 <div id="architectPanel">
-    <h2 style="font-family:'Uncial Antiqua'; color: var(--gold);">Architect Tools</h2>
+    <h2 style="font-family:'Uncial Antiqua'; color: var(--gold);" id="panelTitle">Architect Tools: Create</h2>
+    <input type="hidden" id="editDocId"> 
+    
     <input type="text" id="newActTitle" placeholder="Act Title..." class="admin-input">
     <textarea id="newActPreview" placeholder="Short Preview..." class="admin-input" style="height:60px;"></textarea>
-    <textarea id="newActContent" placeholder="Full Story (supports 2,000+ words)..." class="admin-input" style="height:300px;"></textarea>
-    <button class="btn-access" id="saveActBtn" style="width:100%;">Commit to the Lattice</button>
+    <textarea id="newActContent" placeholder="Full Story..." class="admin-input" style="height:300px;"></textarea>
+    
+    <div style="display:flex; gap:10px;">
+        <button class="btn-access" id="saveActBtn" style="flex:2;">Commit to the Lattice</button>
+        <button class="btn-access" id="cancelEditBtn" style="flex:1; background:#444; color:#fff; display:none;">Cancel</button>
+    </div>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
@@ -170,7 +175,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -186,34 +191,84 @@
   const db = getFirestore(app);
   const GRAND_ARCHITECT_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-  // --- ARCHITECT FUNCTIONS ---
+  // --- ARCHITECT ACTIONS ---
   window.saveNewAct = async () => {
+    const docId = document.getElementById('editDocId').value;
     const title = document.getElementById('newActTitle').value;
     const preview = document.getElementById('newActPreview').value;
     const content = document.getElementById('newActContent').value;
+
     if(!title || !content) return alert("Title and Content are required.");
+
     try {
-        await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
-        alert("Chronicle Updated.");
-        document.getElementById('newActTitle').value = ''; document.getElementById('newActPreview').value = ''; document.getElementById('newActContent').value = '';
-    } catch (e) { alert(e.message); }
+        if(docId) {
+            await updateDoc(doc(db, "acts", docId), { title, preview, content });
+            alert("The Chronicle has been rewritten.");
+        } else {
+            await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
+            alert("A new Act has been manifested.");
+        }
+        resetForm();
+    } catch (e) { alert("Error: " + e.message); }
   };
+
+  window.deleteAct = async (id) => {
+    if(confirm("Erase this Act from history?")) {
+        try {
+            await deleteDoc(doc(db, "acts", id));
+            alert("Act deleted.");
+        } catch (e) { alert(e.message); }
+    }
+  };
+
+  window.prepEdit = (id) => {
+    const act = window[`actData_${id}`];
+    document.getElementById('editDocId').value = id;
+    document.getElementById('newActTitle').value = act.title;
+    document.getElementById('newActPreview').value = act.preview;
+    document.getElementById('newActContent').value = act.content;
+    document.getElementById('panelTitle').innerText = "Architect Tools: Rewriting Act";
+    document.getElementById('saveActBtn').innerText = "Update the Lattice";
+    document.getElementById('cancelEditBtn').style.display = "inline-block";
+    window.scrollTo(0,0);
+  };
+
+  const resetForm = () => {
+    document.getElementById('editDocId').value = '';
+    document.getElementById('newActTitle').value = '';
+    document.getElementById('newActPreview').value = '';
+    document.getElementById('newActContent').value = '';
+    document.getElementById('panelTitle').innerText = "Architect Tools: Create";
+    document.getElementById('saveActBtn').innerText = "Commit to the Lattice";
+    document.getElementById('cancelEditBtn').style.display = "none";
+  };
+
   document.getElementById('saveActBtn').onclick = saveNewAct;
+  document.getElementById('cancelEditBtn').onclick = resetForm;
 
   // --- RENDER CHRONICLE ---
   const q = query(collection(db, "acts"), orderBy("createdAt", "asc"));
   onSnapshot(q, (snap) => {
     const container = document.getElementById('dynamic-acts');
     container.innerHTML = "";
-    snap.forEach((doc) => {
-        const act = doc.data();
-        const id = doc.id;
+    snap.forEach((snapshot) => {
+        const act = snapshot.data();
+        const id = snapshot.id;
         window[`actData_${id}`] = act;
+        
+        const isAdmin = auth.currentUser && auth.currentUser.uid === GRAND_ARCHITECT_UID;
+        const adminButtons = isAdmin ? `
+            <div style="margin-top:10px;">
+                <button onclick="prepEdit('${id}')" style="background:var(--sylva-emerald); color:white; border:none; padding:5px 10px; cursor:pointer;">Modify</button>
+                <button onclick="deleteAct('${id}')" style="background:var(--riot-red); color:white; border:none; padding:5px 10px; cursor:pointer;">Erase</button>
+            </div>` : "";
+
         container.innerHTML += `
             <article class="act-preview-card">
                 <h3 style="font-family:'Uncial Antiqua'; border-bottom: 1px solid var(--gold); margin-bottom: 15px;">${act.title}</h3>
                 <p><span class="dropcap">${(act.preview || "").charAt(0)}</span>${(act.preview || "").substring(1)}</p>
                 <button class="btn-access" style="margin-top:15px;" onclick="openReader('${id}')">Read Full Act</button>
+                ${adminButtons}
             </article>`;
     });
   });
@@ -230,17 +285,14 @@
     document.body.style.overflow = 'auto';
   };
 
-  // --- AUTH LOGIC ---
+  // --- AUTH ---
   let isLogin = true;
-  const authNavBtn = document.getElementById('authNavBtn');
-  authNavBtn.onclick = () => auth.currentUser ? signOut(auth) : document.getElementById('authModal').style.display = 'flex';
-  
+  document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : document.getElementById('authModal').style.display = 'flex';
   document.getElementById('authToggle').onclick = () => {
     isLogin = !isLogin;
     document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Your Sigil";
     document.getElementById('authToggle').innerText = isLogin ? "Create Sigil" : "Login";
   };
-
   document.getElementById('submitAuth').onclick = async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -252,17 +304,15 @@
 
   onAuthStateChanged(auth, (user) => {
     const adminPanel = document.getElementById('architectPanel');
-    const locked = document.getElementById('lockedContent');
-    const gate = document.getElementById('gateOverlay');
     if (user) {
-        authNavBtn.innerText = "Logout";
-        locked.classList.remove('restricted');
-        gate.style.display = 'none';
+        document.getElementById('authNavBtn').innerText = "Logout";
+        document.getElementById('lockedContent').classList.remove('restricted');
+        document.getElementById('gateOverlay').style.display = 'none';
         if (user.uid === GRAND_ARCHITECT_UID) adminPanel.style.display = "block";
     } else {
-        authNavBtn.innerText = "Access Grimoire";
-        locked.classList.add('restricted');
-        gate.style.display = 'block';
+        document.getElementById('authNavBtn').innerText = "Access Grimoire";
+        document.getElementById('lockedContent').classList.add('restricted');
+        document.getElementById('gateOverlay').style.display = 'block';
         adminPanel.style.display = "none";
     }
   });
