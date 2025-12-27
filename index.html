@@ -7,103 +7,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
-            --parchment: #f2e8cf;
-            --ink: #1a1a1a;
-            --gold: #b8924e;
-            --riot-red: #9e0101;
-            --aether-blue: #0077be;
-            --sylva-emerald: #064e3b;
+            --parchment: #f2e8cf; --ink: #1a1a1a; --gold: #b8924e;
+            --riot-red: #9e0101; --aether-blue: #0077be; --sylva-emerald: #064e3b;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; scroll-behavior: smooth; }
-        
-        body {
-            background: #0a0a0a;
-            color: var(--ink);
-            font-family: 'Crimson Text', serif;
-            line-height: 1.8;
-            padding-top: 80px;
-        }
+        body { background: #0a0a0a; color: var(--ink); font-family: 'Crimson Text', serif; line-height: 1.8; padding-top: 80px; }
 
-        /* --- Navigation --- */
+        /* --- UI Elements --- */
         nav {
-            position: fixed;
-            top: 0; width: 100%; height: 70px;
-            background: #111;
-            border-bottom: 2px solid var(--gold);
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: #111; border-bottom: 2px solid var(--gold);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
         }
-
-        .nav-logo {
-            text-decoration: none; color: var(--gold);
-            font-family: 'Uncial Antiqua', cursive; font-size: 1.4rem;
-        }
-
+        .nav-logo { text-decoration: none; color: var(--gold); font-family: 'Uncial Antiqua', cursive; font-size: 1.4rem; }
         .btn-access {
-            background: var(--gold); color: #111;
-            padding: 8px 18px; border: none;
-            font-family: 'Uncial Antiqua', cursive; cursor: pointer;
-            transition: 0.3s;
+            background: var(--gold); color: #111; padding: 8px 18px; border: none;
+            font-family: 'Uncial Antiqua', cursive; cursor: pointer; transition: 0.3s;
         }
         .btn-access:hover { background: var(--parchment); }
 
-        /* --- Architect Panel (Admin) --- */
+        /* --- Architect Panel --- */
         #architectPanel {
             display: none; background: #1a1a1a; border: 3px solid var(--gold);
             padding: 30px; margin: 20px auto; max-width: 1100px; color: var(--parchment);
         }
-        .admin-input {
-            width: 100%; padding: 12px; margin-bottom: 10px;
-            background: #000; border: 1px solid var(--gold); color: #fff; font-family: serif;
-        }
+        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--gold); color: #fff; }
 
-        /* --- Full Screen Reader --- */
-        .reader-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%;
-        }
-        .scroll-paper {
-            max-width: 850px; margin: 0 auto; background: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            padding: 60px; border: 2px solid var(--gold); box-shadow: 0 0 50px rgba(184, 146, 78, 0.3);
-        }
-
-        /* --- Auth Modal --- */
-        .modal {
-            display: none; position: fixed; z-index: 2000;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: var(--parchment); padding: 40px; border: 5px solid var(--gold);
-            width: 90%; max-width: 400px; text-align: center;
-        }
-
-        /* --- Grimoire Layout --- */
+        /* --- Layout --- */
         .grimoire {
-            max-width: 1100px; margin: 0 auto 50px;
-            background: var(--parchment);
+            max-width: 1100px; margin: 0 auto 50px; background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 15px solid #2b1d12; box-shadow: 0 0 80px rgba(0,0,0,0.8);
         }
         header { text-align: center; padding: 60px 20px; border-bottom: 5px double var(--gold); }
-        h1 { font-family: 'Uncial Antiqua', cursive; font-size: clamp(2.5rem, 7vw, 4.5rem); text-shadow: 3px 3px 0px var(--gold); }
-
-        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border-bottom: 2px solid var(--gold); }
-        .char-card { padding: 40px; border-right: 1px solid rgba(0,0,0,0.1); text-align: center;}
-        
         .chronicle-container { position: relative; padding: 60px 10%; }
         .restricted { filter: blur(15px); opacity: 0.2; pointer-events: none; }
-        
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 20; background: rgba(10, 10, 10, 0.95);
-            border: 2px solid var(--gold); padding: 40px; text-align: center; color: var(--gold);
+            border: 2px solid var(--gold); padding: 40px; text-align: center; color: var(--gold); min-width: 300px;
         }
 
+        /* --- Reader --- */
+        .reader-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%;
+        }
+        .scroll-paper { max-width: 850px; margin: 0 auto; background: var(--parchment); padding: 60px; border: 2px solid var(--gold); }
+        
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        .modal-content { background: var(--parchment); padding: 40px; border: 5px solid var(--gold); width: 90%; max-width: 400px; text-align: center; }
+        
         .act-preview-card { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .dropcap { float: left; font-size: 4.5rem; line-height: 0.8; padding: 10px 15px 0 0; color: var(--ink); }
+        .dropcap { float: left; font-size: 4.5rem; line-height: 0.8; padding: 10px 15px 0 0; }
     </style>
 </head>
 <body>
@@ -116,11 +75,9 @@
 <div id="architectPanel">
     <h2 style="font-family:'Uncial Antiqua'; color: var(--gold);" id="panelTitle">Architect Tools: Create</h2>
     <input type="hidden" id="editDocId"> 
-    
     <input type="text" id="newActTitle" placeholder="Act Title..." class="admin-input">
     <textarea id="newActPreview" placeholder="Short Preview..." class="admin-input" style="height:60px;"></textarea>
     <textarea id="newActContent" placeholder="Full Story..." class="admin-input" style="height:300px;"></textarea>
-    
     <div style="display:flex; gap:10px;">
         <button class="btn-access" id="saveActBtn" style="flex:2;">Commit to the Lattice</button>
         <button class="btn-access" id="cancelEditBtn" style="flex:1; background:#444; color:#fff; display:none;">Cancel</button>
@@ -150,15 +107,9 @@
 
 <div class="grimoire">
     <header>
-        <h1>Aetherfall</h1>
+        <h1 style="font-family:'Uncial Antiqua'">Aetherfall</h1>
         <p>— THE TRIAD OF THE FALLING CITY —</p>
     </header>
-
-    <section class="character-grid">
-        <div class="char-card"><h3 style="color:var(--riot-red); font-family:'Uncial Antiqua'">Zyra Kade</h3><p>The Catalyst</p></div>
-        <div class="char-card"><h3 style="color:var(--aether-blue); font-family:'Uncial Antiqua'">Aelira Virex</h3><p>The Anchor</p></div>
-        <div class="char-card"><h3 style="color:var(--sylva-emerald); font-family:'Uncial Antiqua'">Sylva Morren</h3><p>The Authority</p></div>
-    </section>
 
     <div class="chronicle-container">
         <div id="gateOverlay" class="gate-overlay">
@@ -175,7 +126,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -190,35 +141,19 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
   const GRAND_ARCHITECT_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
+  let userAccess = false;
 
-  // --- ARCHITECT ACTIONS ---
+  // --- ADMIN LOGIC ---
   window.saveNewAct = async () => {
     const docId = document.getElementById('editDocId').value;
     const title = document.getElementById('newActTitle').value;
     const preview = document.getElementById('newActPreview').value;
     const content = document.getElementById('newActContent').value;
-
-    if(!title || !content) return alert("Title and Content are required.");
-
     try {
-        if(docId) {
-            await updateDoc(doc(db, "acts", docId), { title, preview, content });
-            alert("The Chronicle has been rewritten.");
-        } else {
-            await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
-            alert("A new Act has been manifested.");
-        }
-        resetForm();
-    } catch (e) { alert("Error: " + e.message); }
-  };
-
-  window.deleteAct = async (id) => {
-    if(confirm("Erase this Act from history?")) {
-        try {
-            await deleteDoc(doc(db, "acts", id));
-            alert("Act deleted.");
-        } catch (e) { alert(e.message); }
-    }
+        if(docId) { await updateDoc(doc(db, "acts", docId), { title, preview, content }); }
+        else { await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() }); }
+        location.reload();
+    } catch (e) { alert(e.message); }
   };
 
   window.prepEdit = (id) => {
@@ -227,28 +162,15 @@
     document.getElementById('newActTitle').value = act.title;
     document.getElementById('newActPreview').value = act.preview;
     document.getElementById('newActContent').value = act.content;
-    document.getElementById('panelTitle').innerText = "Architect Tools: Rewriting Act";
-    document.getElementById('saveActBtn').innerText = "Update the Lattice";
-    document.getElementById('cancelEditBtn').style.display = "inline-block";
+    document.getElementById('saveActBtn').innerText = "Update Act";
+    document.getElementById('cancelEditBtn').style.display = "block";
     window.scrollTo(0,0);
   };
 
-  const resetForm = () => {
-    document.getElementById('editDocId').value = '';
-    document.getElementById('newActTitle').value = '';
-    document.getElementById('newActPreview').value = '';
-    document.getElementById('newActContent').value = '';
-    document.getElementById('panelTitle').innerText = "Architect Tools: Create";
-    document.getElementById('saveActBtn').innerText = "Commit to the Lattice";
-    document.getElementById('cancelEditBtn').style.display = "none";
-  };
-
   document.getElementById('saveActBtn').onclick = saveNewAct;
-  document.getElementById('cancelEditBtn').onclick = resetForm;
 
   // --- RENDER CHRONICLE ---
-  const q = query(collection(db, "acts"), orderBy("createdAt", "asc"));
-  onSnapshot(q, (snap) => {
+  onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
     const container = document.getElementById('dynamic-acts');
     container.innerHTML = "";
     snap.forEach((snapshot) => {
@@ -257,18 +179,14 @@
         window[`actData_${id}`] = act;
         
         const isAdmin = auth.currentUser && auth.currentUser.uid === GRAND_ARCHITECT_UID;
-        const adminButtons = isAdmin ? `
-            <div style="margin-top:10px;">
-                <button onclick="prepEdit('${id}')" style="background:var(--sylva-emerald); color:white; border:none; padding:5px 10px; cursor:pointer;">Modify</button>
-                <button onclick="deleteAct('${id}')" style="background:var(--riot-red); color:white; border:none; padding:5px 10px; cursor:pointer;">Erase</button>
-            </div>` : "";
-
+        const buttonLabel = userAccess ? "Read Full Act" : "Unlock with Gilded Key";
+        
         container.innerHTML += `
             <article class="act-preview-card">
                 <h3 style="font-family:'Uncial Antiqua'; border-bottom: 1px solid var(--gold); margin-bottom: 15px;">${act.title}</h3>
-                <p><span class="dropcap">${(act.preview || "").charAt(0)}</span>${(act.preview || "").substring(1)}</p>
-                <button class="btn-access" style="margin-top:15px;" onclick="openReader('${id}')">Read Full Act</button>
-                ${adminButtons}
+                <p><span class="dropcap">${act.preview.charAt(0)}</span>${act.preview.substring(1)}</p>
+                <button class="btn-access" style="margin-top:15px;" onclick="${userAccess ? `openReader('${id}')` : `alert('Access Restricted: Key Required')` }">${buttonLabel}</button>
+                ${isAdmin ? `<button onclick="prepEdit('${id}')" style="margin-left:10px; background:var(--sylva-emerald); color:white; border:none; padding:5px;">Edit</button>` : ""}
             </article>`;
     });
   });
@@ -280,18 +198,49 @@
     document.getElementById('readerOverlay').style.display = 'block';
     document.body.style.overflow = 'hidden';
   };
+
   window.closeReader = () => {
     document.getElementById('readerOverlay').style.display = 'none';
     document.body.style.overflow = 'auto';
   };
 
-  // --- AUTH ---
+  // --- AUTH & PAYMENT CHECK ---
+  onAuthStateChanged(auth, async (user) => {
+    const gate = document.getElementById('gateOverlay');
+    const locked = document.getElementById('lockedContent');
+    const adminPanel = document.getElementById('architectPanel');
+
+    if (user) {
+        // Check "Paid" status in Firestore
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        userAccess = (user.uid === GRAND_ARCHITECT_UID) || (userDoc.exists() && userDoc.data().paid === true);
+        
+        document.getElementById('authNavBtn').innerText = "Logout";
+        locked.classList.remove('restricted');
+        gate.style.display = 'none';
+
+        if (user.uid === GRAND_ARCHITECT_UID) adminPanel.style.display = "block";
+        
+        // If not paid, show the payment prompt
+        if (!userAccess) {
+            gate.innerHTML = `<h2 style="font-family:'Uncial Antiqua'">Access Restricted</h2><p>The Gilded Keys are required for the full story.</p><button class="btn-access" style="margin-top:20px;" onclick="window.open('YOUR_STRIPE_LINK')">Purchase Access</button>`;
+            gate.style.display = "block";
+            locked.classList.add('restricted');
+        }
+    } else {
+        document.getElementById('authNavBtn').innerText = "Access Grimoire";
+        locked.classList.add('restricted');
+        gate.style.display = 'block';
+        adminPanel.style.display = "none";
+    }
+  });
+
+  // Basic Modal Logic
   let isLogin = true;
   document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : document.getElementById('authModal').style.display = 'flex';
   document.getElementById('authToggle').onclick = () => {
     isLogin = !isLogin;
     document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Your Sigil";
-    document.getElementById('authToggle').innerText = isLogin ? "Create Sigil" : "Login";
   };
   document.getElementById('submitAuth').onclick = async () => {
     const email = document.getElementById('email').value;
@@ -301,21 +250,6 @@
         document.getElementById('authModal').style.display = 'none';
     } catch (e) { alert(e.message); }
   };
-
-  onAuthStateChanged(auth, (user) => {
-    const adminPanel = document.getElementById('architectPanel');
-    if (user) {
-        document.getElementById('authNavBtn').innerText = "Logout";
-        document.getElementById('lockedContent').classList.remove('restricted');
-        document.getElementById('gateOverlay').style.display = 'none';
-        if (user.uid === GRAND_ARCHITECT_UID) adminPanel.style.display = "block";
-    } else {
-        document.getElementById('authNavBtn').innerText = "Access Grimoire";
-        document.getElementById('lockedContent').classList.add('restricted');
-        document.getElementById('gateOverlay').style.display = 'block';
-        adminPanel.style.display = "none";
-    }
-  });
 </script>
 </body>
 </html>
