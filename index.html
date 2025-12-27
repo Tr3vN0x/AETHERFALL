@@ -17,6 +17,12 @@ $acts_data = [
 
 $message_sent = false;
 if(isset($_POST['submit'])) {
+    // Basic sanitization for the message
+    $name = htmlspecialchars($_POST['name']);
+    $email = htmlspecialchars($_POST['email']);
+    $message = htmlspecialchars($_POST['message']);
+    
+    // In a live environment, mail() would go here.
     $message_sent = true; 
 }
 ?>
@@ -25,7 +31,7 @@ if(isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | Official Book Website</title>
+    <title>Aetherfall | The Official Book Chronicle</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -65,16 +71,13 @@ if(isset($_POST['submit'])) {
 
         h1 {
             font-family: 'Uncial Antiqua', cursive;
-            font-size: clamp(3rem, 10vw, 5rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             letter-spacing: 10px;
             color: var(--ink);
             text-shadow: 3px 3px 0px var(--gold);
-            margin-bottom: 10px;
         }
 
-        .tagline { font-style: italic; letter-spacing: 3px; font-weight: bold; }
-
-        /* --- Characters Section --- */
+        /* --- Trinity Grid --- */
         .character-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -84,67 +87,46 @@ if(isset($_POST['submit'])) {
         .char-card {
             padding: 40px;
             border-right: 1px solid rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
         }
 
         .char-card:last-child { border-right: none; }
 
-        .char-header {
+        .char-title {
             font-family: 'Uncial Antiqua', cursive;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
             text-align: center;
+            margin-bottom: 10px;
         }
 
-        .zyra-h { color: var(--riot-red); }
-        .aelira-h { color: var(--aether-blue); }
-        .sylva-h { color: var(--sylva-emerald); }
-
-        .archetype {
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .power-box {
-            margin-top: auto;
-            padding: 15px;
-            background: rgba(0,0,0,0.05);
-            border-left: 4px solid var(--gold);
-            font-size: 0.9rem;
-        }
+        .zyra-c { color: var(--riot-red); }
+        .aelira-c { color: var(--aether-blue); }
+        .sylva-c { color: var(--sylva-emerald); }
 
         /* --- Acts Section --- */
-        .chronicle-section {
-            padding: 80px 10%;
-            background: rgba(0,0,0,0.02);
+        .chronicle-body {
+            padding: 60px 10%;
         }
 
-        .act-block {
-            margin-bottom: 60px;
+        .act-entry {
+            margin-bottom: 80px;
             position: relative;
         }
 
-        .act-label {
+        .act-num {
             font-family: 'Uncial Antiqua', cursive;
-            font-size: 3rem;
+            font-size: 4rem;
             color: var(--gold);
-            opacity: 0.3;
+            opacity: 0.2;
             position: absolute;
-            top: -20px;
-            left: -30px;
+            top: -30px;
+            left: -40px;
         }
 
-        .act-title {
+        .act-subtitle {
             font-family: 'Uncial Antiqua', cursive;
             font-size: 2rem;
-            margin-bottom: 20px;
             border-bottom: 1px solid var(--gold);
-            padding-bottom: 10px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .dropcap {
@@ -155,40 +137,45 @@ if(isset($_POST['submit'])) {
             color: var(--ink);
         }
 
-        /* --- Footer --- */
+        /* --- Footer & Form --- */
         footer {
             text-align: center;
             padding: 60px;
+            background: rgba(0,0,0,0.05);
             border-top: 5px double var(--gold);
-            background: rgba(0,0,0,0.04);
         }
 
-        .raven-form input, .raven-form textarea {
+        input, textarea {
             width: 100%;
             max-width: 500px;
             background: transparent;
             border: none;
-            border-bottom: 1px solid var(--gold);
-            padding: 10px;
+            border-bottom: 2px solid var(--gold);
+            padding: 15px;
             margin-bottom: 20px;
-            font-family: inherit;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            color: var(--ink);
         }
 
-        .btn-seal {
+        .btn-ink {
             background: var(--ink);
             color: var(--parchment);
-            padding: 15px 40px;
+            padding: 15px 45px;
             font-family: 'Uncial Antiqua', cursive;
-            border: 1px solid var(--gold);
+            border: none;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .btn-seal:hover { background: var(--riot-red); }
+        .btn-ink:hover {
+            background: var(--riot-red);
+            transform: scale(1.05);
+        }
 
-        @media (max-width: 800px) {
+        @media (max-width: 768px) {
             .char-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); }
-            .act-label { left: 0; position: relative; }
+            .act-num { left: 0; top: -45px; }
         }
     </style>
 </head>
@@ -197,69 +184,52 @@ if(isset($_POST['submit'])) {
 <div class="grimoire">
     <header>
         <h1>Aetherfall</h1>
-        <p class="tagline">— THERE ARE NO PURE VICTORIES —</p>
+        <p style="font-style: italic; font-weight: bold; letter-spacing: 2px;">THE TRIAD OF THE FALLING CITY</p>
     </header>
 
     <section class="character-grid">
         <div class="char-card">
-            <span class="archetype">The Catalyst</span>
-            <h3 class="char-header zyra-h">Zyra Kade</h3>
-            <p>Weight forward, always ready to lunge. Jagged crimson hair and green eyes scanning for collapse. Her build is hardened by the survival of the industrial zones.</p>
-            <div class="power-box">
-                <strong>Destructive Amplification:</strong> Overdrives magic into chaos. The closer she gets to ruin, the stronger she becomes.
-            </div>
+            <h3 class="char-title zyra-c">Zyra Kade</h3>
+            <p><strong>The Catalyst.</strong> Lean and hardened by the Underfall. Her jagged crimson hair is a warning. She seeks not to rule, but to overdrive the city into collapse.</p>
         </div>
-
         <div class="char-card">
-            <span class="archetype">The Anchor</span>
-            <h3 class="char-header aelira-h">Aelira Virex</h3>
-            <p>Pale blue markings glow like cracks in glass. Her hair falls like twin anchors over her shoulders. She carries a constant sense of detachment and sorrow.</p>
-            <div class="power-box">
-                <strong>Fluid Manipulation:</strong> Controls water that behaves incorrectly—moving without gravity and flowing through solid matter.
-            </div>
+            <h3 class="char-title aelira-c">Aelira Virex</h3>
+            <p><strong>The Anchor.</strong> Water-touched with glowing blue skin-markings. Fragile in appearance, but carrying a heavy, cold magic that warps reality through emotion.</p>
         </div>
-
         <div class="char-card">
-            <span class="archetype">The Authority</span>
-            <h3 class="char-header sylva-h">Madame Morren</h3>
-            <h4 style="text-align:center; font-size:0.8rem; margin-top:-10px;">(Mafia Boss Version)</h4>
-            <p>Immaculate posture and short platinum hair. Tailored in ivory and gold. Every symbol on her person represents a contract, a loyalty, or a debt.</p>
-            <div class="power-box">
-                <strong>Dominion Influence:</strong> Binds magic through contracts. Her presence creates pressure in the chest of those who dare lie.
-            </div>
+            <h3 class="char-title sylva-c">Sylva Morren</h3>
+            <p><strong>The Authority.</strong> The ivory-clad Boss of the High Rises. Platinum hair and calculated posture. She binds magic and men alike through contracts of blood and gold.</p>
         </div>
     </section>
 
-    <section class="chronicle-section">
-        <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 3rem; margin-bottom: 50px;">The Chronicle</h2>
+    <section class="chronicle-body">
+        <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 3rem; margin-bottom: 60px; color: var(--gold);">The Chronicle</h2>
         
         <?php foreach($acts_data as $number => $details): ?>
-            <div class="act-block">
-                <span class="act-label"><?php echo $number; ?></span>
-                <h3 class="act-title"><?php echo $details['subtitle']; ?></h3>
+            <article class="act-entry">
+                <span class="act-num"><?php echo $number; ?></span>
+                <h3 class="act-subtitle"><?php echo $details['subtitle']; ?></h3>
                 <p>
                     <span class="dropcap"><?php echo substr($details['content'], 0, 1); ?></span>
                     <?php echo substr($details['content'], 1); ?>
                 </p>
-            </div>
+            </article>
         <?php endforeach; ?>
     </section>
 
     <footer>
-        <h2 style="font-family:'Uncial Antiqua'; margin-bottom: 20px;">Send a Raven</h2>
+        <h2 style="font-family: 'Uncial Antiqua'; margin-bottom: 20px;">Inscribe Your Name</h2>
         <?php if($message_sent): ?>
-            <p style="color: var(--aether-blue); font-weight: bold;">The testament has been bound to the lattice.</p>
+            <p style="color: var(--riot-red); font-weight: bold; font-size: 1.5rem;">Your message has been sealed in the aether.</p>
         <?php else: ?>
-            <form class="raven-form" method="POST">
-                <input type="text" placeholder="Name or Sigil" required><br>
-                <textarea placeholder="Your message to the city of Aetherfall..." rows="4" required></textarea><br>
-                <button type="submit" name="submit" class="btn-seal">Seal & Inscribe</button>
+            <form method="POST">
+                <input type="text" name="name" placeholder="Name or Alias" required><br>
+                <input type="email" name="email" placeholder="Aether-Mail" required><br>
+                <textarea name="message" placeholder="A message for the High Rises..." required></textarea><br>
+                <button type="submit" name="submit" class="btn-ink">Seal and Send</button>
             </form>
         <?php endif; ?>
-        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.6;">
-            &copy; <?php echo date("Y"); ?> Aetherfall Official Chronicle. <br>
-            Designed for the Architects of Chaos.
-        </p>
+        <p style="margin-top: 60px; font-size: 0.9rem; opacity: 0.5;">&copy; <?php echo date("Y"); ?> Aetherfall. All rights reserved by the Architect.</p>
     </footer>
 </div>
 
