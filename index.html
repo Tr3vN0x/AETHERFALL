@@ -1,4 +1,13 @@
 <?php
+// --- OWNER EDITABLE SECTION ---
+// The owner can update these strings to change the website content
+$acts = [
+    "Act I: The Fractured Lattice" => "The city of Aetherfall hums with a restless energy. We follow Zyra as she navigates the Underfall, discovering a corruption that the High Rises refuse to acknowledge.",
+    "Act II: Hollow Sovereignty" => "Aelira's dominion is challenged when a string of arcane collapses threatens the Midstack. An unlikely meeting between chaos and order changes everything.",
+    "Act III: The Descent" => "The final seal is broken. As the city begins its literal fall, the players must decide if they are the architects of a new world or the ghosts of the old one."
+];
+// ------------------------------
+
 $message_sent = false;
 if(isset($_POST['submit'])) {
     $name = htmlspecialchars($_POST['name']);
@@ -16,7 +25,7 @@ if(isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | The Grimoire</title>
+    <title>Aetherfall | The Official Grimoire</title>
     <style>
         /* ======= Arcane Grimoire CSS ======= */
         :root {
@@ -31,7 +40,7 @@ if(isset($_POST['submit'])) {
         * {margin:0; padding:0; box-sizing:border-box;}
         
         body {
-            background-color: #1a1a1a; /* Dark void behind the book */
+            background-color: #1a1a1a;
             background-image: radial-gradient(circle, #2c1e16 0%, #000 100%);
             color: var(--ink);
             font-family: 'Georgia', serif;
@@ -39,12 +48,11 @@ if(isset($_POST['submit'])) {
             padding: 2rem;
         }
 
-        /* The "Book" Container */
         .grimoire-wrapper {
             max-width: 1000px;
             margin: 0 auto;
             background: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); /* Subtle texture */
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(139, 69, 19, 0.2);
             border: 15px solid #3d2b1f;
             border-radius: 5px;
@@ -52,29 +60,17 @@ if(isset($_POST['submit'])) {
             overflow: hidden;
         }
 
-        /* Decorative Corners */
-        .grimoire-wrapper::before {
-            content: '✧';
-            position: absolute;
-            top: 10px; left: 10px;
-            color: var(--arcane-gold);
-            font-size: 2rem;
-        }
-
         header {
             text-align: center;
             padding: 4rem 2rem;
             border-bottom: var(--border-style);
-            background: rgba(0,0,0,0.03);
         }
 
         h1 {
             font-size: 4rem;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: var(--ink);
             text-shadow: 2px 2px 0px var(--arcane-gold);
-            margin-bottom: 0.5rem;
         }
 
         nav ul {
@@ -92,11 +88,8 @@ if(isset($_POST['submit'])) {
             color: var(--ink);
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: 0.3s;
+            font-size: 0.8rem;
         }
-
-        nav ul li a:hover { color: var(--riot-red); text-shadow: 0 0 5px rgba(139,0,0,0.3); }
 
         .hero {
             padding: 4rem 10%;
@@ -126,25 +119,41 @@ if(isset($_POST['submit'])) {
             position: relative;
         }
 
+        /* Acts Styling */
+        .act-container {
+            margin-bottom: 3rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .act-container h3 {
+            font-variant: small-caps;
+            font-size: 1.5rem;
+            color: #4a3728;
+            border-bottom: 1px dashed var(--arcane-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .act-container::before {
+            content: '❧';
+            position: absolute;
+            left: 0;
+            color: var(--arcane-gold);
+            font-size: 1.5rem;
+        }
+
         .character-box {
             margin: 2rem 0;
             padding: 2rem;
             border: 2px solid #d3c4a1;
             background: rgba(255,255,255,0.3);
-            position: relative;
         }
 
-        .character-box h3 { color: var(--riot-red); font-variant: small-caps; font-size: 1.8rem; }
-        
+        .character-box h3 { color: var(--riot-red); font-variant: small-caps; }
         .riot-acc { border-left: 5px solid var(--riot-red); }
         .aelira-acc { border-left: 5px solid var(--aether-blue); }
 
-        /* Form styling to look like parchment notes */
-        form {
-            background: rgba(0,0,0,0.05);
-            padding: 2rem;
-            border-radius: 10px;
-        }
+        form { background: rgba(0,0,0,0.05); padding: 2rem; border-radius: 10px; }
 
         input, textarea {
             width: 100%;
@@ -152,8 +161,6 @@ if(isset($_POST['submit'])) {
             border: none;
             border-bottom: 1px solid var(--ink);
             margin-bottom: 1.5rem;
-            font-family: 'Georgia', serif;
-            font-size: 1.1rem;
             padding: 0.5rem;
         }
 
@@ -165,26 +172,15 @@ if(isset($_POST['submit'])) {
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
-            transition: 0.3s;
         }
 
-        button:hover { background: var(--riot-red); }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        /* Ambient glowing effects */
-        .glow-text-blue { color: #0077be; text-shadow: 0 0 10px var(--aether-blue); }
+        footer { text-align: center; padding: 2rem; font-size: 0.8rem; opacity: 0.7; }
+        
         .dropcap {
             float: left;
             font-size: 4rem;
             line-height: 1;
             padding-right: 10px;
-            color: var(--ink);
         }
     </style>
 </head>
@@ -197,8 +193,8 @@ if(isset($_POST['submit'])) {
         <nav>
             <ul>
                 <li><a href="#about">The Lore</a></li>
+                <li><a href="#acts">The Acts</a></li>
                 <li><a href="#characters">The Players</a></li>
-                <li><a href="#world">The Strata</a></li>
                 <li><a href="#contact">The Messenger</a></li>
             </ul>
         </nav>
@@ -214,15 +210,25 @@ if(isset($_POST['submit'])) {
         <p><span class="dropcap">A</span>etherfall is a city built upward from necessity, layered with cold steel, ancient stone, and volatile arcane energy. Here, corruption isn't just a political state—it is a physical rot that spreads through the magical lattice. As rebellion simmers in the dark, every choice you make drips like wet ink across the map of the future.</p>
     </section>
 
+    <section id="acts">
+        <h2>The Acts of the Grimoire</h2>
+        <?php foreach($acts as $title => $description): ?>
+            <div class="act-container">
+                <h3><?php echo $title; ?></h3>
+                <p><?php echo $description; ?></p>
+            </div>
+        <?php endforeach; ?>
+    </section>
+
     <section id="characters">
         <h2>The Players</h2>
         <div class="character-box riot-acc">
             <h3>Zyra “Riot” Kade</h3>
-            <p><strong>The Catalyst.</strong> Anarchist, volatile, and beautifully unhinged. Her magic is not a tool, but a destructive amplification that bends the city's energy until it snaps. To Zyra, collapse is the only honest form of progress.</p>
+            <p><strong>The Catalyst.</strong> Anarchist, volatile, and beautifully unhinged. Her magic is not a tool, but a destructive amplification that bends the city's energy until it snaps.</p>
         </div>
         <div class="character-box aelira-acc">
             <h3>Aelira Virex</h3>
-            <p><strong>The Dominion.</strong> Water-touched and deceptively fragile. Behind the silk gloves lies a mafia-boss who commands reality through iron-clad contracts. She is the anchor of order, holding back the tide of Zyra’s chaos.</p>
+            <p><strong>The Dominion.</strong> Water-touched and deceptively fragile. Behind the silk gloves lies a mafia-boss who commands reality through iron-clad contracts.</p>
         </div>
     </section>
 
