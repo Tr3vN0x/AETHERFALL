@@ -1,4 +1,29 @@
+<?php
+/**
+ * AETHERFALL OFFICIAL DATA
+ * Edit the array below to add or change Acts.
+ */
+$acts_data = [
+    "Act I" => [
+        "subtitle" => "The Fractured Lattice",
+        "content" => "In the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving magic into violent chaos. Above, Aelira Virex senses the first crack in the city’s foundation. The water is rising, and the contracts of the High Rises are starting to fray."
+    ],
+    "Act II" => [
+        "subtitle" => "Hollow Sovereignty",
+        "content" => "The Midstack becomes a battlefield as the lattice destabilizes. Aelira and Zyra’s paths collide in a tempest of fluid arcane and destructive amplification. Meanwhile, Madame Sylva Morren begins to pull the strings of the city's architect, realizing that to save the structure, she may have to burn the inhabitants."
+    ],
+    "Act III" => [
+        "subtitle" => "The Descent",
+        "content" => "The High Rises erupt into a spectacle of light and terror. As the city begins its literal fall, the triad of power reaches its breaking point. Zyra unleashes her full destructive potential, Aelira asserts a dominion that warps reality itself, and Sylva proves why she is inevitable. When the dust settles, Aetherfall is no longer a city—it is a monument to their decisions."
+    ]
+];
 
+$message_sent = false;
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    // Logic for the 'Raven' messenger
+    $message_sent = true; 
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,11 +205,11 @@
         
         <?php foreach($acts_data as $number => $details): ?>
             <article class="act-entry">
-                <span class="act-num"><?php echo $number; ?></span>
-                <h3 class="act-subtitle"><?php echo $details['subtitle']; ?></h3>
+                <span class="act-num"><?php echo htmlspecialchars($number); ?></span>
+                <h3 class="act-subtitle"><?php echo htmlspecialchars($details['subtitle']); ?></h3>
                 <p>
-                    <span class="dropcap"><?php echo substr($details['content'], 0, 1); ?></span>
-                    <?php echo substr($details['content'], 1); ?>
+                    <span class="dropcap"><?php echo htmlspecialchars(substr($details['content'], 0, 1)); ?></span>
+                    <?php echo htmlspecialchars(substr($details['content'], 1)); ?>
                 </p>
             </article>
         <?php endforeach; ?>
