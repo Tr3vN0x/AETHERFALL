@@ -1,19 +1,29 @@
 <?php
-// --- THE CHRONICLES: ACT I DATA ---
-$act_i_title = "Act I: The Fractured Lattice";
-$act_i_summary = "In the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, overdriving magic into violent chaos. Aelira Virex struggles to anchor her own fracturing reality, while above them both, Madame Sylva Morren watches from a throne of porcelain and gold. The lattice is screaming, and the city's architect is ready to silence it.";
+// --- THE CHRONICLES: ACT DATA ---
+$acts_data = [
+    "Act I" => [
+        "subtitle" => "The Fractured Lattice",
+        "content" => "In the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving magic into violent chaos. Above, Aelira Virex senses the first crack in the city’s foundation. The water is rising, and the contracts of the High Rises are starting to fray."
+    ],
+    "Act II" => [
+        "subtitle" => "Hollow Sovereignty",
+        "content" => "The Midstack becomes a battlefield as the lattice destabilizes. Aelira and Zyra’s paths collide in a tempest of fluid arcane and destructive amplification. Meanwhile, Madame Sylva Morren begins to pull the strings of the city's architect, realizing that to save the structure, she may have to burn the inhabitants."
+    ],
+    "Act III" => [
+        "subtitle" => "The Descent",
+        "content" => "The High Rises erupt into a spectacle of light and terror. As the city begins its literal fall, the triad of power reaches its breaking point. Zyra unleashes her full destructive potential, Aelira asserts a dominion that warps reality itself, and Sylva proves why she is inevitable. When the dust settles, Aetherfall is no longer a city—it is a monument to their decisions."
+    ]
+];
 
 $message_sent = false;
-if(isset($_POST['submit'])) {
-    $message_sent = true; 
-}
+if(isset($_POST['submit'])) { $message_sent = true; }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | The Official Book Grimoire</title>
+    <title>Aetherfall | Official Book Grimoire</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,133 +32,60 @@ if(isset($_POST['submit'])) {
             --gold: #b8924e;
             --riot-red: #9e0101;
             --aether-blue: #0077be;
-            --sylva-emerald: #064e3b; /* Deep, authoritative green */
+            --sylva-emerald: #064e3b;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
-        
-        body {
-            background: #050505;
-            color: var(--ink);
-            font-family: 'Crimson Text', serif;
-            line-height: 1.6;
-            padding: 20px;
-        }
+        body { background: #050505; color: var(--ink); font-family: 'Crimson Text', serif; line-height: 1.6; padding: 20px; }
 
-        /* The Grimoire Layout - Triptych Style */
         .book-wrapper {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 15px solid #2b1d12;
-            border-image: linear-gradient(to bottom, #3d2b1f, #1a0f0a) 1;
             box-shadow: 0 0 100px rgba(0,0,0,0.9);
             position: relative;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr; /* Three columns for three characters */
         }
 
         header {
-            grid-column: span 3;
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             border-bottom: 5px double var(--gold);
-            background: rgba(0,0,0,0.03);
         }
 
-        h1 {
-            font-family: 'Uncial Antiqua', cursive;
-            font-size: 4.5rem;
-            letter-spacing: 10px;
-            color: var(--ink);
-            text-shadow: 2px 2px var(--gold);
-        }
+        h1 { font-family: 'Uncial Antiqua', cursive; font-size: 4rem; letter-spacing: 10px; text-shadow: 2px 2px var(--gold); }
 
-        .page { padding: 40px; position: relative; }
-        
-        /* Column Dividers */
-        .page:not(:last-child) {
-            border-right: 1px solid rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            font-family: 'Uncial Antiqua', cursive;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            text-align: center;
-            color: var(--gold);
-        }
-
-        .character-card h3 { 
-            font-size: 1.8rem; 
-            margin-bottom: 10px; 
-            text-align: center;
-            font-variant: small-caps;
-        }
-
-        /* Character Specific Accents */
-        .zyra-h { color: var(--riot-red); }
-        .aelira-h { color: var(--aether-blue); }
-        .sylva-h { color: var(--sylva-emerald); }
-
-        .dropcap {
-            float: left;
-            font-size: 4rem;
-            line-height: 0.8;
-            padding: 5px 8px 0 0;
-            color: var(--gold);
-        }
-
-        .flavor-text {
-            font-style: italic;
-            text-align: center;
-            display: block;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        /* Act Summary Section */
-        .act-display {
-            grid-column: span 3;
-            padding: 60px 20%;
-            text-align: center;
-            background: rgba(255,255,255,0.2);
-            border-top: 2px solid var(--gold);
+        /* Trinity Section */
+        .trinity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             border-bottom: 2px solid var(--gold);
         }
 
-        .act-display h2 { font-size: 2.5rem; color: var(--ink); border: none; }
+        .char-col { padding: 30px; border-right: 1px solid rgba(0,0,0,0.1); }
+        .char-col:last-child { border-right: none; }
+        
+        .char-name { font-family: 'Uncial Antiqua', cursive; font-size: 1.4rem; margin-bottom: 10px; text-align: center; }
+        .zyra { color: var(--riot-red); }
+        .aelira { color: var(--aether-blue); }
+        .sylva { color: var(--sylva-emerald); }
 
-        .sidebar-note {
-            background: rgba(0,0,0,0.05);
-            padding: 15px;
-            border-left: 3px solid var(--gold);
-            font-size: 0.95rem;
-            margin-top: 20px;
+        /* Acts Section */
+        .acts-chronicle { padding: 60px 10%; background: rgba(0,0,0,0.02); }
+        .act-entry { margin-bottom: 50px; position: relative; padding-left: 40px; }
+        .act-num { 
+            position: absolute; left: 0; top: 0;
+            font-family: 'Uncial Antiqua', cursive; font-size: 2rem; color: var(--gold);
+            opacity: 0.5;
         }
+        .act-title { font-family: 'Uncial Antiqua', cursive; font-size: 1.8rem; border-bottom: 1px solid var(--gold); margin-bottom: 15px; }
 
-        footer {
-            grid-column: span 3;
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid var(--gold);
-            font-size: 0.9rem;
-        }
+        .dropcap { float: left; font-size: 4rem; line-height: 0.8; padding: 5px 8px 0 0; color: var(--gold); }
 
-        button {
-            background: #1a0f0a;
-            color: var(--parchment);
-            padding: 12px 25px;
-            border: 1px solid var(--gold);
-            font-family: 'Uncial Antiqua', cursive;
-            cursor: pointer;
-        }
-
-        @media (max-width: 1100px) {
-            .book-wrapper { grid-template-columns: 1fr; }
-            header, .act-display, footer { grid-column: span 1; }
-        }
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--gold); font-size: 0.9rem; }
+        
+        @media (max-width: 900px) { .trinity-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -159,52 +96,45 @@ if(isset($_POST['submit'])) {
         <p>— THE TRIAD OF POWER —</p>
     </header>
 
-    <div class="page">
-        <div class="character-card">
-            <h2>The Catalyst</h2>
-            <h3 class="zyra-h">Zyra “Riot” Kade</h3>
-            <span class="flavor-text">"She doesn't want control. She wants collapse."</span>
-            <p><span class="dropcap">Z</span>yra stands with her weight forward, muscles defined from survival rather than training. One side of her hair is shaved close, the rest swept forward in a jagged crimson-black fall. Her eyes are sharp green and restless—scanning for threats.</p>
-            <div class="sidebar-note">
-                <strong>Power: Destructive Amplification.</strong> She overdrives magic until it breaks containment. The closer she gets to chaos, the stronger she becomes.
-            </div>
+    <div class="trinity-grid">
+        <div class="char-col">
+            <h3 class="char-name zyra">Zyra Kade</h3>
+            <p>The Anarchist Catalyst. She doesn't create magic—she overdrives it into collapse.</p>
+        </div>
+        <div class="char-col">
+            <h3 class="char-name aelira">Aelira Virex</h3>
+            <p>The Water-touched Anchor. Her magic responds to emotion, warping reality into tides.</p>
+        </div>
+        <div class="char-col">
+            <h3 class="char-name sylva">Madame Morren</h3>
+            <p>The High Rise Authority. She binds the city through contracts and inevitable dominion.</p>
         </div>
     </div>
 
-    <div class="page">
-        <div class="character-card">
-            <h2>The Dominion</h2>
-            <h3 class="aelira-h">Aelira Virex</h3>
-            <span class="flavor-text">"She doesn't dominate power. She survives it."</span>
-            <p><span class="dropcap">A</span>elira's presence is colder, heavier. Blue hair braided into twin plaits that fall like anchors. Pale blue markings glow across her skin like cracks in glass. Light bends near her; moisture gathers when she breathes.</p>
-            <div class="sidebar-note">
-                <strong>Power: Fluid Manipulation.</strong> Water that behaves incorrectly. It moves without gravity and flows through solid matter, responding to her emotions first.
+    <section class="acts-chronicle">
+        <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 2.5rem; margin-bottom: 40px;">The Chronicle</h2>
+        
+        <?php foreach($acts_data as $num => $data): ?>
+            <div class="act-entry">
+                <span class="act-num"><?php echo $num; ?></span>
+                <h3 class="act-title"><?php echo $data['subtitle']; ?></h3>
+                <p><span class="dropcap"><?php echo substr($data['content'], 0, 1); ?></span><?php echo substr($data['content'], 1); ?></p>
             </div>
-        </div>
-    </div>
+        <?php endforeach; ?>
+    </section>
 
-    <div class="page">
-        <div class="character-card">
-            <h2>The Authority</h2>
-            <h3 class="sylva-h">Madame Sylva Morren</h3>
-            <span class="flavor-text">"She is not chaotic. She is inevitable."</span>
-            <p><span class="dropcap">S</span>ylva is sharpened rather than fractured. Posture immaculate, chin lifted. Short platinum hair and a tailored coat of ivory and gold. Every symbol on her person represents a contract, a loyalty, or a consequence.</p>
-            <div class="sidebar-note">
-                <strong>Power: Dominion Influence.</strong> She binds magic. Contracts seal when she speaks. People feel a heavy pressure in their chest when they lie to her.
-            </div>
-        </div>
-    </div>
-
-    <div class="act-display" id="acts">
-        <h2><?php echo $act_i_title; ?></h2>
-        <p style="font-size: 1.3rem; line-height: 1.8;"><?php echo $act_i_summary; ?></p>
-    </div>
+    <section style="padding: 40px; text-align: center;">
+        <h2 style="font-family:'Uncial Antiqua';">The Story Continues...</h2>
+        <p style="margin: 20px 0;">The ink is still wet. The city is still falling.</p>
+        <form method="POST">
+            <button type="submit" style="background:#1a0f0a; color:var(--parchment); padding: 15px 40px; font-family:'Uncial Antiqua'; border:1px solid var(--gold); cursor:pointer;">
+                Inscribe Your Name
+            </button>
+        </form>
+    </section>
 
     <footer>
-        <p>Inscribed by the hand of the Architect — &copy; <?php echo date("Y"); ?> Aetherfall</p>
-        <div style="margin-top: 20px;">
-            <button onclick="alert('The Raven has been sent.')">Seal and Send Testament</button>
-        </div>
+        <p>&copy; <?php echo date("Y"); ?> Aetherfall — Hand-penned in the High Rises.</p>
     </footer>
 </div>
 
