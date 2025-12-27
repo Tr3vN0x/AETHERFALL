@@ -1,7 +1,7 @@
 <?php
 // --- THE CHRONICLES: ACT I DATA ---
 $act_i_title = "Act I: The Fractured Lattice";
-$act_i_summary = "In the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving the city's fading magic into beautiful, violent chaos. High above, Aelira Virex—the fractured girl and the iron-willed Boss—senses the shift. The water is rising, the contracts are fraying, and the first crack has appeared in the foundation of the High Rises.";
+$act_i_summary = "In the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, overdriving magic into violent chaos. Aelira Virex struggles to anchor her own fracturing reality, while above them both, Madame Sylva Morren watches from a throne of porcelain and gold. The lattice is screaming, and the city's architect is ready to silence it.";
 
 $message_sent = false;
 if(isset($_POST['submit'])) {
@@ -13,7 +13,7 @@ if(isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | Act I</title>
+    <title>Aetherfall | The Official Book Grimoire</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,138 +22,132 @@ if(isset($_POST['submit'])) {
             --gold: #b8924e;
             --riot-red: #9e0101;
             --aether-blue: #0077be;
-            --ivory: #ffffff;
+            --sylva-emerald: #064e3b; /* Deep, authoritative green */
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
         
         body {
-            background: #0a0a0a;
+            background: #050505;
             color: var(--ink);
             font-family: 'Crimson Text', serif;
             line-height: 1.6;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
-        /* The Grimoire Layout */
+        /* The Grimoire Layout - Triptych Style */
         .book-wrapper {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            border: 12px solid #2b1d12;
+            border: 15px solid #2b1d12;
+            border-image: linear-gradient(to bottom, #3d2b1f, #1a0f0a) 1;
             box-shadow: 0 0 100px rgba(0,0,0,0.9);
             position: relative;
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Split page look */
-        }
-
-        /* Center Binding Line */
-        .book-wrapper::after {
-            content: '';
-            position: absolute;
-            left: 50%; top: 0; bottom: 0;
-            width: 2px;
-            background: rgba(0,0,0,0.1);
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            grid-template-columns: 1fr 1fr 1fr; /* Three columns for three characters */
         }
 
         header {
-            grid-column: span 2;
+            grid-column: span 3;
             text-align: center;
-            padding: 60px 20px;
-            border-bottom: 4px double var(--gold);
-            background: rgba(0,0,0,0.02);
+            padding: 50px 20px;
+            border-bottom: 5px double var(--gold);
+            background: rgba(0,0,0,0.03);
         }
 
         h1 {
             font-family: 'Uncial Antiqua', cursive;
-            font-size: 5rem;
-            letter-spacing: 8px;
+            font-size: 4.5rem;
+            letter-spacing: 10px;
             color: var(--ink);
             text-shadow: 2px 2px var(--gold);
         }
 
-        .page { padding: 40px; }
-
-        /* Left Page: The Chaos (Zyra) */
-        .page-riot {
-            border-right: 1px solid rgba(0,0,0,0.05);
-            background: rgba(158, 1, 1, 0.03);
-        }
-
-        /* Right Page: The Order (Aelira) */
-        .page-dominion {
-            background: rgba(0, 119, 190, 0.03);
+        .page { padding: 40px; position: relative; }
+        
+        /* Column Dividers */
+        .page:not(:last-child) {
+            border-right: 1px solid rgba(0,0,0,0.1);
         }
 
         h2 {
             font-family: 'Uncial Antiqua', cursive;
             margin-bottom: 20px;
-            border-bottom: 1px solid var(--gold);
-            display: inline-block;
+            font-size: 1.5rem;
+            text-align: center;
+            color: var(--gold);
         }
 
-        .character-card {
-            margin-bottom: 40px;
-            position: relative;
+        .character-card h3 { 
+            font-size: 1.8rem; 
+            margin-bottom: 10px; 
+            text-align: center;
+            font-variant: small-caps;
         }
 
-        .riot-text h3 { color: var(--riot-red); font-size: 1.8rem; margin-bottom: 10px; }
-        .aelira-text h3 { color: var(--aether-blue); font-size: 1.8rem; margin-bottom: 10px; }
+        /* Character Specific Accents */
+        .zyra-h { color: var(--riot-red); }
+        .aelira-h { color: var(--aether-blue); }
+        .sylva-h { color: var(--sylva-emerald); }
 
         .dropcap {
             float: left;
-            font-size: 4.5rem;
+            font-size: 4rem;
             line-height: 0.8;
-            padding: 5px 10px 0 0;
+            padding: 5px 8px 0 0;
             color: var(--gold);
+        }
+
+        .flavor-text {
+            font-style: italic;
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
         /* Act Summary Section */
         .act-display {
-            grid-column: span 2;
-            padding: 60px 15%;
+            grid-column: span 3;
+            padding: 60px 20%;
             text-align: center;
-            background: rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.2);
             border-top: 2px solid var(--gold);
             border-bottom: 2px solid var(--gold);
-            font-style: italic;
         }
 
-        .act-display h2 { color: var(--ink); border: none; font-size: 2.5rem; }
+        .act-display h2 { font-size: 2.5rem; color: var(--ink); border: none; }
 
-        .contract-box {
-            border: 2px solid var(--gold);
-            padding: 20px;
+        .sidebar-note {
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-left: 3px solid var(--gold);
+            font-size: 0.95rem;
             margin-top: 20px;
-            background: rgba(255,255,255,0.5);
-            font-family: 'Crimson Text', serif;
-            position: relative;
         }
 
-        /* Decorative Ink Splatters */
-        .ink-smudge {
-            position: absolute;
-            opacity: 0.1;
-            pointer-events: none;
+        footer {
+            grid-column: span 3;
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--gold);
+            font-size: 0.9rem;
         }
 
         button {
-            background: var(--ink);
+            background: #1a0f0a;
             color: var(--parchment);
-            padding: 15px 30px;
-            border: none;
+            padding: 12px 25px;
+            border: 1px solid var(--gold);
             font-family: 'Uncial Antiqua', cursive;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        button:hover { background: var(--riot-red); box-shadow: 0 0 15px var(--riot-red); }
-
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .book-wrapper { grid-template-columns: 1fr; }
-            .book-wrapper::after { display: none; }
+            header, .act-display, footer { grid-column: span 1; }
         }
     </style>
 </head>
@@ -162,46 +156,56 @@ if(isset($_POST['submit'])) {
 <div class="book-wrapper">
     <header>
         <h1>Aetherfall</h1>
-        <p>— THE OFFICIAL RECORD —</p>
+        <p>— THE TRIAD OF POWER —</p>
     </header>
 
-    <div class="page page-riot">
-        <div class="character-card riot-text">
+    <div class="page">
+        <div class="character-card">
             <h2>The Catalyst</h2>
-            <h3>Zyra “Riot” Kade</h3>
-            <p><strong>Anarchist. Volatile. Unhinged.</strong></p>
-            <p><span class="dropcap">Z</span>yra stands with her weight forward, always ready to lunge. Her build is lean but hardened, muscles defined from survival rather than training. One side of her hair is shaved close, the rest swept forward in a jagged crimson-black fall that looks deliberately aggressive.</p>
-            <p style="margin-top:10px;">She wears stripped-down combat gear: street armor scavenged from industrial zones. Her fists are always clenched, as if violence is a reflex she never learned to turn off. She doesn't want control. She wants <strong>collapse.</strong></p>
+            <h3 class="zyra-h">Zyra “Riot” Kade</h3>
+            <span class="flavor-text">"She doesn't want control. She wants collapse."</span>
+            <p><span class="dropcap">Z</span>yra stands with her weight forward, muscles defined from survival rather than training. One side of her hair is shaved close, the rest swept forward in a jagged crimson-black fall. Her eyes are sharp green and restless—scanning for threats.</p>
+            <div class="sidebar-note">
+                <strong>Power: Destructive Amplification.</strong> She overdrives magic until it breaks containment. The closer she gets to chaos, the stronger she becomes.
+            </div>
         </div>
     </div>
 
-    <div class="page page-dominion">
-        <div class="character-card aelira-text">
+    <div class="page">
+        <div class="character-card">
             <h2>The Dominion</h2>
-            <h3>Aelira Virex</h3>
-            <p><strong>Water-touched. Dangerous without trying.</strong></p>
-            <p><span class="dropcap">A</span>elira's presence feels colder, heavier. Her long blue hair is braided into thick twin plaits that fall like anchors over her shoulders. Pale blue markings glow faintly across her skin, branching like cracks in glass, pulsing softly as if responding to an unseen tide.</p>
-            
-            <div class="contract-box">
-                <p><em>The Mafia Persona:</em> Elegant. Calculated. Absolute authority. Tailored in ivory and gold, every symbol on her coat represents ownership. She is not chaotic. She is <strong>inevitable.</strong></p>
+            <h3 class="aelira-h">Aelira Virex</h3>
+            <span class="flavor-text">"She doesn't dominate power. She survives it."</span>
+            <p><span class="dropcap">A</span>elira's presence is colder, heavier. Blue hair braided into twin plaits that fall like anchors. Pale blue markings glow across her skin like cracks in glass. Light bends near her; moisture gathers when she breathes.</p>
+            <div class="sidebar-note">
+                <strong>Power: Fluid Manipulation.</strong> Water that behaves incorrectly. It moves without gravity and flows through solid matter, responding to her emotions first.
+            </div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="character-card">
+            <h2>The Authority</h2>
+            <h3 class="sylva-h">Madame Sylva Morren</h3>
+            <span class="flavor-text">"She is not chaotic. She is inevitable."</span>
+            <p><span class="dropcap">S</span>ylva is sharpened rather than fractured. Posture immaculate, chin lifted. Short platinum hair and a tailored coat of ivory and gold. Every symbol on her person represents a contract, a loyalty, or a consequence.</p>
+            <div class="sidebar-note">
+                <strong>Power: Dominion Influence.</strong> She binds magic. Contracts seal when she speaks. People feel a heavy pressure in their chest when they lie to her.
             </div>
         </div>
     </div>
 
     <div class="act-display" id="acts">
         <h2><?php echo $act_i_title; ?></h2>
-        <p style="font-size: 1.4rem; color: #444;"><?php echo $act_i_summary; ?></p>
+        <p style="font-size: 1.3rem; line-height: 1.8;"><?php echo $act_i_summary; ?></p>
     </div>
 
-    <div class="page" style="grid-column: span 2; text-align: center; border-top: 1px solid var(--gold);">
-        <h2>Inscribe Your Testimony</h2>
-        <form method="POST" style="max-width: 500px; margin: 20px auto;">
-            <input type="text" placeholder="Your Name" style="width:100%; padding:10px; margin-bottom:10px; border:none; border-bottom:1px solid var(--gold); background:transparent;">
-            <textarea placeholder="Your message to the city..." rows="4" style="width:100%; padding:10px; margin-bottom:20px; border:none; border-bottom:1px solid var(--gold); background:transparent;"></textarea>
-            <button type="submit" name="submit">Seal Record</button>
-        </form>
-        <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6;">&copy; <?php echo date("Y"); ?> Aetherfall — All Rights Reserved.</p>
-    </div>
+    <footer>
+        <p>Inscribed by the hand of the Architect — &copy; <?php echo date("Y"); ?> Aetherfall</p>
+        <div style="margin-top: 20px;">
+            <button onclick="alert('The Raven has been sent.')">Seal and Send Testament</button>
+        </div>
+    </footer>
 </div>
 
 </body>
