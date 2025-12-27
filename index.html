@@ -3,66 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | Official Book Chronicle</title>
+    <title>Aetherfall | The Chronicle</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
             --parchment: #f2e8cf; --ink: #1a1a1a; --gold: #b8924e;
             --riot-red: #9e0101; --aether-blue: #0077be; --sylva-emerald: #064e3b;
         }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: #0a0a0a; color: var(--ink); font-family: 'Crimson Text', serif; padding-top: 80px; }
 
-        * { margin:0; padding:0; box-sizing:border-box; scroll-behavior: smooth; }
-        body { background: #0a0a0a; color: var(--ink); font-family: 'Crimson Text', serif; line-height: 1.8; padding-top: 80px; }
-
-        /* --- UI Elements --- */
+        /* Navigation */
         nav {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: #111; border-bottom: 2px solid var(--gold);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
         }
-        .nav-logo { text-decoration: none; color: var(--gold); font-family: 'Uncial Antiqua', cursive; font-size: 1.4rem; }
-        .btn-access {
-            background: var(--gold); color: #111; padding: 8px 18px; border: none;
-            font-family: 'Uncial Antiqua', cursive; cursor: pointer; transition: 0.3s;
-        }
-        .btn-access:hover { background: var(--parchment); }
-
-        /* --- Architect Panel --- */
+        .nav-logo { text-decoration: none; color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.4rem; }
+        
+        /* Architect Tools */
         #architectPanel {
             display: none; background: #1a1a1a; border: 3px solid var(--gold);
-            padding: 30px; margin: 20px auto; max-width: 1100px; color: var(--parchment);
+            padding: 30px; margin: 20px auto; max-width: 1000px; color: var(--parchment);
         }
         .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--gold); color: #fff; }
 
-        /* --- Layout --- */
+        /* The Grimoire */
         .grimoire {
-            max-width: 1100px; margin: 0 auto 50px; background: var(--parchment);
+            max-width: 1000px; margin: 0 auto 50px; background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 15px solid #2b1d12; box-shadow: 0 0 80px rgba(0,0,0,0.8);
         }
         header { text-align: center; padding: 60px 20px; border-bottom: 5px double var(--gold); }
         .chronicle-container { position: relative; padding: 60px 10%; }
-        .restricted { filter: blur(15px); opacity: 0.2; pointer-events: none; }
+        .restricted { filter: blur(10px); opacity: 0.3; pointer-events: none; }
+        
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 20; background: rgba(10, 10, 10, 0.95);
-            border: 2px solid var(--gold); padding: 40px; text-align: center; color: var(--gold); min-width: 300px;
+            z-index: 20; background: rgba(10, 10, 10, 0.9);
+            border: 2px solid var(--gold); padding: 30px; text-align: center; color: var(--gold);
         }
 
-        /* --- Reader --- */
+        /* Buttons */
+        .btn-access {
+            background: var(--gold); color: #111; padding: 10px 20px; border: none;
+            font-family: 'Uncial Antiqua'; cursor: pointer;
+        }
+
+        /* Reader */
         .reader-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%;
         }
-        .scroll-paper { max-width: 850px; margin: 0 auto; background: var(--parchment); padding: 60px; border: 2px solid var(--gold); }
-        
-        /* --- Modal --- */
+        .scroll-paper { max-width: 800px; margin: 0 auto; background: var(--parchment); padding: 50px; border: 2px solid var(--gold); }
+
+        /* Modal */
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-content { background: var(--parchment); padding: 40px; border: 5px solid var(--gold); width: 90%; max-width: 400px; text-align: center; }
-        
-        .act-preview-card { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .dropcap { float: left; font-size: 4.5rem; line-height: 0.8; padding: 10px 15px 0 0; }
+        .modal-content { background: var(--parchment); padding: 40px; border: 5px solid var(--gold); width: 400px; text-align: center; }
+
+        .act-card { margin-bottom: 40px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 20px; }
+        .dropcap { float: left; font-size: 4rem; line-height: 0.8; padding: 5px 10px 0 0; }
     </style>
 </head>
 <body>
@@ -73,21 +74,35 @@
 </nav>
 
 <div id="architectPanel">
-    <h2 style="font-family:'Uncial Antiqua'; color: var(--gold);" id="panelTitle">Architect Tools: Create</h2>
-    <input type="hidden" id="editDocId"> 
-    <input type="text" id="newActTitle" placeholder="Act Title..." class="admin-input">
-    <textarea id="newActPreview" placeholder="Short Preview..." class="admin-input" style="height:60px;"></textarea>
-    <textarea id="newActContent" placeholder="Full Story..." class="admin-input" style="height:300px;"></textarea>
-    <div style="display:flex; gap:10px;">
-        <button class="btn-access" id="saveActBtn" style="flex:2;">Commit to the Lattice</button>
-        <button class="btn-access" id="cancelEditBtn" style="flex:1; background:#444; color:#fff; display:none;">Cancel</button>
+    <h2 style="font-family:'Uncial Antiqua'">Architect Tools</h2>
+    <input type="hidden" id="editId">
+    <input type="text" id="title" placeholder="Act Title" class="admin-input">
+    <textarea id="preview" placeholder="Preview Text" class="admin-input"></textarea>
+    <textarea id="content" placeholder="Full Story" class="admin-input" style="height:200px;"></textarea>
+    <button class="btn-access" id="saveBtn">Save to Lattice</button>
+</div>
+
+<div class="grimoire">
+    <header>
+        <h1 style="font-family:'Uncial Antiqua'; font-size: 3rem;">Aetherfall</h1>
+        <p>A TRIAD CHRONICLE</p>
+    </header>
+    <div class="chronicle-container">
+        <div id="gateOverlay" class="gate-overlay">
+            <h2 style="font-family:'Uncial Antiqua'">Grimoire Sealed</h2>
+            <p style="margin-bottom:15px;">Sign the contract to unlock the full history.</p>
+            <button class="btn-access" onclick="openAuth()">Sign In</button>
+        </div>
+        <div id="lockedContent" class="restricted">
+            <div id="dynamic-acts"></div>
+        </div>
     </div>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
     <div class="scroll-paper">
-        <button onclick="closeReader()" style="float:right; cursor:pointer; background:none; border:none; color:var(--riot-red); font-family:'Uncial Antiqua';">[ CLOSE ]</button>
-        <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:40px; font-size: 2.2rem;"></h2>
+        <button onclick="closeReader()" style="float:right; color:var(--riot-red); border:none; background:none; cursor:pointer;">[ CLOSE ]</button>
+        <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:20px;"></h2>
         <div id="readerBody"></div>
     </div>
 </div>
@@ -95,38 +110,17 @@
 <div id="authModal" class="modal">
     <div class="modal-content">
         <h2 id="modalTitle" style="font-family:'Uncial Antiqua'">Sign the Contract</h2>
-        <input type="email" id="email" placeholder="Email Address" style="width:100%; padding:10px; margin:10px 0; border:none; border-bottom:2px solid var(--gold); background:transparent;">
-        <input type="password" id="password" placeholder="Password" style="width:100%; padding:10px; margin:10px 0; border:none; border-bottom:2px solid var(--gold); background:transparent;">
-        <button class="btn-access" id="submitAuth" style="width:100%; margin-top:20px;">Submit</button>
-        <p style="margin-top:15px; font-size:0.9rem;">
-            <span id="toggleText">Need an account?</span> 
-            <span style="color:var(--riot-red); cursor:pointer; text-decoration:underline;" id="authToggle">Create Sigil</span>
-        </p>
-    </div>
-</div>
-
-<div class="grimoire">
-    <header>
-        <h1 style="font-family:'Uncial Antiqua'">Aetherfall</h1>
-        <p>— THE TRIAD OF THE FALLING CITY —</p>
-    </header>
-
-    <div class="chronicle-container">
-        <div id="gateOverlay" class="gate-overlay">
-            <h2 style="font-family:'Uncial Antiqua'">Grimoire Sealed</h2>
-            <p>Login to unlock the deep chronicles.</p>
-        </div>
-        <div id="lockedContent" class="restricted">
-            <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 2.5rem; margin-bottom: 50px; color: var(--gold);">The Chronicle</h2>
-            <div id="dynamic-acts"></div>
-        </div>
+        <input type="email" id="email" placeholder="Email" class="admin-input" style="background:white; color:black;">
+        <input type="password" id="password" placeholder="Password" class="admin-input" style="background:white; color:black;">
+        <button class="btn-access" id="submitAuth" style="width:100%;">Enter</button>
+        <p id="toggleAuth" style="margin-top:15px; cursor:pointer; text-decoration:underline;">Need an account? Create one.</p>
     </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -140,116 +134,64 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const GRAND_ARCHITECT_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
-  let userAccess = false;
+  const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-  // --- ADMIN LOGIC ---
-  window.saveNewAct = async () => {
-    const docId = document.getElementById('editDocId').value;
-    const title = document.getElementById('newActTitle').value;
-    const preview = document.getElementById('newActPreview').value;
-    const content = document.getElementById('newActContent').value;
-    try {
-        if(docId) { await updateDoc(doc(db, "acts", docId), { title, preview, content }); }
-        else { await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() }); }
-        location.reload();
-    } catch (e) { alert(e.message); }
+  // Auth Handling
+  window.openAuth = () => document.getElementById('authModal').style.display = 'flex';
+  let isLogin = true;
+  document.getElementById('toggleAuth').onclick = () => {
+      isLogin = !isLogin;
+      document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Account";
+  };
+  
+  document.getElementById('submitAuth').onclick = async () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      try {
+          isLogin ? await signInWithEmailAndPassword(auth, email, pass) : await createUserWithEmailAndPassword(auth, email, pass);
+          document.getElementById('authModal').style.display = 'none';
+      } catch(e) { alert(e.message); }
   };
 
-  window.prepEdit = (id) => {
-    const act = window[`actData_${id}`];
-    document.getElementById('editDocId').value = id;
-    document.getElementById('newActTitle').value = act.title;
-    document.getElementById('newActPreview').value = act.preview;
-    document.getElementById('newActContent').value = act.content;
-    document.getElementById('saveActBtn').innerText = "Update Act";
-    document.getElementById('cancelEditBtn').style.display = "block";
-    window.scrollTo(0,0);
+  document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : openAuth();
+
+  // Admin Tools
+  document.getElementById('saveBtn').onclick = async () => {
+      const data = { title: document.getElementById('title').value, preview: document.getElementById('preview').value, content: document.getElementById('content').value, createdAt: serverTimestamp() };
+      await addDoc(collection(db, "acts"), data);
+      location.reload();
   };
 
-  document.getElementById('saveActBtn').onclick = saveNewAct;
-
-  // --- RENDER CHRONICLE ---
+  // Render
   onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
-    const container = document.getElementById('dynamic-acts');
-    container.innerHTML = "";
-    snap.forEach((snapshot) => {
-        const act = snapshot.data();
-        const id = snapshot.id;
-        window[`actData_${id}`] = act;
-        
-        const isAdmin = auth.currentUser && auth.currentUser.uid === GRAND_ARCHITECT_UID;
-        const buttonLabel = userAccess ? "Read Full Act" : "Unlock with Gilded Key";
-        
-        container.innerHTML += `
-            <article class="act-preview-card">
-                <h3 style="font-family:'Uncial Antiqua'; border-bottom: 1px solid var(--gold); margin-bottom: 15px;">${act.title}</h3>
-                <p><span class="dropcap">${act.preview.charAt(0)}</span>${act.preview.substring(1)}</p>
-                <button class="btn-access" style="margin-top:15px;" onclick="${userAccess ? `openReader('${id}')` : `alert('Access Restricted: Key Required')` }">${buttonLabel}</button>
-                ${isAdmin ? `<button onclick="prepEdit('${id}')" style="margin-left:10px; background:var(--sylva-emerald); color:white; border:none; padding:5px;">Edit</button>` : ""}
-            </article>`;
-    });
+      const container = document.getElementById('dynamic-acts');
+      container.innerHTML = "";
+      snap.forEach(s => {
+          const act = s.data();
+          window[`act_${s.id}`] = act;
+          container.innerHTML += `
+              <div class="act-card">
+                  <h3 style="font-family:'Uncial Antiqua'">${act.title}</h3>
+                  <p><span class="dropcap">${act.preview[0]}</span>${act.preview.substring(1)}</p>
+                  <button class="btn-access" style="margin-top:10px;" onclick="openReader('${s.id}')">Read Full Act</button>
+              </div>`;
+      });
   });
 
   window.openReader = (id) => {
-    const act = window[`actData_${id}`];
-    document.getElementById('readerTitle').innerText = act.title;
-    document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:20px;">${p.trim()}</p>`).join('');
-    document.getElementById('readerOverlay').style.display = 'block';
-    document.body.style.overflow = 'hidden';
+      const act = window[`act_${id}`];
+      document.getElementById('readerTitle').innerText = act.title;
+      document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:15px;">${p}</p>`).join('');
+      document.getElementById('readerOverlay').style.display = 'block';
   };
+  window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
 
-  window.closeReader = () => {
-    document.getElementById('readerOverlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  };
-
-  // --- AUTH & PAYMENT CHECK ---
-  onAuthStateChanged(auth, async (user) => {
-    const gate = document.getElementById('gateOverlay');
-    const locked = document.getElementById('lockedContent');
-    const adminPanel = document.getElementById('architectPanel');
-
-    if (user) {
-        // Check "Paid" status in Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        userAccess = (user.uid === GRAND_ARCHITECT_UID) || (userDoc.exists() && userDoc.data().paid === true);
-        
-        document.getElementById('authNavBtn').innerText = "Logout";
-        locked.classList.remove('restricted');
-        gate.style.display = 'none';
-
-        if (user.uid === GRAND_ARCHITECT_UID) adminPanel.style.display = "block";
-        
-        // If not paid, show the payment prompt
-        if (!userAccess) {
-            gate.innerHTML = `<h2 style="font-family:'Uncial Antiqua'">Access Restricted</h2><p>The Gilded Keys are required for the full story.</p><button class="btn-access" style="margin-top:20px;" onclick="window.open('YOUR_STRIPE_LINK')">Purchase Access</button>`;
-            gate.style.display = "block";
-            locked.classList.add('restricted');
-        }
-    } else {
-        document.getElementById('authNavBtn').innerText = "Access Grimoire";
-        locked.classList.add('restricted');
-        gate.style.display = 'block';
-        adminPanel.style.display = "none";
-    }
+  onAuthStateChanged(auth, (user) => {
+      document.getElementById('architectPanel').style.display = (user && user.uid === ADMIN_UID) ? 'block' : 'none';
+      document.getElementById('lockedContent').classList.toggle('restricted', !user);
+      document.getElementById('gateOverlay').style.display = user ? 'none' : 'block';
+      document.getElementById('authNavBtn').innerText = user ? "Logout" : "Access Grimoire";
   });
-
-  // Basic Modal Logic
-  let isLogin = true;
-  document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : document.getElementById('authModal').style.display = 'flex';
-  document.getElementById('authToggle').onclick = () => {
-    isLogin = !isLogin;
-    document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Your Sigil";
-  };
-  document.getElementById('submitAuth').onclick = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try {
-        isLogin ? await signInWithEmailAndPassword(auth, email, password) : await createUserWithEmailAndPassword(auth, email, password);
-        document.getElementById('authModal').style.display = 'none';
-    } catch (e) { alert(e.message); }
-  };
 </script>
 </body>
 </html>
