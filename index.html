@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | The Official Book Chronicle</title>
+    <title>Aetherfall | Official Book Chronicle</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,209 +15,210 @@
             --sylva-emerald: #064e3b;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { margin:0; padding:0; box-sizing:border-box; scroll-behavior: smooth; }
         
         body {
             background: #0a0a0a;
             color: var(--ink);
             font-family: 'Crimson Text', serif;
             line-height: 1.8;
-            padding: 20px;
+            padding-top: 80px;
         }
 
+        /* --- Navigation Bar --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            height: 70px;
+            background: #111;
+            border-bottom: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--gold);
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 1.4rem;
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a {
+            color: var(--parchment);
+            text-decoration: none;
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+
+        .btn-access {
+            background: var(--gold);
+            color: #111;
+            padding: 8px 18px;
+            border: none;
+            font-family: 'Uncial Antiqua', cursive;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* --- Grimoire Layout --- */
         .grimoire {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0 auto 50px;
             background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 15px solid #2b1d12;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
             position: relative;
         }
 
-        header {
-            text-align: center;
-            padding: 80px 20px;
-            border-bottom: 5px double var(--gold);
+        header { text-align: center; padding: 60px 20px; border-bottom: 5px double var(--gold); }
+        h1 { font-family: 'Uncial Antiqua', cursive; font-size: clamp(2.5rem, 7vw, 4.5rem); text-shadow: 3px 3px 0px var(--gold); }
+
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border-bottom: 2px solid var(--gold); }
+        .char-card { padding: 40px; border-right: 1px solid rgba(0,0,0,0.1); }
+        .char-title { font-family: 'Uncial Antiqua', cursive; text-align: center; margin-bottom: 10px; }
+
+        /* --- Access Gate --- */
+        .chronicle-container { position: relative; padding: 60px 10%; }
+        
+        .restricted {
+            filter: blur(10px);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.5;
+            transition: 0.5s ease;
         }
 
-        h1 {
-            font-family: 'Uncial Antiqua', cursive;
-            font-size: clamp(3rem, 8vw, 5rem);
-            letter-spacing: 10px;
-            color: var(--ink);
-            text-shadow: 3px 3px 0px var(--gold);
-        }
-
-        /* --- Trinity Grid --- */
-        .character-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .char-card {
-            padding: 40px;
-            border-right: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .char-card:last-child { border-right: none; }
-
-        .char-title {
-            font-family: 'Uncial Antiqua', cursive;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .zyra-c { color: var(--riot-red); }
-        .aelira-c { color: var(--aether-blue); }
-        .sylva-c { color: var(--sylva-emerald); }
-
-        /* --- Acts Section --- */
-        .chronicle-body {
-            padding: 60px 10%;
-        }
-
-        .act-entry {
-            margin-bottom: 80px;
-            position: relative;
-        }
-
-        .act-num {
-            font-family: 'Uncial Antiqua', cursive;
-            font-size: 4rem;
-            color: var(--gold);
-            opacity: 0.2;
+        .gate-overlay {
             position: absolute;
-            top: -30px;
-            left: -40px;
-        }
-
-        .act-subtitle {
-            font-family: 'Uncial Antiqua', cursive;
-            font-size: 2rem;
-            border-bottom: 1px solid var(--gold);
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .dropcap {
-            float: left;
-            font-size: 5rem;
-            line-height: 0.8;
-            padding: 10px 15px 0 0;
-            color: var(--ink);
-        }
-
-        /* --- Footer & Form --- */
-        footer {
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--gold);
+            padding: 40px;
             text-align: center;
-            padding: 60px;
-            background: rgba(0,0,0,0.05);
-            border-top: 5px double var(--gold);
-        }
-
-        input, textarea {
-            width: 100%;
+            color: var(--gold);
+            width: 80%;
             max-width: 500px;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--gold);
-            padding: 15px;
-            margin-bottom: 20px;
-            font-family: 'Crimson Text', serif;
-            font-size: 1.2rem;
-            color: var(--ink);
         }
 
-        .btn-ink {
-            background: var(--ink);
-            color: var(--parchment);
-            padding: 15px 45px;
-            font-family: 'Uncial Antiqua', cursive;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-ink:hover {
-            background: var(--riot-red);
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 768px) {
-            .char-card { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); }
-            .act-num { left: 0; top: -45px; }
-        }
+        .dropcap { float: left; font-size: 5rem; line-height: 0.8; padding: 10px 15px 0 0; color: var(--ink); }
     </style>
 </head>
 <body>
 
+<nav>
+    <a href="#" class="nav-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" />
+        </svg>
+        AETHERFALL
+    </a>
+    <div class="nav-links">
+        <a href="#characters">Characters</a>
+        <a href="#acts">Acts</a>
+        <button class="btn-access" id="loginBtn">Login</button>
+    </div>
+</nav>
+
 <div class="grimoire">
     <header>
         <h1>Aetherfall</h1>
-        <p style="font-style: italic; font-weight: bold; letter-spacing: 2px;">THE TRIAD OF THE FALLING CITY</p>
+        <p>— THE TRIAD OF THE FALLING CITY —</p>
     </header>
 
-    <section class="character-grid">
+    <section class="character-grid" id="characters">
         <div class="char-card">
-            <h3 class="char-title zyra-c">Zyra Kade</h3>
-            <p><strong>The Catalyst.</strong> Lean and hardened by the Underfall. Her jagged crimson hair is a warning. She seeks not to rule, but to overdrive the city into collapse.</p>
+            <h3 class="char-title" style="color:var(--riot-red)">Zyra Kade</h3>
+            <p><strong>The Catalyst.</strong> Unhinged and ready to overdrive the magic of the Underfall into a total collapse.</p>
         </div>
         <div class="char-card">
-            <h3 class="char-title aelira-c">Aelira Virex</h3>
-            <p><strong>The Anchor.</strong> Water-touched with glowing blue skin-markings. Fragile in appearance, but carrying a heavy, cold magic that warps reality through emotion.</p>
+            <h3 class="char-title" style="color:var(--aether-blue)">Aelira Virex</h3>
+            <p><strong>The Anchor.</strong> Her magic behaves like tide and glass, responding to the fracture of her own emotions.</p>
         </div>
         <div class="char-card">
-            <h3 class="char-title sylva-c">Sylva Morren</h3>
-            <p><strong>The Authority.</strong> The ivory-clad Boss of the High Rises. Platinum hair and calculated posture. She binds magic and men alike through contracts of blood and gold.</p>
+            <h3 class="char-title" style="color:var(--sylva-emerald)">Sylva Morren</h3>
+            <p><strong>The Authority.</strong> The Boss who binds reality through ivory contracts and platinum-cold discipline.</p>
         </div>
     </section>
 
-    <section class="chronicle-body">
-        <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 3rem; margin-bottom: 60px; color: var(--gold);">The Chronicle</h2>
-        
-        <article class="act-entry">
-            <span class="act-num">Act I</span>
-            <h3 class="act-subtitle">The Fractured Lattice</h3>
-            <p>
-                <span class="dropcap">I</span>n the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving magic into violent chaos. Above, Aelira Virex senses the first crack in the city’s foundation. The water is rising, and the contracts of the High Rises are starting to fray.
-            </p>
-        </article>
+    <div class="chronicle-container" id="acts">
+        <div id="gateOverlay" class="gate-overlay">
+            <h2 style="font-family:'Uncial Antiqua'">Grimoire Sealed</h2>
+            <p style="margin: 15px 0;">This chronicle requires a paid contract to unlock. Sign in or purchase access to read the Acts.</p>
+            <button class="btn-access" onclick="alert('Redirecting to Purchase...')">Sign Contract</button>
+        </div>
 
-        <article class="act-entry">
-            <span class="act-num">Act II</span>
-            <h3 class="act-subtitle">Hollow Sovereignty</h3>
-            <p>
-                <span class="dropcap">T</span>he Midstack becomes a battlefield as the lattice destabilizes. Aelira and Zyra’s paths collide in a tempest of fluid arcane and destructive amplification. Meanwhile, Madame Sylva Morren begins to pull the strings of the city's architect, realizing that to save the structure, she may have to burn the inhabitants.
-            </p>
-        </article>
+        <div id="lockedContent" class="restricted">
+            <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 2.5rem; margin-bottom: 40px;">The Chronicle</h2>
+            
+            <article style="margin-bottom: 60px;">
+                <h3 style="font-family:'Uncial Antiqua'; border-bottom: 1px solid var(--gold);">Act I: The Fractured Lattice</h3>
+                <p><span class="dropcap">I</span>n the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving magic into violent chaos...</p>
+            </article>
 
-        <article class="act-entry">
-            <span class="act-num">Act III</span>
-            <h3 class="act-subtitle">The Descent</h3>
-            <p>
-                <span class="dropcap">T</span>he High Rises erupt into a spectacle of light and terror. As the city begins its literal fall, the triad of power reaches its breaking point. Zyra unleashes her full destructive potential, Aelira asserts a dominion that warps reality itself, and Sylva proves why she is inevitable. When the dust settles, Aetherfall is no longer a city—it is a monument to their decisions.
-            </p>
-        </article>
-    </section>
-
-    <footer>
-        <h2 style="font-family: 'Uncial Antiqua'; margin-bottom: 20px;">Inscribe Your Name</h2>
-        <p style="margin-bottom: 20px; opacity: 0.8;">The ink of the Underfall never fades.</p>
-        
-        <form action="https://formspree.io/f/your-id-here" method="POST">
-            <input type="text" name="name" placeholder="Name or Alias" required><br>
-            <input type="email" name="_replyto" placeholder="Aether-Mail" required><br>
-            <textarea name="message" placeholder="A message for the High Rises..." required></textarea><br>
-            <button type="submit" class="btn-ink">Seal and Send</button>
-        </form>
-        
-        <p style="margin-top: 60px; font-size: 0.9rem; opacity: 0.5;">&copy; 2025 Aetherfall. All rights reserved by the Architect.</p>
-    </footer>
+            <article>
+                <h3 style="font-family:'Uncial Antiqua'; border-bottom: 1px solid var(--gold);">Act II: Hollow Sovereignty</h3>
+                <p><span class="dropcap">T</span>he Midstack becomes a battlefield as the lattice destabilizes. Aelira and Zyra’s paths collide in a tempest of fluid arcane and destructive amplification...</p>
+            </article>
+        </div>
+    </div>
 </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
+    authDomain: "aetherfall-d35a2.firebaseapp.com",
+    projectId: "aetherfall-d35a2",
+    storageBucket: "aetherfall-d35a2.firebasestorage.app",
+    messagingSenderId: "107057087956",
+    appId: "1:107057087956:web:cd958bc57a400502d1c241"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginBtn = document.getElementById('loginBtn');
+  const lockedContent = document.getElementById('lockedContent');
+  const gateOverlay = document.getElementById('gateOverlay');
+
+  // Login Function
+  loginBtn.addEventListener('click', () => {
+    signInWithPopup(auth, provider).catch(error => console.error(error));
+  });
+
+  // Access Logic
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginBtn.innerText = "Logout";
+      loginBtn.onclick = () => auth.signOut();
+      
+      // IMPORTANT: Here you would normally check a database (Firestore) 
+      // to see if user.uid has a "paid" status.
+      // For now, logging in unlocks the view:
+      lockedContent.classList.remove('restricted');
+      gateOverlay.style.display = 'none';
+    } else {
+      loginBtn.innerText = "Login";
+      lockedContent.classList.add('restricted');
+      gateOverlay.style.display = 'block';
+    }
+  });
+</script>
 
 </body>
 </html>
