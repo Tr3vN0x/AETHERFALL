@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | The Chronicle</title>
+    <title>Aetherfall | The Grand Grimoire</title>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
             --parchment: #f2e8cf; --ink: #1a1a1a; --gold: #b8924e;
             --riot-red: #9e0101; --aether-blue: #0077be; --sylva-emerald: #064e3b;
+            --note-paper: #e9dcc0;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background: #0a0a0a; color: var(--ink); font-family: 'Crimson Text', serif; padding-top: 80px; }
@@ -29,41 +30,52 @@
         }
         .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--gold); color: #fff; }
 
-        /* The Grimoire */
+        /* General Layout */
         .grimoire {
-            max-width: 1000px; margin: 0 auto 50px; background: var(--parchment);
+            max-width: 1100px; margin: 0 auto 50px; background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 15px solid #2b1d12; box-shadow: 0 0 80px rgba(0,0,0,0.8);
         }
         header { text-align: center; padding: 60px 20px; border-bottom: 5px double var(--gold); }
+        
+        /* Character Archives */
+        .archives-section { padding: 50px 5%; border-bottom: 5px double var(--gold); }
+        .character-dossier-grid { display: flex; flex-direction: column; gap: 40px; }
+        
+        .char-dossier {
+            background: rgba(255,255,255,0.4); border: 1px solid var(--gold);
+            padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            position: relative; transition: 0.3s;
+        }
+        .char-dossier:hover { background: rgba(255,255,255,0.8); transform: scale(1.01); }
+
+        .char-info h2 { font-family: 'Uncial Antiqua'; font-size: 2rem; margin-bottom: 10px; }
+        .tagline { font-weight: bold; font-style: italic; color: #555; display: block; margin-bottom: 15px; }
+        
+        .architect-notes {
+            background: var(--note-paper); padding: 20px; border-left: 5px solid var(--gold);
+            font-style: italic; font-size: 0.95rem; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .architect-notes::before { content: "✍️ Architect's Observation:"; display: block; font-weight: bold; margin-bottom: 5px; color: var(--ink); }
+
+        /* Chronicle Area */
         .chronicle-container { position: relative; padding: 60px 10%; }
         .restricted { filter: blur(10px); opacity: 0.3; pointer-events: none; }
-        
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 20; background: rgba(10, 10, 10, 0.9);
             border: 2px solid var(--gold); padding: 30px; text-align: center; color: var(--gold);
         }
 
-        /* Buttons */
-        .btn-access {
-            background: var(--gold); color: #111; padding: 10px 20px; border: none;
-            font-family: 'Uncial Antiqua'; cursor: pointer;
-        }
-
-        /* Reader */
-        .reader-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%;
-        }
+        /* Buttons & Reader */
+        .btn-access { background: var(--gold); color: #111; padding: 10px 20px; border: none; font-family: 'Uncial Antiqua'; cursor: pointer; }
+        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 40px 5%; }
         .scroll-paper { max-width: 800px; margin: 0 auto; background: var(--parchment); padding: 50px; border: 2px solid var(--gold); }
-
-        /* Modal */
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: var(--parchment); padding: 40px; border: 5px solid var(--gold); width: 400px; text-align: center; }
-
         .act-card { margin-bottom: 40px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 20px; }
-        .dropcap { float: left; font-size: 4rem; line-height: 0.8; padding: 5px 10px 0 0; }
+
+        @media (max-width: 768px) { .char-dossier { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -75,7 +87,6 @@
 
 <div id="architectPanel">
     <h2 style="font-family:'Uncial Antiqua'">Architect Tools</h2>
-    <input type="hidden" id="editId">
     <input type="text" id="title" placeholder="Act Title" class="admin-input">
     <textarea id="preview" placeholder="Preview Text" class="admin-input"></textarea>
     <textarea id="content" placeholder="Full Story" class="admin-input" style="height:200px;"></textarea>
@@ -84,9 +95,54 @@
 
 <div class="grimoire">
     <header>
-        <h1 style="font-family:'Uncial Antiqua'; font-size: 3rem;">Aetherfall</h1>
-        <p>A TRIAD CHRONICLE</p>
+        <h1 style="font-family:'Uncial Antiqua'; font-size: 3.5rem;">Aetherfall</h1>
+        <p>— THE TRIAD ARCHIVES & CHRONICLES —</p>
     </header>
+
+    <section class="archives-section">
+        <h2 style="text-align:center; font-family:'Uncial Antiqua'; color: var(--gold); margin-bottom: 40px;">The Triad Dossiers</h2>
+        
+        <div class="character-dossier-grid">
+            
+            <div class="char-dossier" style="border-left: 8px solid var(--riot-red);">
+                <div class="char-info">
+                    <h2 style="color:var(--riot-red);">Zyra "Riot" Kade</h2>
+                    <span class="tagline">Anarchist. Volatile. Unhinged.</span>
+                    <p>Zyra stands with her weight forward, always ready to lunge. Her build is lean but hardened, muscles defined from survival rather than training. One side of her hair is shaved close, the rest swept forward in a jagged crimson-black fall. Her eyes are sharp, green, and restless—constantly scanning for threats or opportunities to cause damage.</p>
+                    <p style="margin-top:10px;"><strong>The Power:</strong> Destructive amplification. She doesn't create magic—she overdrives it. Arcane energy reacts violently around her, surging faster, burning hotter, and breaking containment.</p>
+                </div>
+                <div class="architect-notes">
+                    Zyra doesn't want control; she wants collapse. Her influence on the Lattice is like a virus—where she goes, the law of physics begins to overheat. Proceed with extreme caution.
+                </div>
+            </div>
+
+            <div class="char-dossier" style="border-left: 8px solid var(--aether-blue);">
+                <div class="char-info">
+                    <h2 style="color:var(--aether-blue);">Aelira Virex</h2>
+                    <span class="tagline">Water-touched. Emotionally unstable.</span>
+                    <p>Aelira's presence feels colder, heavier. Her long blue hair is braided into thick twin plaits that fall like anchors. Pale blue markings glow faintly across her skin, branching like veins or cracks in glass, pulsing softly as if responding to an unseen tide. Her eyes are large and exhausted, carrying a constant sense of detachment.</p>
+                    <p style="margin-top:10px;"><strong>The Power:</strong> Fluid arcane manipulation. Water that behaves incorrectly—moving without gravity, hardening without freezing, and flowing through solid matter.</p>
+                </div>
+                <div class="architect-notes">
+                    Aelira survives her power; she does not dominate it. Her magic responds to emotion first, intention second. When she loses her center, the city literally begins to drown around her.
+                </div>
+            </div>
+
+            <div class="char-dossier" style="border-left: 8px solid var(--gold);">
+                <div class="char-info">
+                    <h2 style="color:var(--gold);">Sylva Morren</h2>
+                    <span class="tagline">Elegant. Calculated. Absolute Authority.</span>
+                    <p>The Authority is sharpened rather than fractured. Her posture is immaculate, shoulders squared, chin lifted. Her platinum hair is styled with precision, revealing a face sculpted by discipline. She wears a tailored coat in ivory and gold, cut to emphasize command. Every symbol on her seams represents ownership and consequence.</p>
+                    <p style="margin-top:10px;"><strong>The Power:</strong> Dominion-based arcane influence. She doesn't throw magic; she binds it. Contracts seal themselves when she speaks. Wards trigger at her displeasure.</p>
+                </div>
+                <div class="architect-notes">
+                    She is not chaotic; she is inevitable. People feel a physical pressure in their chest when they lie to her. She treats the city like a chessboard where she already owns the king.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <div class="chronicle-container">
         <div id="gateOverlay" class="gate-overlay">
             <h2 style="font-family:'Uncial Antiqua'">Grimoire Sealed</h2>
@@ -94,6 +150,7 @@
             <button class="btn-access" onclick="openAuth()">Sign In</button>
         </div>
         <div id="lockedContent" class="restricted">
+            <h2 style="text-align:center; font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:30px;">The Chronicle</h2>
             <div id="dynamic-acts"></div>
         </div>
     </div>
@@ -101,7 +158,7 @@
 
 <div id="readerOverlay" class="reader-overlay">
     <div class="scroll-paper">
-        <button onclick="closeReader()" style="float:right; color:var(--riot-red); border:none; background:none; cursor:pointer;">[ CLOSE ]</button>
+        <button onclick="closeReader()" style="float:right; color:var(--riot-red); border:none; background:none; cursor:pointer; font-family:'Uncial Antiqua';">[ CLOSE ]</button>
         <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:20px;"></h2>
         <div id="readerBody"></div>
     </div>
@@ -110,8 +167,8 @@
 <div id="authModal" class="modal">
     <div class="modal-content">
         <h2 id="modalTitle" style="font-family:'Uncial Antiqua'">Sign the Contract</h2>
-        <input type="email" id="email" placeholder="Email" class="admin-input" style="background:white; color:black;">
-        <input type="password" id="password" placeholder="Password" class="admin-input" style="background:white; color:black;">
+        <input type="email" id="email" placeholder="Email" class="admin-input" style="background:white; color:black; border: 1px solid #ccc;">
+        <input type="password" id="password" placeholder="Password" class="admin-input" style="background:white; color:black; border: 1px solid #ccc;">
         <button class="btn-access" id="submitAuth" style="width:100%;">Enter</button>
         <p id="toggleAuth" style="margin-top:15px; cursor:pointer; text-decoration:underline;">Need an account? Create one.</p>
     </div>
@@ -120,7 +177,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -142,6 +199,7 @@
   document.getElementById('toggleAuth').onclick = () => {
       isLogin = !isLogin;
       document.getElementById('modalTitle').innerText = isLogin ? "Sign the Contract" : "Create Account";
+      document.getElementById('toggleAuth').innerText = isLogin ? "Need an account? Create one." : "Already have an account? Sign in.";
   };
   
   document.getElementById('submitAuth').onclick = async () => {
@@ -159,10 +217,13 @@
   document.getElementById('saveBtn').onclick = async () => {
       const data = { title: document.getElementById('title').value, preview: document.getElementById('preview').value, content: document.getElementById('content').value, createdAt: serverTimestamp() };
       await addDoc(collection(db, "acts"), data);
-      location.reload();
+      alert("Chronicle Updated!");
+      document.getElementById('title').value = "";
+      document.getElementById('preview').value = "";
+      document.getElementById('content').value = "";
   };
 
-  // Render
+  // Render Story Acts
   onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
       const container = document.getElementById('dynamic-acts');
       container.innerHTML = "";
@@ -171,8 +232,8 @@
           window[`act_${s.id}`] = act;
           container.innerHTML += `
               <div class="act-card">
-                  <h3 style="font-family:'Uncial Antiqua'">${act.title}</h3>
-                  <p><span class="dropcap">${act.preview[0]}</span>${act.preview.substring(1)}</p>
+                  <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
+                  <p>${act.preview}</p>
                   <button class="btn-access" style="margin-top:10px;" onclick="openReader('${s.id}')">Read Full Act</button>
               </div>`;
       });
@@ -183,8 +244,12 @@
       document.getElementById('readerTitle').innerText = act.title;
       document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:15px;">${p}</p>`).join('');
       document.getElementById('readerOverlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
   };
-  window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
+  window.closeReader = () => {
+      document.getElementById('readerOverlay').style.display = 'none';
+      document.body.style.overflow = 'auto';
+  };
 
   onAuthStateChanged(auth, (user) => {
       document.getElementById('architectPanel').style.display = (user && user.uid === ADMIN_UID) ? 'block' : 'none';
