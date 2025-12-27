@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,6 +138,8 @@
             border: none;
             cursor: pointer;
             transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-ink:hover {
@@ -178,31 +179,43 @@
     <section class="chronicle-body">
         <h2 style="text-align:center; font-family:'Uncial Antiqua'; font-size: 3rem; margin-bottom: 60px; color: var(--gold);">The Chronicle</h2>
         
-        <?php foreach($acts_data as $number => $details): ?>
-            <article class="act-entry">
-                <span class="act-num"><?php echo htmlspecialchars($number); ?></span>
-                <h3 class="act-subtitle"><?php echo htmlspecialchars($details['subtitle']); ?></h3>
-                <p>
-                    <span class="dropcap"><?php echo htmlspecialchars(substr($details['content'], 0, 1)); ?></span>
-                    <?php echo htmlspecialchars(substr($details['content'], 1)); ?>
-                </p>
-            </article>
-        <?php endforeach; ?>
+        <article class="act-entry">
+            <span class="act-num">Act I</span>
+            <h3 class="act-subtitle">The Fractured Lattice</h3>
+            <p>
+                <span class="dropcap">I</span>n the sunless depths of the Underfall, the scent of ozone and rot is the only constant. Zyra 'Riot' Kade moves like a jagged blade through the industrial zones, her presence overdriving magic into violent chaos. Above, Aelira Virex senses the first crack in the city’s foundation. The water is rising, and the contracts of the High Rises are starting to fray.
+            </p>
+        </article>
+
+        <article class="act-entry">
+            <span class="act-num">Act II</span>
+            <h3 class="act-subtitle">Hollow Sovereignty</h3>
+            <p>
+                <span class="dropcap">T</span>he Midstack becomes a battlefield as the lattice destabilizes. Aelira and Zyra’s paths collide in a tempest of fluid arcane and destructive amplification. Meanwhile, Madame Sylva Morren begins to pull the strings of the city's architect, realizing that to save the structure, she may have to burn the inhabitants.
+            </p>
+        </article>
+
+        <article class="act-entry">
+            <span class="act-num">Act III</span>
+            <h3 class="act-subtitle">The Descent</h3>
+            <p>
+                <span class="dropcap">T</span>he High Rises erupt into a spectacle of light and terror. As the city begins its literal fall, the triad of power reaches its breaking point. Zyra unleashes her full destructive potential, Aelira asserts a dominion that warps reality itself, and Sylva proves why she is inevitable. When the dust settles, Aetherfall is no longer a city—it is a monument to their decisions.
+            </p>
+        </article>
     </section>
 
     <footer>
         <h2 style="font-family: 'Uncial Antiqua'; margin-bottom: 20px;">Inscribe Your Name</h2>
-        <?php if($message_sent): ?>
-            <p style="color: var(--riot-red); font-weight: bold; font-size: 1.5rem;">Your message has been sealed in the aether.</p>
-        <?php else: ?>
-            <form method="POST">
-                <input type="text" name="name" placeholder="Name or Alias" required><br>
-                <input type="email" name="email" placeholder="Aether-Mail" required><br>
-                <textarea name="message" placeholder="A message for the High Rises..." required></textarea><br>
-                <button type="submit" name="submit" class="btn-ink">Seal and Send</button>
-            </form>
-        <?php endif; ?>
-        <p style="margin-top: 60px; font-size: 0.9rem; opacity: 0.5;">&copy; <?php echo date("Y"); ?> Aetherfall. All rights reserved by the Architect.</p>
+        <p style="margin-bottom: 20px; opacity: 0.8;">The ink of the Underfall never fades.</p>
+        
+        <form action="https://formspree.io/f/your-id-here" method="POST">
+            <input type="text" name="name" placeholder="Name or Alias" required><br>
+            <input type="email" name="_replyto" placeholder="Aether-Mail" required><br>
+            <textarea name="message" placeholder="A message for the High Rises..." required></textarea><br>
+            <button type="submit" class="btn-ink">Seal and Send</button>
+        </form>
+        
+        <p style="margin-top: 60px; font-size: 0.9rem; opacity: 0.5;">&copy; 2025 Aetherfall. All rights reserved by the Architect.</p>
     </footer>
 </div>
 
