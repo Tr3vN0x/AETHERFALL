@@ -7,10 +7,13 @@
     
     <meta property="og:title" content="Aetherfall | The Grand Grimoire">
     <meta property="og:description" content="Explore the Triad Archives and the unfolding chronicle of the Lattice.">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Aetherfall+Chronicle"> <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Aetherfall+Chronicle">
+    <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32.png?text=A"> <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32.png?text=A">
+
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
         :root {
             --parchment: #f2e8cf; --ink: #1a1a1a; --gold: #b8924e;
@@ -90,6 +93,10 @@
         .chronicle-container { position: relative; padding: 40px 5%; }
         .restricted { filter: blur(12px); opacity: 0.3; pointer-events: none; user-select: none; }
         
+        .view-badge {
+            font-size: 0.75rem; color: #777; font-style: italic; margin-bottom: 10px; display: block;
+        }
+
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 20; background: rgba(10, 10, 10, 0.95);
@@ -225,7 +232,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -283,10 +290,19 @@
 
   document.getElementById('saveBtn').onclick = async () => {
       const id = document.getElementById('editId').value;
-      const data = { title: document.getElementById('title').value, preview: document.getElementById('preview').value, content: document.getElementById('content').value, updatedAt: serverTimestamp() };
+      const data = { 
+          title: document.getElementById('title').value, 
+          preview: document.getElementById('preview').value, 
+          content: document.getElementById('content').value, 
+          updatedAt: serverTimestamp() 
+      };
       try {
           if(id) { await updateDoc(doc(db, "acts", id), data); }
-          else { data.createdAt = serverTimestamp(); await addDoc(collection(db, "acts"), data); }
+          else { 
+              data.createdAt = serverTimestamp(); 
+              data.views = 0; // Initialize views for new acts
+              await addDoc(collection(db, "acts"), data); 
+          }
           document.getElementById('cancelEdit').click();
       } catch(e) { alert(e.message); }
   };
@@ -303,8 +319,10 @@
           const act = s.data();
           window[`act_${s.id}`] = act;
           const isAdmin = auth.currentUser && auth.currentUser.uid === ADMIN_UID;
+          const views = act.views || 0;
           container.innerHTML += `
               <div class="act-card">
+                  <span class="view-badge">👁 ${views} seekers have witnessed this.</span>
                   <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
                   <p>${act.preview}</p>
                   <div style="margin-top:15px; display:flex; gap:10px;">
@@ -315,12 +333,23 @@
       });
   });
 
-  window.openReader = (id) => {
+  // READER WITH VIEW COUNTER
+  window.openReader = async (id) => {
       const act = window[`act_${id}`];
       document.getElementById('readerTitle').innerText = act.title;
       document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:15px;">${p}</p>`).join('');
       document.getElementById('readerOverlay').style.display = 'block';
+
+      // Increment view count in Firebase if user is logged in
+      if (auth.currentUser) {
+        try {
+            await updateDoc(doc(db, "acts", id), {
+                views: increment(1)
+            });
+        } catch (err) { console.error("Could not update view count", err); }
+      }
   };
+
   window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
 
   onAuthStateChanged(auth, (user) => {
