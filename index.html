@@ -11,7 +11,7 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32.png?text=A">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/gold-bars.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
@@ -38,13 +38,16 @@
             border-bottom: 2px solid var(--gold);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
-            animation: pulseLattice 8s infinite;
         }
-        .nav-logo { text-decoration: none; color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
-
-        @keyframes pulseLattice {
-            0%,100% { background-position: 0 0; }
-            50% { background-position: 100% 0; }
+        .nav-logo-wrap { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-logo { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
+        .gold-emblem { 
+            width: 30px; height: 30px; 
+            background: var(--gold); 
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
+            display: flex; align-items: center; justify-content: center;
+            color: black; font-weight: bold; font-family: 'Uncial Antiqua';
+            box-shadow: 0 0 10px var(--gold);
         }
 
         /* FLOATING DISCORD BUTTON */
@@ -73,6 +76,7 @@
             font-size: 0.85rem; color: var(--gold); margin-bottom: 15px;
             display: flex; gap: 20px;
         }
+        .draft-toggle { margin-bottom: 15px; color: var(--gold); font-family: 'Uncial Antiqua'; cursor: pointer; }
 
         /* THE GRIMOIRE CONTAINER */
         .grimoire {
@@ -80,7 +84,6 @@
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
             border: 10px solid #2b1d12; box-shadow: 0 0 40px rgba(0,0,0,0.8);
             position: relative;
-            overflow: hidden;
         }
         header { text-align: center; padding: 40px 15px; border-bottom: 5px double var(--gold); }
         header h1 { font-family: 'Uncial Antiqua'; font-size: 2.2rem; }
@@ -91,54 +94,13 @@
         .char-dossier {
             background: rgba(255,255,255,0.4); border: 1px solid var(--gold);
             padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-            position: relative;
+            position: relative; z-index: 1;
         }
         .char-info h2 { font-family: 'Uncial Antiqua'; font-size: 1.8rem; margin-bottom: 5px; }
         .tagline { font-weight: bold; font-style: italic; color: #555; display: block; margin-bottom: 10px; font-size: 0.9rem; }
         .architect-notes { background: var(--note-paper); padding: 15px; border-left: 5px solid var(--gold); font-style: italic; font-size: 0.9rem; }
 
-        /* Animated effects per character */
-        .char-dossier[data-char="Zyra"]::after {
-            content: '';
-            position: absolute; top:0; left:0; width:100%; height:100%;
-            background: radial-gradient(circle, rgba(158,1,1,0.3), transparent 70%);
-            pointer-events:none;
-            animation: sparks 2s infinite alternate;
-        }
-        @keyframes sparks {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(1.1); opacity: 0.7; }
-        }
-        .char-dossier[data-char="Aelira"]::after {
-            content:'';
-            position:absolute; top:0; left:0; width:100%; height:100%;
-            background: radial-gradient(circle, rgba(0,119,190,0.2), transparent 70%);
-            pointer-events:none; animation: ripple 3s infinite alternate;
-        }
-        @keyframes ripple {
-            0% { transform: scale(1); opacity:0.3; }
-            100% { transform: scale(1.1); opacity:0.6; }
-        }
-        .char-dossier[data-char="Sylva"]::after {
-            content:'';
-            position:absolute; top:0; left:0; width:100%; height:100%;
-            background: radial-gradient(circle, rgba(6,78,59,0.25), transparent 70%);
-            pointer-events:none; animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            0% { transform: scale(1); opacity:0.2; }
-            100% { transform: scale(1.05); opacity:0.5; }
-        }
-
-        /* DISCORD COMMUNITY SECTION */
-        .discord-ad {
-            background: #111; color: var(--gold); padding: 50px 10%; text-align: center;
-            border-top: 5px double var(--gold); border-bottom: 5px double var(--gold);
-        }
-
-        /* CHRONICLE & STATS */
-        .chronicle-container { position: relative; padding: 40px 5%; }
-        .restricted { filter: blur(12px); opacity: 0.3; pointer-events: none; user-select: none; }
+        /* STATS DESIGN */
         .stats-row {
             display: flex; gap: 20px; margin-bottom: 15px; align-items: center;
             background: rgba(0,0,0,0.05); padding: 10px 15px; border-radius: 4px;
@@ -153,15 +115,8 @@
 
         /* ACT CARDS */
         .act-card { margin-bottom: 40px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 25px; position: relative; }
-        .act-card[data-char2="Aelira"][data-char="Zyra"]::after {
-            content: '💧❤️🔥';
-            position: absolute; top:-10px; right:-10px;
-            font-size: 1.2rem; animation: pulseLove 1.5s infinite alternate;
-        }
-        @keyframes pulseLove {
-            0% { transform: scale(1); opacity:0.5; }
-            100% { transform: scale(1.3); opacity:1; }
-        }
+        .btn-like { background: white; border: 1px solid var(--gold); padding: 6px 14px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-family: 'Uncial Antiqua'; font-size: 1rem; box-shadow: 2px 2px 0px var(--gold); }
+        .btn-like.active { background: var(--riot-red); color: white; border-color: #700; box-shadow: 2px 2px 0px #700; }
 
         /* READER & MODALS */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 20px 10%; }
@@ -169,40 +124,32 @@
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: var(--parchment); padding: 30px; border: 5px solid var(--gold); width: 90%; max-width: 400px; text-align: center; }
 
+        .btn-access { background: var(--gold); color: #111; padding: 10px 15px; border: none; font-family: 'Uncial Antiqua'; cursor: pointer; font-size: 0.9rem; }
+
+        /* Floating fragments */
+        .fragment {
+            position: absolute; width: 10px; height: 10px;
+            background: var(--lattice-purple); border-radius: 50%;
+            pointer-events: none; z-index: 0; animation: floatFragment 6s infinite;
+        }
+        @keyframes floatFragment {
+            0%, 100% { transform: translate(0,0); opacity:0.4; }
+            50% { transform: translate(20px, -30px); opacity:1; }
+        }
+
         @media (max-width: 850px) {
             .char-dossier { grid-template-columns: 1fr; }
             header h1 { font-size: 1.8rem; }
-            .discord-float { padding: 10px; font-size: 0; border-radius: 50%; }
-            .discord-float::after { content: "💬"; font-size: 1.2rem; }
-        }
-
-        /* Floating Lattice fragments background */
-        body::before {
-            content: '';
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            background-repeat: repeat;
-            pointer-events: none;
-            z-index: -1;
-        }
-        .fragment {
-            position: absolute;
-            width: 10px; height: 10px;
-            background: var(--lattice-purple);
-            border-radius: 50%;
-            animation: floatFragment 6s infinite;
-        }
-        @keyframes floatFragment {
-            0% { transform: translate(0,0); opacity:0.4; }
-            50% { transform: translate(20px, -30px); opacity:1; }
-            100% { transform: translate(0,0); opacity:0.4; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <a href="#" class="nav-logo">AETHERFALL</a>
+    <a href="#" class="nav-logo-wrap">
+        <div class="gold-emblem">A</div>
+        <span class="nav-logo">AETHERFALL</span>
+    </a>
     <button class="btn-access" id="authNavBtn">Sign In</button>
 </nav>
 
@@ -222,6 +169,10 @@
         <span>Characters: <strong id="charCount">0</strong></span>
     </div>
 
+    <label class="draft-toggle">
+        <input type="checkbox" id="isDraft"> Save as Hidden Draft
+    </label>
+
     <div style="display:flex; gap:10px;">
         <button class="btn-access" id="saveBtn" style="flex:2;">Commit to Lattice</button>
         <button class="btn-access" id="cancelEdit" style="flex:1; background:#444; color:white; display:none;">Cancel</button>
@@ -236,7 +187,7 @@
 
     <section class="archives-section">
         <div class="character-dossier-grid">
-            <div class="char-dossier" data-char="Zyra" style="border-left: 8px solid var(--riot-red);">
+            <div class="char-dossier" style="border-left: 8px solid var(--riot-red);">
                 <div class="char-info">
                     <h2 style="color:var(--riot-red);">Zyra "Riot" Kade</h2>
                     <span class="tagline">The Catalyst | Underfall Anarchist</span>
@@ -244,7 +195,7 @@
                 </div>
                 <div class="architect-notes">Notes: Her presence destabilizes every arcane ward she touches.</div>
             </div>
-            <div class="char-dossier" data-char="Aelira" style="border-left: 8px solid var(--aether-blue);">
+            <div class="char-dossier" style="border-left: 8px solid var(--aether-blue);">
                 <div class="char-info">
                     <h2 style="color:var(--aether-blue);">Aelira Virex</h2>
                     <span class="tagline">The Anchor | The Living Tide</span>
@@ -252,7 +203,7 @@
                 </div>
                 <div class="architect-notes">Notes: Her spirit fractures result in Midstack flooding.</div>
             </div>
-            <div class="char-dossier" data-char="Sylva" style="border-left: 8px solid var(--gold);">
+            <div class="char-dossier" style="border-left: 8px solid var(--gold);">
                 <div class="char-info">
                     <h2 style="color:var(--gold);">Sylva Morren</h2>
                     <span class="tagline">The Authority | Grand Architect</span>
@@ -300,18 +251,158 @@
     </div>
 </div>
 
-<!-- Firebase + Dynamic Acts scripts remain the same as your previous code -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, increment, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
-  // Floating Lattice fragments generator
-  for(let i=0;i<40;i++){
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
+    authDomain: "aetherfall-d35a2.firebaseapp.com",
+    projectId: "aetherfall-d35a2",
+    storageBucket: "aetherfall-d35a2.firebasestorage.app",
+    messagingSenderId: "107057087956",
+    appId: "1:107057087956:web:cd958bc57a400502d1c241"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
+
+  // --- AUTH ---
+  window.openAuth = () => document.getElementById('authModal').style.display = 'flex';
+  let isLogin = true;
+  document.getElementById('toggleAuth').onclick = () => {
+      isLogin = !isLogin;
+      document.getElementById('modalTitle').innerText = isLogin ? "Sign In" : "Create Account";
+  };
+  document.getElementById('submitAuth').onclick = async () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      try {
+          isLogin ? await signInWithEmailAndPassword(auth, email, pass) : await createUserWithEmailAndPassword(auth, email, pass);
+          document.getElementById('authModal').style.display = 'none';
+      } catch(e) { alert(e.message); }
+  };
+  document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : openAuth();
+
+  // --- WORD COUNT ---
+  const contentInput = document.getElementById('content');
+  contentInput.addEventListener('input', () => {
+      const text = contentInput.value.trim();
+      document.getElementById('wordCount').innerText = text ? text.split(/\s+/).length : 0;
+      document.getElementById('charCount').innerText = text.length;
+  });
+
+  // --- ADMIN ACTIONS ---
+  window.prepEdit = (id) => {
+      const act = window[`act_${id}`];
+      document.getElementById('editId').value = id;
+      document.getElementById('title').value = act.title;
+      document.getElementById('preview').value = act.preview;
+      document.getElementById('content').value = act.content;
+      document.getElementById('isDraft').checked = act.status === "draft";
+      contentInput.dispatchEvent(new Event('input'));
+      document.getElementById('saveBtn').innerText = "Update Act";
+      document.getElementById('cancelEdit').style.display = "block";
+      window.scrollTo(0,0);
+  };
+
+  document.getElementById('saveBtn').onclick = async () => {
+      const id = document.getElementById('editId').value;
+      const data = {
+          title: document.getElementById('title').value,
+          preview: document.getElementById('preview').value,
+          content: document.getElementById('content').value,
+          status: document.getElementById('isDraft').checked ? "draft" : "published",
+          updatedAt: serverTimestamp()
+      };
+      if(!data.title || !data.content) return alert("Title/Content required");
+      try {
+          if(id) await updateDoc(doc(db, "acts", id), data);
+          else {
+              data.createdAt = serverTimestamp();
+              data.views = 0; data.likes = 0; data.likedBy = [];
+              await addDoc(collection(db, "acts"), data);
+          }
+          location.reload();
+      } catch(e) { alert(e.message); }
+  };
+
+  // --- LIKE SYSTEM ---
+  window.toggleLike = async (id) => {
+      if(!auth.currentUser) return openAuth();
+      const act = window[`act_${id}`];
+      const hasLiked = act.likedBy && act.likedBy.includes(auth.currentUser.uid);
+      await updateDoc(doc(db, "acts", id), {
+          likes: increment(hasLiked ? -1 : 1),
+          likedBy: hasLiked ? arrayRemove(auth.currentUser.uid) : arrayUnion(auth.currentUser.uid)
+      });
+  };
+
+  // --- RENDERING ---
+  onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
+      const container = document.getElementById('dynamic-acts');
+      container.innerHTML = "";
+      let actsData = [];
+      snap.forEach(s => {
+          const data = s.data();
+          // Hide drafts from non-admins
+          if(data.status === "draft" && (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID)) return;
+          actsData.push({id: s.id, ...data});
+      });
+      
+      const maxLikes = Math.max(...actsData.map(a => a.likes || 0));
+
+      actsData.forEach(act => {
+          window[`act_${act.id}`] = act;
+          const isAdmin = auth.currentUser && auth.currentUser.uid === ADMIN_UID;
+          const hasLiked = auth.currentUser && act.likedBy && act.likedBy.includes(auth.currentUser.uid);
+          const isRevered = act.likes > 0 && act.likes === maxLikes;
+
+          container.innerHTML += `
+              <div class="act-card" style="${act.status === 'draft' ? 'border-left: 5px solid gray; opacity: 0.7;' : ''}">
+                  ${act.status === 'draft' ? '<div style="color:gray; font-size:0.7rem;">[ DRAFT - ONLY YOU CAN SEE THIS ]</div>' : ''}
+                  ${isRevered ? `<div class="revered-badge">✨ Most Revered</div>` : ''}
+                  <div class="stats-row">
+                      <div class="stat-item">👁 <span>${act.views || 0}</span></div>
+                      <button class="btn-like ${hasLiked ? 'active' : ''}" onclick="toggleLike('${act.id}')">
+                          ${hasLiked ? '❤️' : '🤍'} <span>${act.likes || 0}</span>
+                      </button>
+                  </div>
+                  <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
+                  <p>${act.preview}</p>
+                  <div style="margin-top:15px; display:flex; gap:10px;">
+                      <button class="btn-access" onclick="openReader('${act.id}')">Read Full Act</button>
+                      ${isAdmin ? `<button class="btn-access" onclick="prepEdit('${act.id}')">Edit</button>` : ''}
+                  </div>
+              </div>`;
+      });
+  });
+
+  window.openReader = async (id) => {
+      const act = window[`act_${id}`];
+      document.getElementById('readerTitle').innerText = act.title;
+      document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:15px;">${p}</p>`).join('');
+      document.getElementById('readerOverlay').style.display = 'block';
+      if (auth.currentUser) await updateDoc(doc(db, "acts", id), { views: increment(1) });
+  };
+
+  window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
+
+  onAuthStateChanged(auth, (user) => {
+      document.getElementById('architectPanel').style.display = (user && user.uid === ADMIN_UID) ? 'block' : 'none';
+      document.getElementById('lockedContent').classList.toggle('restricted', !user);
+      document.getElementById('gateOverlay').style.display = user ? 'none' : 'block';
+      document.getElementById('authNavBtn').innerText = user ? "Sign Out" : "Sign In";
+  });
+
+  // Fragments
+  for(let i=0;i<20;i++){
       const frag = document.createElement('div');
       frag.className='fragment';
-      frag.style.top=Math.random()*100+'%';
-      frag.style.left=Math.random()*100+'%';
-      frag.style.animationDuration=(4+Math.random()*4)+'s';
-      frag.style.width=(5+Math.random()*10)+'px';
-      frag.style.height=frag.style.width;
+      frag.style.top=Math.random()*100+'%'; frag.style.left=Math.random()*100+'%';
       document.body.appendChild(frag);
   }
 </script>
