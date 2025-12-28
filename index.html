@@ -93,9 +93,10 @@
         .chronicle-container { position: relative; padding: 40px 5%; }
         .restricted { filter: blur(12px); opacity: 0.3; pointer-events: none; user-select: none; }
         
-        .view-badge {
-            font-size: 0.75rem; color: #777; font-style: italic; margin-bottom: 10px; display: block;
+        .stats-row {
+            display: flex; gap: 15px; margin-bottom: 10px; align-items: center;
         }
+        .stat-item { font-size: 0.8rem; color: #666; font-style: italic; }
 
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -115,6 +116,13 @@
             text-decoration: none; display: inline-block; transition: background 0.3s;
         }
         .btn-discord:hover { background: #4752c4; }
+
+        .btn-like {
+            background: none; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;
+            cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s;
+            font-family: serif; font-size: 0.9rem;
+        }
+        .btn-like.active { border-color: var(--riot-red); color: var(--riot-red); background: rgba(158, 1, 1, 0.05); }
 
         /* READER & MODALS */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 20px 10px; }
@@ -171,7 +179,6 @@
                 </div>
                 <div class="architect-notes">Notes: Her presence destabilizes every arcane ward she touches.</div>
             </div>
-
             <div class="char-dossier" style="border-left: 8px solid var(--aether-blue);">
                 <div class="char-info">
                     <h2 style="color:var(--aether-blue);">Aelira Virex</h2>
@@ -180,7 +187,6 @@
                 </div>
                 <div class="architect-notes">Notes: Her spirit fractures result in Midstack flooding.</div>
             </div>
-
             <div class="char-dossier" style="border-left: 8px solid var(--gold);">
                 <div class="char-info">
                     <h2 style="color:var(--gold);">Sylva Morren</h2>
@@ -232,7 +238,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc, increment, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
@@ -248,7 +254,7 @@
   const db = getFirestore(app);
   const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-  // AUTH LOGIC
+  // AUTH
   window.openAuth = () => document.getElementById('authModal').style.display = 'flex';
   let isLogin = true;
   document.getElementById('toggleAuth').onclick = () => {
@@ -267,27 +273,7 @@
   };
   document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : openAuth();
 
-  // ADMIN CRUD
-  window.prepEdit = (id) => {
-      const act = window[`act_${id}`];
-      document.getElementById('editId').value = id;
-      document.getElementById('title').value = act.title;
-      document.getElementById('preview').value = act.preview;
-      document.getElementById('content').value = act.content;
-      document.getElementById('saveBtn').innerText = "Update Act";
-      document.getElementById('cancelEdit').style.display = "block";
-      window.scrollTo(0,0);
-  };
-
-  document.getElementById('cancelEdit').onclick = () => {
-      document.getElementById('editId').value = "";
-      document.getElementById('title').value = "";
-      document.getElementById('preview').value = "";
-      document.getElementById('content').value = "";
-      document.getElementById('saveBtn').innerText = "Commit to Lattice";
-      document.getElementById('cancelEdit').style.display = "none";
-  };
-
+  // ADMIN
   document.getElementById('saveBtn').onclick = async () => {
       const id = document.getElementById('editId').value;
       const data = { 
@@ -300,18 +286,30 @@
           if(id) { await updateDoc(doc(db, "acts", id), data); }
           else { 
               data.createdAt = serverTimestamp(); 
-              data.views = 0; // Initialize views for new acts
+              data.views = 0; 
+              data.likes = 0;
+              data.likedBy = [];
               await addDoc(collection(db, "acts"), data); 
           }
           document.getElementById('cancelEdit').click();
       } catch(e) { alert(e.message); }
   };
 
-  window.deleteAct = async (id) => {
-      if(confirm("Erase this memory permanently?")) { await deleteDoc(doc(db, "acts", id)); }
+  // LIKE SYSTEM
+  window.toggleLike = async (id) => {
+      if(!auth.currentUser) return;
+      const act = window[`act_${id}`];
+      const hasLiked = act.likedBy && act.likedBy.includes(auth.currentUser.uid);
+      
+      try {
+          await updateDoc(doc(db, "acts", id), {
+              likes: increment(hasLiked ? -1 : 1),
+              likedBy: hasLiked ? arrayRemove(auth.currentUser.uid) : arrayUnion(auth.currentUser.uid)
+          });
+      } catch(e) { console.error(e); }
   };
 
-  // RENDERING
+  // RENDER
   onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
       const container = document.getElementById('dynamic-acts');
       container.innerHTML = "";
@@ -320,9 +318,17 @@
           window[`act_${s.id}`] = act;
           const isAdmin = auth.currentUser && auth.currentUser.uid === ADMIN_UID;
           const views = act.views || 0;
+          const likes = act.likes || 0;
+          const hasLiked = auth.currentUser && act.likedBy && act.likedBy.includes(auth.currentUser.uid);
+
           container.innerHTML += `
               <div class="act-card">
-                  <span class="view-badge">👁 ${views} seekers have witnessed this.</span>
+                  <div class="stats-row">
+                      <span class="stat-item">👁 ${views} seekers</span>
+                      <button class="btn-like ${hasLiked ? 'active' : ''}" onclick="toggleLike('${s.id}')">
+                          ${hasLiked ? '❤️' : '🤍'} ${likes}
+                      </button>
+                  </div>
                   <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
                   <p>${act.preview}</p>
                   <div style="margin-top:15px; display:flex; gap:10px;">
@@ -333,20 +339,13 @@
       });
   });
 
-  // READER WITH VIEW COUNTER
   window.openReader = async (id) => {
       const act = window[`act_${id}`];
       document.getElementById('readerTitle').innerText = act.title;
       document.getElementById('readerBody').innerHTML = act.content.split('\n').map(p => `<p style="margin-bottom:15px;">${p}</p>`).join('');
       document.getElementById('readerOverlay').style.display = 'block';
-
-      // Increment view count in Firebase if user is logged in
       if (auth.currentUser) {
-        try {
-            await updateDoc(doc(db, "acts", id), {
-                views: increment(1)
-            });
-        } catch (err) { console.error("Could not update view count", err); }
+        await updateDoc(doc(db, "acts", id), { views: increment(1) });
       }
   };
 
