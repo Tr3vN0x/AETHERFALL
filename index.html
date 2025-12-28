@@ -6,87 +6,137 @@
     <title>Aetherfall | The Grand Grimoire</title>
     
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/gold-bars.png">
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --parchment: #f2e8cf;
-            --ink: #1a1a1a;
+            --parchment: #f9f4e8;
+            --ink: #1e1e1e;
             --gold: #b8924e;
-            --riot-red: #9e0101;       
-            --aether-blue: #0077be;    
-            --leather: #2b1d12;
+            --riot-red: #d32f2f;       
+            --aether-blue: #0288d1;    
+            --leather: #3d2b1f;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
+        /* GLOBAL STYLES */
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #050505; color: var(--ink); font-family: 'Crimson Text', serif; padding-top: 80px; }
+        body { 
+            background: #0d0d0d; 
+            color: var(--ink); 
+            font-family: 'Crimson Text', serif; 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-        /* NAVIGATION */
+        /* PROFESSIONAL NAVBAR */
         nav {
-            position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(10, 10, 10, 0.95); border-bottom: 2px solid var(--gold);
+            position: fixed; top: 0; width: 100%; height: 65px;
+            background: rgba(13, 13, 13, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(184, 146, 78, 0.3);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 5%; z-index: 1000; backdrop-filter: blur(10px);
+            padding: 0 8%; z-index: 1000;
         }
         .nav-logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .nav-logo { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.4rem; letter-spacing: 1px; }
+        .nav-logo { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.2rem; letter-spacing: 2px; }
         .gold-emblem { 
-            width: 32px; height: 32px; background: var(--gold); 
+            width: 28px; height: 28px; background: var(--gold); 
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
             display: flex; align-items: center; justify-content: center;
-            color: black; font-weight: bold; font-family: 'Uncial Antiqua';
+            color: #000; font-weight: bold; font-family: 'Uncial Antiqua'; font-size: 0.8rem;
         }
 
-        /* GRIMOIRE MAIN CONTAINER */
+        /* STATUS BAR - NEW FEATURE */
+        .lattice-status {
+            background: #151515; color: var(--gold);
+            padding: 8px 0; text-align: center; font-size: 0.75rem;
+            letter-spacing: 3px; font-family: 'Inter', sans-serif;
+            border-bottom: 1px solid #222; margin-top: 65px;
+            text-transform: uppercase;
+        }
+
+        /* GRIMOIRE CONTAINER */
         .grimoire {
-            width: 95%; max-width: 1000px; margin: 0 auto 100px; 
+            width: 90%; max-width: 1100px; margin: 40px auto 100px; 
             background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            border: 12px solid var(--leather);
-            box-shadow: 0 0 60px rgba(0,0,0,0.9);
-            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
         }
         
-        header { text-align: center; padding: 60px 20px; border-bottom: 5px double var(--gold); }
-        header h1 { font-family: 'Uncial Antiqua'; font-size: 3.5rem; color: #111; margin-bottom: 10px; }
-        header p { font-size: 1.2rem; letter-spacing: 4px; color: var(--gold); font-weight: bold; }
+        header { 
+            text-align: center; padding: 80px 20px 60px; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.03), transparent);
+        }
+        header h1 { font-family: 'Uncial Antiqua'; font-size: 4rem; color: #111; margin-bottom: 5px; }
+        header p { font-size: 1rem; letter-spacing: 6px; color: var(--gold); font-weight: bold; text-transform: uppercase; }
 
-        /* INTERACTIVE MAP SECTION */
-        .map-section { padding: 40px 8%; border-bottom: 5px double var(--gold); text-align: center; }
-        .map-container { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
+        /* INTERACTIVE MAP - REFINED */
+        .map-section { padding: 40px 10%; background: rgba(0,0,0,0.02); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .section-label { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 20px; display: block; text-align: center; }
         
+        .map-container { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
         .map-layer {
-            border: 2px solid rgba(184, 146, 78, 0.4);
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            background: rgba(0,0,0,0.02);
+            background: #fff; border: 1px solid rgba(0,0,0,0.08);
+            padding: 25px; cursor: pointer; border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .map-layer:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .map-layer.active { border-left: 5px solid var(--gold); }
+        .map-layer h3 { font-family: 'Uncial Antiqua'; font-size: 1.5rem; margin-bottom: 5px; color: #222; }
+        .layer-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; color: #555; font-size: 1rem; }
+        .map-layer.active .layer-details { max-height: 150px; margin-top: 15px; }
+
+        /* CHARACTER DOSSIERS */
+        .archives-section { padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .char-dossier {
+            background: #fff; padding: 30px; border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 3px solid var(--gold);
+        }
+        .char-dossier h2 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 10px; }
+        .tagline { color: #888; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block;}
+
+        /* THE CHRONICLE */
+        .chronicle-container { padding: 80px 10%; background: #fff; }
+        .act-card { margin-bottom: 60px; position: relative; }
+        .act-card h3 { font-family: 'Uncial Antiqua'; font-size: 2rem; color: #111; margin-bottom: 15px; }
+        .act-card p { font-size: 1.2rem; color: #444; margin-bottom: 25px; text-align: justify; }
+
+        /* BUTTONS */
+        .btn-access { 
+            background: var(--gold); color: #fff; padding: 12px 28px; 
+            border: none; border-radius: 2px; font-family: 'Inter', sans-serif; font-weight: 600;
+            cursor: pointer; font-size: 0.85rem; transition: 0.3s; letter-spacing: 1px;
+        }
+        .btn-access:hover { background: #96753d; box-shadow: 0 5px 15px rgba(184, 146, 78, 0.3); }
+        .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+        .btn-outline:hover { background: var(--gold); color: #fff; }
+
+        /* READER OVERLAY */
+        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; padding: 60px 5%; }
+        .scroll-paper { 
+            width: 100%; max-width: 800px; margin: 0 auto; background: var(--parchment); 
+            padding: 60px; border-radius: 4px; position: relative;
+        }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #888; }
+
+        /* ADMIN PANEL */
+        #architectPanel { 
+            display: none; background: #111; border-top: 2px solid var(--gold); 
+            padding: 40px 8%; color: #fff;
+        }
+        .admin-input { 
+            width: 100%; padding: 15px; margin-bottom: 20px; background: #1a1a1a; 
+            border: 1px solid #333; color: #fff; font-family: 'Inter', sans-serif;
         }
 
-        .map-layer:hover { background: rgba(184, 146, 78, 0.1); border-color: var(--gold); transform: scale(1.02); }
-        
-        .map-layer h3 { font-family: 'Uncial Antiqua'; font-size: 1.8rem; margin-bottom: 5px; }
-        .map-layer .governor { font-size: 0.9rem; text-transform: uppercase; color: var(--gold); letter-spacing: 2px; font-weight: bold; }
-        .layer-details { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; font-style: italic; margin-top: 0; color: #444; }
-        .map-layer.active { border-color: var(--gold); background: white; }
-        .map-layer.active .layer-details { max-height: 100px; margin-top: 15px; }
-
-        /* Existing Character/Chronicle Styles */
-        .archives-section { padding: 40px 8%; border-bottom: 5px double var(--gold); }
-        .char-dossier { background: rgba(0,0,0,0.03); border: 1px solid rgba(184, 146, 78, 0.3); padding: 25px; margin-bottom: 30px; }
-        .char-info h2 { font-family: 'Uncial Antiqua'; font-size: 2rem; margin-bottom: 8px; }
-        .tagline { font-weight: bold; font-style: italic; color: #666; display: block; margin-bottom: 12px; }
-        .chronicle-container { padding: 60px 8%; }
-        .chronicle-title { text-align: center; font-family: 'Uncial Antiqua'; color: var(--gold); font-size: 2.5rem; margin-bottom: 40px; }
-        .act-card { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .btn-access { background: var(--gold); color: #fff; padding: 10px 20px; border: none; font-family: 'Uncial Antiqua'; cursor: pointer; transition: 0.3s; margin-right: 5px; }
-
-        /* ADMIN/READER OVERLAYS */
-        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 4000; overflow-y: auto; padding: 40px 5%; }
-        .scroll-paper { width: 100%; max-width: 850px; margin: 0 auto; background: var(--parchment); padding: 50px; border: 2px solid var(--gold); }
-        #architectPanel { display: none; background: #111; border: 2px solid var(--gold); padding: 25px; margin: 20px auto; width: 95%; max-width: 1000px; color: var(--parchment); }
-        .admin-input { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; border: 1px solid #444; color: #fff; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .archives-section { grid-template-columns: 1fr; }
+            .scroll-paper { padding: 30px; }
+        }
     </style>
 </head>
 <body>
@@ -99,129 +149,139 @@
     <button class="btn-access" id="authNavBtn">SIGN IN</button>
 </nav>
 
+<div class="lattice-status">
+    Current Lattice Resonance: <span style="color:#fff">Stable</span> | Timeline: <span style="color:#fff">Act VIII Active</span>
+</div>
+
 <div id="architectPanel">
-    <h2 id="panelTitle" style="font-family:'Uncial Antiqua'; color:var(--gold);">MANIFEST NEW ACT</h2>
-    <input type="hidden" id="editId">
+    <h2 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:20px;">MANIFEST NEW ACT</h2>
     <input type="text" id="title" placeholder="Act Title" class="admin-input">
     <textarea id="preview" placeholder="Brief Preview" class="admin-input" style="height:80px;"></textarea>
-    <textarea id="content" placeholder="Full Chronicle..." class="admin-input" style="height:300px;"></textarea>
+    <textarea id="content" placeholder="Full Chronicle Text..." class="admin-input" style="height:300px;"></textarea>
     <button class="btn-access" id="saveBtn">COMMIT TO LATTICE</button>
 </div>
 
 <div class="grimoire">
     <header>
         <h1>Aetherfall</h1>
-        <p>THE TRIAD ARCHIVES</p>
+        <p>The Grand Grimoire</p>
     </header>
 
     <section class="map-section">
-        <h2 style="font-family:'Uncial Antiqua'; color:var(--gold);">CITY TOPOGRAPHY</h2>
+        <span class="section-label">CITY TOPOGRAPHY</span>
         <div class="map-container">
-            <div class="map-layer" onclick="this.classList.toggle('active')" style="border-top: 5px solid var(--gold);">
-                <span class="governor">Sylva's Jurisdiction</span>
+            <div class="map-layer" onclick="this.classList.toggle('active')">
                 <h3>The High Rises</h3>
-                <p class="layer-details">A gleaming forest of ivory towers and golden wards. Here, the Lattice is a tool of absolute precision and cold law.</p>
+                <span class="tagline">Jurisdiction: Sylva Morren</span>
+                <p class="layer-details">The peak of civilization. Gleaming spires protected by golden wards and rigid law. The air here tastes of ozone and absolute order.</p>
             </div>
-            <div class="map-layer" onclick="this.classList.toggle('active')" style="border-top: 5px solid var(--aether-blue);">
-                <span class="governor">Aelira's Domain</span>
+            <div class="map-layer" onclick="this.classList.toggle('active')">
                 <h3>The Midstack</h3>
-                <p class="layer-details">The heart of commerce and life. Cascading waterfalls flow through markets, pulsed by the city's emotional resonance.</p>
+                <span class="tagline">Jurisdiction: Aelira Virex</span>
+                <p class="layer-details">A bustling hub of water-ways and neon markets. Gravity is a suggestion here, and life flows with the city's emotional tide.</p>
             </div>
-            <div class="map-layer" onclick="this.classList.toggle('active')" style="border-top: 5px solid var(--riot-red);">
-                <span class="governor">Zyra's Territory</span>
+            <div class="map-layer" onclick="this.classList.toggle('active')">
                 <h3>The Underfall</h3>
-                <p class="layer-details">The foundations of Aetherfall. A labyrinth of neon chaos, leaking energy, and raw, unfiltered arcane power.</p>
+                <span class="tagline">Jurisdiction: Zyra Kade</span>
+                <p class="layer-details">The raw foundation. A labyrinth of wires and leaking magic. It is dangerous, chaotic, and entirely free.</p>
             </div>
         </div>
     </section>
 
     <section class="archives-section">
-        <div class="char-dossier" style="border-left: 6px solid var(--riot-red);">
-            <h2>Zyra "Riot" Kade</h2>
-            <span class="tagline">The Catalyst | Underfall Anarchist</span>
-            <p>Lean, hardened, and built for survival. She overdrives magic into chaos.</p>
+        <div class="char-dossier" style="border-top-color: var(--riot-red);">
+            <h2>Zyra Kade</h2>
+            <span class="tagline">Underfall Anarchist</span>
+            <p>A hardened survivor who thrives in the city's chaotic energy.</p>
         </div>
-        <div class="char-dossier" style="border-left: 6px solid var(--aether-blue);">
+        <div class="char-dossier" style="border-top-color: var(--aether-blue);">
             <h2>Aelira Virex</h2>
-            <span class="tagline">The Anchor | The Living Tide</span>
-            <p>Commands water that defies gravity. A living storm in a fragile vessel.</p>
+            <span class="tagline">The Living Tide</span>
+            <p>The anchor of emotion, commanding waters that mirror her soul.</p>
         </div>
-        <div class="char-dossier" style="border-left: 6px solid var(--gold);">
+        <div class="char-dossier">
             <h2>Sylva Morren</h2>
-            <span class="tagline">The Authority | Grand Architect</span>
-            <p>The personification of order. Sylva binds reality through contracts.</p>
+            <span class="tagline">Grand Architect</span>
+            <p>The voice of the Lattice, ensuring the city remains within the lines of law.</p>
         </div>
     </section>
 
     <div class="chronicle-container">
-        <h2 class="chronicle-title">THE CHRONICLE</h2>
-        <div id="dynamic-acts"></div>
+        <span class="section-label">THE CHRONICLE</span>
+        <div id="dynamic-acts">
+            </div>
     </div>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
     <div class="scroll-paper">
-        <button class="close-btn" onclick="closeReader()">[ CLOSE ]</button>
-        <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:30px;"></h2>
-        <div id="readerBody" style="white-space: pre-wrap; line-height: 1.8;"></div>
+        <button class="close-btn" onclick="closeReader()">&times;</button>
+        <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:30px; font-size: 2.5rem;"></h2>
+        <div id="readerBody" style="white-space: pre-wrap; font-size: 1.3rem; color: #333;"></div>
     </div>
 </div>
 
 <script type="module">
-  // [Firebase Config and logic remains exactly the same as previous working version]
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
-    authDomain: "aetherfall-d35a2.firebaseapp.com",
-    projectId: "aetherfall-d35a2",
-    storageBucket: "aetherfall-d35a2.firebasestorage.app",
-    messagingSenderId: "107057087956",
-    appId: "1:107057087956:web:cd958bc57a400502d1c241"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDvY6EBbx55sK3F5ovjWDGexG9N58WXS-4",
+        authDomain: "aetherfall-d35a2.firebaseapp.com",
+        projectId: "aetherfall-d35a2",
+        storageBucket: "aetherfall-d35a2.firebasestorage.app",
+        messagingSenderId: "107057087956",
+        appId: "1:107057087956:web:cd958bc57a400502d1c241"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-  onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "desc")), (snap) => {
-      const container = document.getElementById('dynamic-acts');
-      container.innerHTML = "";
-      snap.forEach(s => {
-          const act = s.data();
-          const id = s.id;
-          window[`act_${id}`] = act;
-          let adminBtns = (auth.currentUser && auth.currentUser.uid === ADMIN_UID) ? 
-            `<button class="btn-access" onclick="prepareEdit('${id}')">EDIT</button>` : '';
-          container.innerHTML += `<div class="act-card"><h3>${act.title}</h3><p>${act.preview}</p>
-          <button class="btn-access" onclick="openReader('${id}')">READ FULL ACT</button>${adminBtns}</div>`;
-      });
-  });
+    onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "desc")), (snap) => {
+        const container = document.getElementById('dynamic-acts');
+        container.innerHTML = "";
+        snap.forEach(s => {
+            const act = s.data();
+            const id = s.id;
+            window[`act_${id}`] = act;
+            let adminActions = '';
+            if (auth.currentUser && auth.currentUser.uid === ADMIN_UID) {
+                adminActions = `<button class="btn-access btn-outline" style="margin-left:10px;" onclick="prepareEdit('${id}')">EDIT</button>`;
+            }
+            container.innerHTML += `
+                <div class="act-card">
+                    <h3>${act.title}</h3>
+                    <p>${act.preview}</p>
+                    <button class="btn-access" onclick="openReader('${id}')">READ FULL ACT</button>
+                    ${adminActions}
+                </div>`;
+        });
+    });
 
-  window.openReader = (id) => {
-      const act = window[`act_${id}`];
-      document.getElementById('readerTitle').innerText = act.title;
-      document.getElementById('readerBody').innerText = act.content;
-      document.getElementById('readerOverlay').style.display = 'block';
-  };
-  window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
+    window.openReader = (id) => {
+        const act = window[`act_${id}`];
+        document.getElementById('readerTitle').innerText = act.title;
+        document.getElementById('readerBody').innerText = act.content;
+        document.getElementById('readerOverlay').style.display = 'block';
+    };
+    window.closeReader = () => document.getElementById('readerOverlay').style.display = 'none';
 
-  onAuthStateChanged(auth, (user) => {
-      document.getElementById('architectPanel').style.display = (user && user.uid === ADMIN_UID) ? 'block' : 'none';
-      document.getElementById('authNavBtn').innerText = user ? "SIGN OUT" : "SIGN IN";
-  });
+    onAuthStateChanged(auth, (user) => {
+        document.getElementById('architectPanel').style.display = (user && user.uid === ADMIN_UID) ? 'block' : 'none';
+        document.getElementById('authNavBtn').innerText = user ? "SIGN OUT" : "SIGN IN";
+    });
 
-  document.getElementById('authNavBtn').onclick = () => {
-    if(auth.currentUser) signOut(auth);
-    else {
-        const email = prompt("Email:");
-        const pass = prompt("Key:");
-        signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
-    }
-  };
+    document.getElementById('authNavBtn').onclick = () => {
+        if(auth.currentUser) signOut(auth);
+        else {
+            const email = prompt("Email:");
+            const pass = prompt("Key:");
+            if(email && pass) signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
+        }
+    };
 </script>
 </body>
 </html>
