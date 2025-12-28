@@ -89,14 +89,25 @@
             border-top: 5px double var(--gold); border-bottom: 5px double var(--gold);
         }
 
-        /* CHRONICLE & GATES */
+        /* CHRONICLE & STATS */
         .chronicle-container { position: relative; padding: 40px 5%; }
         .restricted { filter: blur(12px); opacity: 0.3; pointer-events: none; user-select: none; }
         
+        /* NEW LARGER STATS DESIGN */
         .stats-row {
-            display: flex; gap: 15px; margin-bottom: 10px; align-items: center;
+            display: flex; gap: 20px; margin-bottom: 15px; align-items: center;
+            background: rgba(0,0,0,0.05); padding: 10px 15px; border-radius: 4px;
+            border-left: 3px solid var(--gold);
         }
-        .stat-item { font-size: 0.8rem; color: #666; font-style: italic; }
+        .stat-item { 
+            font-size: 1rem; color: #333; font-weight: bold; 
+            display: flex; align-items: center; gap: 6px;
+        }
+        .revered-badge {
+            display: inline-block; background: var(--gold); color: #000;
+            font-family: 'Uncial Antiqua'; font-size: 0.7rem; padding: 4px 8px;
+            border-radius: 2px; margin-bottom: 10px;
+        }
 
         .gate-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -118,11 +129,13 @@
         .btn-discord:hover { background: #4752c4; }
 
         .btn-like {
-            background: none; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;
-            cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s;
-            font-family: serif; font-size: 0.9rem;
+            background: white; border: 1px solid var(--gold); padding: 6px 14px; 
+            border-radius: 4px; cursor: pointer; display: flex; align-items: center; 
+            gap: 8px; transition: 0.3s; font-family: 'Uncial Antiqua'; font-size: 1rem;
+            box-shadow: 2px 2px 0px var(--gold);
         }
-        .btn-like.active { border-color: var(--riot-red); color: var(--riot-red); background: rgba(158, 1, 1, 0.05); }
+        .btn-like:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--gold); }
+        .btn-like.active { background: var(--riot-red); color: white; border-color: #700; box-shadow: 2px 2px 0px #700; }
 
         /* READER & MODALS */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; overflow-y: auto; padding: 20px 10px; }
@@ -130,7 +143,7 @@
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: var(--parchment); padding: 30px; border: 5px solid var(--gold); width: 90%; max-width: 400px; text-align: center; }
 
-        .act-card { margin-bottom: 40px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 25px; }
+        .act-card { margin-bottom: 40px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 25px; position: relative; }
 
         @media (max-width: 850px) {
             .char-dossier { grid-template-columns: 1fr; }
@@ -273,34 +286,11 @@
   };
   document.getElementById('authNavBtn').onclick = () => auth.currentUser ? signOut(auth) : openAuth();
 
-  // ADMIN
-  document.getElementById('saveBtn').onclick = async () => {
-      const id = document.getElementById('editId').value;
-      const data = { 
-          title: document.getElementById('title').value, 
-          preview: document.getElementById('preview').value, 
-          content: document.getElementById('content').value, 
-          updatedAt: serverTimestamp() 
-      };
-      try {
-          if(id) { await updateDoc(doc(db, "acts", id), data); }
-          else { 
-              data.createdAt = serverTimestamp(); 
-              data.views = 0; 
-              data.likes = 0;
-              data.likedBy = [];
-              await addDoc(collection(db, "acts"), data); 
-          }
-          document.getElementById('cancelEdit').click();
-      } catch(e) { alert(e.message); }
-  };
-
   // LIKE SYSTEM
   window.toggleLike = async (id) => {
       if(!auth.currentUser) return;
       const act = window[`act_${id}`];
       const hasLiked = act.likedBy && act.likedBy.includes(auth.currentUser.uid);
-      
       try {
           await updateDoc(doc(db, "acts", id), {
               likes: increment(hasLiked ? -1 : 1),
@@ -313,27 +303,35 @@
   onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
       const container = document.getElementById('dynamic-acts');
       container.innerHTML = "";
-      snap.forEach(s => {
-          const act = s.data();
-          window[`act_${s.id}`] = act;
+      
+      let actsData = [];
+      snap.forEach(s => actsData.push({id: s.id, ...s.data()}));
+      
+      // Find the most liked act
+      const maxLikes = Math.max(...actsData.map(a => a.likes || 0));
+
+      actsData.forEach(act => {
+          window[`act_${act.id}`] = act;
           const isAdmin = auth.currentUser && auth.currentUser.uid === ADMIN_UID;
           const views = act.views || 0;
           const likes = act.likes || 0;
           const hasLiked = auth.currentUser && act.likedBy && act.likedBy.includes(auth.currentUser.uid);
+          const isRevered = likes > 0 && likes === maxLikes;
 
           container.innerHTML += `
               <div class="act-card">
+                  ${isRevered ? `<div class="revered-badge">✨ Most Revered by the Lattice</div>` : ''}
                   <div class="stats-row">
-                      <span class="stat-item">👁 ${views} seekers</span>
-                      <button class="btn-like ${hasLiked ? 'active' : ''}" onclick="toggleLike('${s.id}')">
-                          ${hasLiked ? '❤️' : '🤍'} ${likes}
+                      <div class="stat-item">👁 <span>${views} Seekers</span></div>
+                      <button class="btn-like ${hasLiked ? 'active' : ''}" onclick="toggleLike('${act.id}')">
+                          ${hasLiked ? '❤️' : '🤍'} <span>${likes}</span>
                       </button>
                   </div>
                   <h3 style="font-family:'Uncial Antiqua'; color: var(--gold);">${act.title}</h3>
                   <p>${act.preview}</p>
                   <div style="margin-top:15px; display:flex; gap:10px;">
-                      <button class="btn-access" onclick="openReader('${s.id}')">Read Full Act</button>
-                      ${isAdmin ? `<button class="btn-access" style="background:var(--sylva-emerald)" onclick="prepEdit('${s.id}')">Edit</button><button class="btn-access" style="background:var(--riot-red)" onclick="deleteAct('${s.id}')">Delete</button>` : ''}
+                      <button class="btn-access" onclick="openReader('${act.id}')">Read Full Act</button>
+                      ${isAdmin ? `<button class="btn-access" style="background:var(--sylva-emerald)" onclick="prepEdit('${act.id}')">Edit</button><button class="btn-access" style="background:var(--riot-red)" onclick="deleteAct('${act.id}')">Delete</button>` : ''}
                   </div>
               </div>`;
       });
