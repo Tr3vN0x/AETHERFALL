@@ -14,6 +14,7 @@
             --ink: #1a1a1a;
             --gold: #b8924e;
             --glass: rgba(10, 10, 10, 0.98);
+            --discord: #5865F2;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -25,25 +26,34 @@
             background: var(--glass); backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(184, 146, 78, 0.3);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 15px; z-index: 1000;
+            padding: 0 20px; z-index: 1000;
         }
-        .nav-left { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-left { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .brand-icon { width: 40px; height: 40px; background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=NOSzaFl6cNwIYGHeJVAYEA&oh=00_AfngpKzFyblJVfeaZ_b_b1pt-kP0up7l0jqYLXIdo7i76Q&oe=6958337C'); background-size: cover; border: 1px solid var(--gold); border-radius: 2px; }
-        .nav-title { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1rem; }
+        .nav-title { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.1rem; }
 
-        /* MAIN GRIMOIRE */
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .discord-btn { 
+            color: var(--discord); 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 0.75rem; 
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(88, 101, 242, 0);
+            transition: 0.3s;
+        }
+        .discord-btn:hover { text-shadow: 0 0 10px rgba(88, 101, 242, 0.5); transform: translateY(-1px); }
+
+        /* GRIMOIRE */
         .grimoire { width: 100%; max-width: 1000px; margin: 65px auto 0; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); box-shadow: 0 50px 100px rgba(0,0,0,0.9); min-height: 100vh; }
         header { text-align: center; padding: 40px 15px; border-bottom: 2px solid var(--gold); }
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2.5rem, 10vw, 4rem); color: #111; }
         
-        .search-wrap { padding: 20px; text-align: center; }
-        .search-input { width: 100%; max-width: 400px; padding: 10px; border: 1px solid var(--gold); background: rgba(255,255,255,0.6); font-family: 'Inter'; border-radius: 20px; text-align: center; outline: none; }
-
         .section-label { background: #111; color: var(--gold); text-align: center; font-family: 'Uncial Antiqua'; padding: 15px; font-size: 1.4rem; letter-spacing: 3px; }
 
-        /* CHARACTER GRID */
+        /* CHARACTERS */
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); background: rgba(0,0,0,0.05); gap: 1px; }
-        .char-card { background: #fff; padding: 25px; border-bottom: 1px solid #eee; position: relative; }
+        .char-card { background: #fff; padding: 25px; border-bottom: 1px solid #eee; }
         .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
         .char-card p { font-family: 'Crimson Text'; font-size: 1.1rem; line-height: 1.5; color: #333; white-space: pre-wrap; }
 
@@ -53,7 +63,7 @@
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.7rem; margin-bottom: 10px; color: #111; }
         .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #222; font-style: italic; display: block; margin-bottom: 15px; border-top: 1px solid rgba(184, 146, 78, 0.2); padding-top: 10px; }
 
-        /* HUD & UI */
+        /* HUD */
         #architectHUD { display: none; position: fixed; right: 20px; top: 85px; width: 320px; background: var(--glass); border: 1px solid var(--gold); padding: 20px; z-index: 2000; border-radius: 4px; color: #fff; }
         .hud-select, .input-field { width: 100%; padding: 10px; margin-bottom: 10px; background: #111; border: 1px solid var(--gold); color: #fff; }
         .btn { padding: 10px 20px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
@@ -75,8 +85,12 @@
 <body>
 
 <nav>
-    <a href="#" class="nav-left"><div class="brand-icon"></div><span class="nav-title">AETHERFALL</span></a>
-    <div style="display:flex; align-items:center; gap:10px;">
+    <a href="#" class="nav-left">
+        <div class="brand-icon"></div>
+        <span class="nav-title">AETHERFALL</span>
+    </a>
+    <div class="nav-right">
+        <a href="https://discord.gg/XSEwZU7c9H" target="_blank" class="discord-btn">DISCORD</a>
         <button class="btn btn-outline" id="authBtn">LOGIN</button>
     </div>
 </nav>
@@ -85,9 +99,6 @@
     <header>
         <p style="color:var(--gold); letter-spacing:4px; font-weight:600; font-size:0.7rem;">EST. IN NEON & BLOOD</p>
         <h1>Aetherfall</h1>
-        <div class="search-wrap">
-            <input type="text" id="gSearch" class="search-input" placeholder="Search the Grimoire...">
-        </div>
     </header>
 
     <div class="section-label">Character Dossiers</div>
@@ -105,8 +116,8 @@
         <option value="chars">New Character Dossier</option>
     </select>
     <input type="text" id="postTitle" placeholder="Name or Title" class="input-field">
-    <textarea id="postPreview" placeholder="Summary..." class="input-field" style="height:60px;"></textarea>
-    <textarea id="postContent" placeholder="Full Details (Acts only)..." class="input-field" style="height:100px;"></textarea>
+    <textarea id="postPreview" placeholder="Brief Summary" class="input-field" style="height:60px;"></textarea>
+    <textarea id="postContent" placeholder="Full Details (Acts only)" class="input-field" style="height:100px;"></textarea>
     <button class="btn btn-gold" id="saveBtn" style="width:100%;">COMMIT TO GRIMOIRE</button>
 </div>
 
@@ -142,7 +153,6 @@
     let allActs = [];
     let allChars = [];
 
-    // Real-time Sync
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
         allActs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderAll();
@@ -153,13 +163,11 @@
     });
 
     function renderAll() {
-        const searchVal = document.getElementById('gSearch').value.toLowerCase();
         const actCont = document.getElementById('dynamic-acts');
         const charCont = document.getElementById('dynamic-chars');
         actCont.innerHTML = ""; charCont.innerHTML = "";
 
-        // Render Characters Grid
-        allChars.filter(c => c.title.toLowerCase().includes(searchVal)).forEach(char => {
+        allChars.forEach(char => {
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
                 <div class="admin-controls">
                     <button class="btn-edit" onclick="editEntry('chars', '${char.id}')">[EDIT]</button>
@@ -168,8 +176,7 @@
             charCont.innerHTML += `<div class="char-card"><h3>${char.title}</h3><p>${char.preview}</p>${adminUI}</div>`;
         });
 
-        // Render Chronicles List
-        allActs.filter(a => a.title.toLowerCase().includes(searchVal)).forEach(act => {
+        allActs.forEach(act => {
             window[`act_${act.id}`] = act;
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
                 <div class="admin-controls">
@@ -187,8 +194,6 @@
                 </div>`;
         });
     }
-
-    document.getElementById('gSearch').oninput = renderAll;
 
     document.getElementById('saveBtn').onclick = async () => {
         const id = document.getElementById('editId').value;
