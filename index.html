@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aetherfall | The Grand Grimoire</title>
     
+    <link rel="icon" type="image/jpg" href="https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=NOSzaFl6cNwIYGHeJVAYEA&oh=00_AfngpKzFyblJVfeaZ_b_b1pt-kP0up7l0jqYLXIdo7i76Q&oe=6958337C">
+    
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -12,11 +14,11 @@
             --parchment: #fdfaf3;
             --ink: #1a1a1a;
             --gold: #b8924e;
-            --glass: rgba(10, 10, 10, 0.95);
+            --glass: rgba(10, 10, 10, 0.96);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: #050505; color: var(--ink); font-family: 'Inter', sans-serif; }
+        body { background: #050505; color: var(--ink); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
         /* NAVIGATION */
         nav {
@@ -29,60 +31,61 @@
         
         .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; }
         
-        /* FIXED SQUARE ICON */
         .brand-icon {
             width: 45px; height: 45px;
             background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=NOSzaFl6cNwIYGHeJVAYEA&oh=00_AfngpKzFyblJVfeaZ_b_b1pt-kP0up7l0jqYLXIdo7i76Q&oe=6958337C');
             background-size: cover;
             background-position: center;
             border: 1px solid var(--gold);
-            border-radius: 2px; /* Sharp square feel */
+            border-radius: 4px;
         }
 
         .nav-title { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.2rem; letter-spacing: 2px; }
 
         .nav-right { display: flex; gap: 20px; align-items: center; }
-        .discord-link { color: #5865F2; text-decoration: none; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; }
+        .discord-link { color: #5865F2; text-decoration: none; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; }
 
-        /* SIDE PANEL (ARCHITECT HUD) */
+        /* SIDE PANEL (STRICT RIGHT) */
         #architectHUD {
-            display: none; position: fixed; right: 20px; top: 100px;
-            width: 300px; background: var(--glass); border: 1px solid var(--gold);
-            padding: 20px; z-index: 2000; border-radius: 4px;
+            display: none; position: fixed; right: 30px; top: 100px;
+            width: 320px; background: var(--glass); border: 1px solid var(--gold);
+            padding: 25px; z-index: 2000; border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
         /* GRIMOIRE */
         .grimoire {
             width: 95%; max-width: 1000px; margin: 100px auto 50px;
             background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8); min-height: 80vh;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9); border-radius: 2px;
         }
 
         header { text-align: center; padding: 80px 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2.5rem, 10vw, 5rem); color: #111; }
         
+        /* CHARACTER TEXT STYLES */
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border-bottom: 1px solid #ddd; }
-        .char-card { padding: 40px; border: 0.5px solid #eee; background: #fff; }
-        .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 15px; }
-        .char-card p { font-family: 'Crimson Text'; font-size: 1.2rem; line-height: 1.6; color: #333; }
+        .char-card { padding: 40px; background: #fff; border-right: 1px solid #eee; }
+        .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; color: #111; margin-bottom: 10px; }
+        .char-card p { font-family: 'Crimson Text'; font-size: 1.2rem; line-height: 1.6; color: #444; }
 
         .chronicle-container { padding: 50px 8%; }
         .act-card { padding: 40px 0; border-bottom: 1px solid #eee; }
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 2rem; margin-bottom: 15px; }
-        .preview-text { font-family: 'Crimson Text'; font-size: 1.3rem; color: #444; font-style: italic; display: block; margin-bottom: 20px; }
+        .preview-text { font-family: 'Crimson Text'; font-size: 1.35rem; color: #444; font-style: italic; display: block; margin-bottom: 25px; }
 
-        /* BUTTONS */
-        .btn { padding: 12px 25px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+        /* UI ELEMENTS */
+        .btn { padding: 14px 28px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 
+        .input-field { width: 100%; padding: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--gold); color: #fff; font-family: 'Inter'; }
+
         /* READER */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
-        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 80px 20px; }
+        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 80px 5%; }
 
-        .input-field { width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--gold); color: #fff; }
-
-        @media (max-width: 600px) {
+        @media (max-width: 850px) {
             #architectHUD { position: fixed; top: auto; bottom: 0; right: 0; width: 100%; border-radius: 0; }
         }
     </style>
@@ -90,45 +93,45 @@
 <body>
 
 <nav>
-    <a href="#" class="nav-left click-sound">
+    <a href="#" class="nav-left">
         <div class="brand-icon"></div>
         <span class="nav-title">AETHERFALL</span>
     </a>
     <div class="nav-right">
-        <a href="https://discord.gg/YOUR_LINK" class="discord-link click-sound" target="_blank">DISCORD</a>
-        <button class="btn btn-outline click-sound" id="authBtn">LOGIN</button>
+        <a href="https://discord.gg/YOUR_LINK" class="discord-link" target="_blank">DISCORD</a>
+        <button class="btn btn-outline" id="authBtn">LOGIN</button>
     </div>
 </nav>
 
 <div class="grimoire">
     <header>
-        <p style="color:var(--gold); letter-spacing:6px; font-weight:600;">THE GRAND GRIMOIRE</p>
+        <p style="color:var(--gold); letter-spacing:6px; font-weight:600; font-size: 0.75rem;">THE GRAND GRIMOIRE</p>
         <h1>Aetherfall</h1>
     </header>
 
     <div class="character-grid">
         <div class="char-card"><h3>Zyra Kade</h3><p>Volatile mind wrapped in red punk leather and raw fury. Chaos given form.</p></div>
         <div class="char-card"><h3>Aelira Virex</h3><p>Sustains the city's emotional flow through neon canals of arcane power.</p></div>
-        <div class="char-card"><h3>Sylva Morren</h3><p>Roams the underworld using blood-ink spells from a forgotten era.</p></div>
+        <div class="char-card" style="border-right: none;"><h3>Sylva Morren</h3><p>Roams the underworld using blood-ink spells from a forgotten era.</p></div>
     </div>
 
     <div class="chronicle-container" id="dynamic-acts"></div>
 </div>
 
 <div id="architectHUD">
-    <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:15px;">LATTICE COMMAND</h4>
+    <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:20px; letter-spacing: 2px;">LATTICE COMMAND</h4>
     <input type="text" id="actTitle" placeholder="Act Title" class="input-field">
-    <textarea id="actPreview" placeholder="Preview..." class="input-field" style="height:60px;"></textarea>
-    <textarea id="actContent" placeholder="Main Content..." class="input-field" style="height:120px;"></textarea>
-    <button class="btn btn-gold click-sound" id="saveBtn" style="width:100%;">COMMIT TO LATTICE</button>
+    <textarea id="actPreview" placeholder="Preview Summary..." class="input-field" style="height:60px;"></textarea>
+    <textarea id="actContent" placeholder="Full Chronicle History..." class="input-field" style="height:150px;"></textarea>
+    <button class="btn btn-gold" id="saveBtn" style="width:100%;">COMMIT TO LATTICE</button>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
     <div class="scroll-paper">
-        <button onclick="closeReader()" class="click-sound" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:2.5rem; cursor:pointer;">&times;</button>
+        <button onclick="closeReader()" style="position:absolute; top:20px; right:30px; background:none; border:none; font-size:3rem; cursor:pointer;">&times;</button>
         <div style="max-width: 800px; margin: 0 auto;">
-            <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; font-size: 2.5rem; color:var(--gold); margin-bottom:20px;"></h2>
-            <div id="readerBody" style="font-family:'Crimson Text'; font-size:1.4rem; line-height:1.8; white-space:pre-wrap;"></div>
+            <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; font-size: 2.8rem; color:var(--gold); margin-bottom:25px;"></h2>
+            <div id="readerBody" style="font-family:'Crimson Text'; font-size:1.5rem; line-height:1.8; white-space:pre-wrap; color: #222;"></div>
         </div>
     </div>
 </div>
@@ -155,7 +158,7 @@
     const clickSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
     clickSfx.volume = 0.4;
     document.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.click-sound, button, a')) {
+        if (e.target.closest('button, a, .brand-icon')) {
             clickSfx.currentTime = 0;
             clickSfx.play().catch(() => {});
         }
@@ -169,14 +172,16 @@
             const id = s.id;
             window[`act_${id}`] = act;
             let adminBtns = (auth.currentUser && auth.currentUser.uid === ADMIN_UID) ? 
-                `<button class="btn click-sound" onclick="deleteAct('${id}')" style="color:red; font-size:0.6rem;">[ERASE]</button>` : "";
+                `<button class="btn" onclick="deleteAct('${id}')" style="color:red; font-size:0.6rem; background:none;">[ERASE ENTRY]</button>` : "";
             
             container.innerHTML += `
                 <div class="act-card">
                     <h2>${act.title}</h2>
                     <span class="preview-text">${act.preview}</span>
-                    <button class="btn btn-gold click-sound" onclick="openReader('${id}')">UNROLL SCROLL</button>
-                    ${adminBtns}
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <button class="btn btn-gold" onclick="openReader('${id}')">UNROLL SCROLL</button>
+                        ${adminBtns}
+                    </div>
                 </div>`;
         });
     });
@@ -189,7 +194,7 @@
         document.getElementById('actTitle').value = ""; document.getElementById('actPreview').value = ""; document.getElementById('actContent').value = "";
     };
 
-    window.deleteAct = async (id) => { if(confirm("Erase?")) await deleteDoc(doc(db, "acts", id)); };
+    window.deleteAct = async (id) => { if(confirm("Erase from history?")) await deleteDoc(doc(db, "acts", id)); };
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
@@ -205,9 +210,9 @@
     document.getElementById('authBtn').onclick = () => {
         if(auth.currentUser) signOut(auth);
         else {
-            const email = prompt("Email:");
+            const email = prompt("Architect Email:");
             const pass = prompt("Key:");
-            signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Denied."));
+            if(email && pass) signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Access Denied."));
         }
     };
 
