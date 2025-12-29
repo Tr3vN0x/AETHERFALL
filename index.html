@@ -41,15 +41,9 @@
             display: flex; align-items: center; gap: 12px;
         }
         .nav-logo::before {
-            content: ''; 
-            width: 30px; 
-            height: 30px;
-            display: inline-block;
-            background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=cwUrwh7_HN-PevvMk1uivQ&oh=00_AflHxCq99fTsNYFJMZiX7JYWJLAcyhndvNorWnJq-8o13A&oe=6957FB3C');
-            background-size: cover; 
-            background-position: center;
-            border-radius: 50%; 
-            border: 1px solid var(--gold);
+            content: ''; width: 30px; height: 30px;
+            background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZTqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=cwUrwh7_HN-PevvMk1uivQ&oh=00_AflHxCq99fTsNYFJMZiX7JYWJLAcyhndvNorWnJq-8o13A&oe=6957FB3C');
+            background-size: cover; background-position: center; border-radius: 50%; border: 1px solid var(--gold);
         }
 
         /* GRIMOIRE MAIN CONTAINER */
@@ -63,23 +57,6 @@
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2.5rem, 10vw, 5rem); color: #111; line-height: 1; }
         header p { color: var(--gold); letter-spacing: 6px; font-weight: 600; text-transform: uppercase; margin-top: 15px; font-size: 0.75rem; }
 
-        /* DISCORD BUTTONS */
-        .header-discord-btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            margin-top: 35px; background: #111; color: var(--gold);
-            text-decoration: none; padding: 14px 25px; border: 1px solid var(--gold);
-            font-family: 'Inter'; font-weight: 700; letter-spacing: 1px;
-            font-size: 0.75rem; transition: 0.4s; border-radius: 4px;
-        }
-        .header-discord-btn:hover { background: var(--gold); color: #fff; box-shadow: 0 0 25px var(--gold-glow); transform: translateY(-2px); }
-
-        .floating-discord {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
-            background: var(--discord-blurple); color: white; width: 45px; height: 45px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.4); transition: 0.3s;
-        }
-
         /* COMPACT SIDE HUD */
         #architectHUD { 
             display: none; position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
@@ -90,33 +67,34 @@
         .hud-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .input-field { width: 100%; padding: 10px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(184, 146, 78, 0.3); color: #fff; border-radius: 4px; font-size: 0.85rem; }
 
-        /* GRID & CARDS */
+        /* CHARACTER CARDS */
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: rgba(0,0,0,0.1); }
         .char-card { background: #fff; padding: 30px; transition: 0.3s; }
         .char-tag { font-size: 0.65rem; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;}
         .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 15px; }
-        .char-card p { font-family: 'Crimson Text'; font-size: 1.05rem; line-height: 1.6; color: #444; }
+        .char-card p { font-family: 'Crimson Text'; font-size: 1.15rem; line-height: 1.6; color: #444; }
 
-        /* CHRONICLE LIST */
+        /* CHRONICLE LISTING (FIXED FONTS) */
         .chronicle-header { padding: 40px 5% 20px; color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.8rem; border-top: 1px solid #ddd; }
         .chronicle-container { padding: 0 5% 60px; }
         .act-card { padding: 40px 0; border-bottom: 1px solid #eee; }
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.8rem; margin-bottom: 12px; color: #111; }
+        .act-card .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #333; line-height: 1.6; font-style: italic; display: block; margin-bottom: 20px; }
 
-        /* READER VIEW */
+        /* READER OVERLAY */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
         .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); padding: 60px 25px; position: relative; }
-        .reader-body { font-family: 'Crimson Text'; font-size: 1.25rem; line-height: 1.7; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
+        .reader-body { font-family: 'Crimson Text'; font-size: 1.4rem; line-height: 1.8; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
 
+        /* UTILITY */
         .btn { padding: 12px 20px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; border-radius: 2px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-
+        .floating-discord { position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: var(--discord-blurple); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
         footer { padding: 40px 20px; background: #050505; color: var(--gold); text-align: center; }
 
         @media (max-width: 768px) {
             #architectHUD { top: auto; bottom: 20px; right: 10px; left: 10px; width: auto; transform: none; }
-            .nav-logo { font-size: 0.9rem; gap: 8px; }
         }
     </style>
 </head>
@@ -133,14 +111,14 @@
 
 <div id="architectHUD">
     <div class="hud-header">
-        <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); font-size: 0.8rem;">LATTICE CMD</h4>
+        <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); font-size: 0.8rem; letter-spacing: 1px;">LATTICE CMD</h4>
         <button onclick="toggleHudSize()" id="hudToggle" style="background:none; border:none; color:var(--gold); cursor:pointer;">[—]</button>
     </div>
     <div id="hudContent">
         <input type="hidden" id="editId">
         <input type="text" id="actTitle" placeholder="Act Title" class="input-field">
-        <textarea id="actPreview" placeholder="Preview..." class="input-field" style="height:50px; resize: none;"></textarea>
-        <textarea id="actContent" placeholder="Content..." class="input-field" style="height:120px; resize: vertical;"></textarea>
+        <textarea id="actPreview" placeholder="Short Preview..." class="input-field" style="height:50px; resize: none;"></textarea>
+        <textarea id="actContent" placeholder="Full Chronicle..." class="input-field" style="height:120px; resize: vertical;"></textarea>
         <button class="btn btn-gold" id="saveBtn" style="width:100%;">COMMIT</button>
     </div>
 </div>
@@ -149,24 +127,24 @@
     <header id="top">
         <p>The Grand Grimoire</p>
         <h1>Aetherfall</h1>
-        <a href="https://discord.gg/423jrrp7wD" target="_blank" class="header-discord-btn">ENTER THE DISCORD SANCTUARY</a>
+        <a href="https://discord.gg/423jrrp7wD" target="_blank" class="header-discord-btn" style="text-decoration:none; margin-top:30px; display:inline-block; border:1px solid var(--gold); padding:12px 20px; color:var(--gold); font-family:'Inter'; font-weight:700; font-size:0.7rem; letter-spacing:1px;">ENTER THE DISCORD SANCTUARY</a>
     </header>
 
     <div class="character-grid">
         <div class="char-card">
             <span class="char-tag">The Anarchist</span>
             <h3>Zyra Kade</h3>
-            <p>Volatile mind wrapped in red punk leather and raw fury.</p>
+            <p>Volatile mind wrapped in red punk leather and raw fury. Her power is chaos given form—forged from a soul that refuses to be governed.</p>
         </div>
         <div class="char-card" style="border-left: 1px solid #eee; border-right: 1px solid #eee;">
             <span class="char-tag">The Resonance</span>
             <h3>Aelira Virex</h3>
-            <p>Known as the Heart of Aetherfall, turning feelings into stabilized arcane power.</p>
+            <p>Known as the Heart of Aetherfall. She sustains the city's emotional flow through neon canals, turning feelings into stabilized arcane power.</p>
         </div>
         <div class="char-card">
             <span class="char-tag">The Mafia Queen</span>
             <h3>Sylva Morren</h3>
-            <p>The Grand Grimoire herself, using blood-ink spells from an era long forgotten.</p>
+            <p>The Grand Grimoire herself. Unbound by the Lattice, she roams the underworld using blood-ink spells from an era long forgotten.</p>
         </div>
     </div>
 
@@ -268,7 +246,7 @@
         document.getElementById('hudContent').style.display = "block";
     };
 
-    window.deleteAct = async (id) => { if(confirm("Delete memory?")) await deleteDoc(doc(db, "acts", id)); };
+    window.deleteAct = async (id) => { if(confirm("Erase this memory?")) await deleteDoc(doc(db, "acts", id)); };
     const resetHUD = () => { document.getElementById('editId').value = ""; document.getElementById('actTitle').value = ""; document.getElementById('actPreview').value = ""; document.getElementById('actContent').value = ""; document.getElementById('saveBtn').innerText = "COMMIT"; };
 
     document.getElementById('authBtn').onclick = () => {
