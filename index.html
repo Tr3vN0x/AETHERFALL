@@ -41,29 +41,27 @@
 
         .section-label { background: #111; color: var(--gold); text-align: center; font-family: 'Uncial Antiqua'; padding: 15px; font-size: 1.4rem; letter-spacing: 3px; }
 
-        /* CHARACTER GRID - STRICT SECTION */
+        /* CHARACTER GRID */
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); background: rgba(0,0,0,0.05); gap: 1px; }
-        .char-card { background: #fff; padding: 25px; border-bottom: 1px solid #eee; }
+        .char-card { background: #fff; padding: 25px; border-bottom: 1px solid #eee; position: relative; }
         .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
         .char-card p { font-family: 'Crimson Text'; font-size: 1.1rem; line-height: 1.5; color: #333; white-space: pre-wrap; }
 
-        /* CHRONICLES - STRICT SECTION */
+        /* CHRONICLES */
         .chronicle-container { padding: 30px 5%; }
         .act-card { margin-bottom: 30px; padding: 25px; background: rgba(0,0,0,0.02); border-left: 4px solid var(--gold); border-radius: 0 4px 4px 0; }
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.7rem; margin-bottom: 10px; color: #111; }
         .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #222; font-style: italic; display: block; margin-bottom: 15px; border-top: 1px solid rgba(184, 146, 78, 0.2); padding-top: 10px; }
 
-        /* ARCHITECT HUD */
+        /* HUD & UI */
         #architectHUD { display: none; position: fixed; right: 20px; top: 85px; width: 320px; background: var(--glass); border: 1px solid var(--gold); padding: 20px; z-index: 2000; border-radius: 4px; color: #fff; }
         .hud-select, .input-field { width: 100%; padding: 10px; margin-bottom: 10px; background: #111; border: 1px solid var(--gold); color: #fff; }
-
-        /* BUTTONS */
-        .btn { padding: 10px 20px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .btn { padding: 10px 20px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
         .admin-controls { margin-top: 10px; display: flex; gap: 10px; }
-        .btn-edit { background: none; border: none; color: var(--gold); font-size: 0.6rem; cursor: pointer; text-decoration: underline; }
-        .btn-erase { background: none; border: none; color: #ff4444; font-size: 0.6rem; cursor: pointer; text-decoration: underline; }
+        .btn-edit, .btn-erase { background: none; border: none; font-size: 0.6rem; cursor: pointer; text-decoration: underline; }
+        .btn-edit { color: var(--gold); } .btn-erase { color: #ff4444; }
 
         /* READER */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
@@ -79,7 +77,6 @@
 <nav>
     <a href="#" class="nav-left"><div class="brand-icon"></div><span class="nav-title">AETHERFALL</span></a>
     <div style="display:flex; align-items:center; gap:10px;">
-        <a href="#" class="discord-link" style="color:#5865F2; text-decoration:none; font-size:0.7rem; font-weight:bold;">DISCORD</a>
         <button class="btn btn-outline" id="authBtn">LOGIN</button>
     </div>
 </nav>
@@ -89,7 +86,7 @@
         <p style="color:var(--gold); letter-spacing:4px; font-weight:600; font-size:0.7rem;">EST. IN NEON & BLOOD</p>
         <h1>Aetherfall</h1>
         <div class="search-wrap">
-            <input type="text" id="gSearch" class="search-input" placeholder="Filter Dossiers & Chronicles...">
+            <input type="text" id="gSearch" class="search-input" placeholder="Search the Grimoire...">
         </div>
     </header>
 
@@ -107,9 +104,9 @@
         <option value="acts">New Chronicle (Act)</option>
         <option value="chars">New Character Dossier</option>
     </select>
-    <input type="text" id="postTitle" placeholder="Name or Act Title" class="input-field">
-    <textarea id="postPreview" placeholder="Brief Summary (Shows on Main Page)" class="input-field" style="height:60px;"></textarea>
-    <textarea id="postContent" placeholder="Full Story Text (Acts Only)" class="input-field" style="height:100px;"></textarea>
+    <input type="text" id="postTitle" placeholder="Name or Title" class="input-field">
+    <textarea id="postPreview" placeholder="Summary..." class="input-field" style="height:60px;"></textarea>
+    <textarea id="postContent" placeholder="Full Details (Acts only)..." class="input-field" style="height:100px;"></textarea>
     <button class="btn btn-gold" id="saveBtn" style="width:100%;">COMMIT TO GRIMOIRE</button>
 </div>
 
@@ -145,6 +142,7 @@
     let allActs = [];
     let allChars = [];
 
+    // Real-time Sync
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
         allActs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderAll();
@@ -160,7 +158,7 @@
         const charCont = document.getElementById('dynamic-chars');
         actCont.innerHTML = ""; charCont.innerHTML = "";
 
-        // STRICT CHARACTER FILTER
+        // Render Characters Grid
         allChars.filter(c => c.title.toLowerCase().includes(searchVal)).forEach(char => {
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
                 <div class="admin-controls">
@@ -170,7 +168,7 @@
             charCont.innerHTML += `<div class="char-card"><h3>${char.title}</h3><p>${char.preview}</p>${adminUI}</div>`;
         });
 
-        // STRICT ACT FILTER
+        // Render Chronicles List
         allActs.filter(a => a.title.toLowerCase().includes(searchVal)).forEach(act => {
             window[`act_${act.id}`] = act;
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
@@ -201,18 +199,14 @@
             content: document.getElementById('postContent').value,
             updatedAt: serverTimestamp()
         };
-
         if(!id) {
             data.createdAt = serverTimestamp();
             await addDoc(collection(db, type), data);
         } else {
             await updateDoc(doc(db, type, id), data);
         }
-        
-        document.getElementById('editId').value = "";
-        document.getElementById('postTitle').value = "";
-        document.getElementById('postPreview').value = "";
-        document.getElementById('postContent').value = "";
+        document.getElementById('editId').value = ""; document.getElementById('postTitle').value = "";
+        document.getElementById('postPreview').value = ""; document.getElementById('postContent').value = "";
         document.getElementById('saveBtn').innerText = "COMMIT TO GRIMOIRE";
     };
 
