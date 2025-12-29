@@ -20,7 +20,7 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background: #050505; color: var(--ink); font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
-        /* NAVIGATION & ICON FIX */
+        /* NAVIGATION & ICON */
         nav {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: var(--glass); backdrop-filter: blur(15px);
@@ -45,7 +45,18 @@
             box-shadow: 0 0 10px var(--gold-glow);
         }
 
-        /* COMPACT SIDE HUD (Lattice Command) */
+        /* AMBIENT MUSIC CONTROLLER */
+        .music-player {
+            position: fixed; bottom: 20px; right: 20px; z-index: 1001;
+            background: var(--glass); border: 1px solid var(--gold);
+            padding: 10px 15px; border-radius: 30px; display: flex;
+            align-items: center; gap: 10px; color: var(--gold);
+            backdrop-filter: blur(5px); transition: 0.3s;
+        }
+        .music-player:hover { box-shadow: 0 0 15px var(--gold-glow); }
+        .play-toggle { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; }
+
+        /* LATTICE HUD */
         #architectHUD { 
             display: none; position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
             background: var(--glass); border: 1px solid var(--gold); padding: 15px; 
@@ -87,7 +98,7 @@
         .reader-body { font-family: 'Crimson Text'; font-size: 1.4rem; line-height: 1.8; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
 
         @media (max-width: 768px) {
-            #architectHUD { top: auto; bottom: 20px; right: 10px; left: 10px; width: auto; transform: none; }
+            #architectHUD { top: auto; bottom: 80px; right: 10px; left: 10px; width: auto; transform: none; }
         }
     </style>
 </head>
@@ -97,6 +108,16 @@
     <a href="#" class="nav-logo">AETHERFALL</a>
     <button class="btn btn-outline" id="authBtn">ARCHITECT LOGIN</button>
 </nav>
+
+<div class="music-player">
+    <button class="play-toggle" id="musicToggle">
+        <span id="musicIcon">▶</span>
+    </button>
+    <span style="font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;">AMBIENT RESONANCE</span>
+    <audio id="bgAudio" loop preload="auto">
+        <source src="https://cdn.pixabay.com/audio/2022/10/24/audio_9831169608.mp3" type="audio/mpeg">
+    </audio>
+</div>
 
 <div id="architectHUD">
     <div class="hud-header">
@@ -178,6 +199,22 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
+
+    // MUSIC LOGIC
+    const audio = document.getElementById('bgAudio');
+    const toggle = document.getElementById('musicToggle');
+    const icon = document.getElementById('musicIcon');
+    audio.volume = 0.4;
+
+    toggle.onclick = () => {
+        if (audio.paused) {
+            audio.play();
+            icon.innerText = "⏸";
+        } else {
+            audio.pause();
+            icon.innerText = "▶";
+        }
+    };
 
     window.toggleHudSize = () => {
         const content = document.getElementById('hudContent');
