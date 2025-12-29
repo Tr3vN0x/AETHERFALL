@@ -41,7 +41,7 @@
             box-shadow: 0 0 10px var(--gold-glow);
         }
 
-        /* MUSIC PLAYER (Medieval Style) */
+        /* MUSIC PLAYER */
         .music-player {
             position: fixed; bottom: 20px; right: 20px; z-index: 1001;
             background: rgba(20, 18, 15, 0.95); border: 1px solid var(--gold);
@@ -49,27 +49,16 @@
             align-items: center; gap: 15px; color: var(--gold);
             backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .play-toggle { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; outline: none; transition: 0.3s; }
-        .play-toggle:hover { text-shadow: 0 0 10px var(--gold); }
+        .play-toggle { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; outline: none; }
         .volume-slider { width: 80px; height: 3px; accent-color: var(--gold); cursor: pointer; }
 
-        /* LATTICE HUD */
-        #architectHUD { 
-            display: none; position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
-            background: var(--glass); border: 1px solid var(--gold); padding: 15px; 
-            border-radius: 12px; z-index: 2000; width: 280px; color: #fff;
-        }
+        /* HUD & GRIMOIRE */
+        #architectHUD { display: none; position: fixed; top: 50%; right: 20px; transform: translateY(-50%); background: var(--glass); border: 1px solid var(--gold); padding: 15px; border-radius: 12px; z-index: 2000; width: 280px; color: #fff; }
         .input-field { width: 100%; padding: 10px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(184, 146, 78, 0.3); color: #fff; border-radius: 4px; }
-
-        /* GRIMOIRE STYLES */
-        .grimoire {
-            width: 95%; max-width: 1100px; margin: 90px auto 40px; 
-            background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9); border-radius: 4px; overflow: hidden;
-        }
+        .grimoire { width: 95%; max-width: 1100px; margin: 90px auto 40px; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); box-shadow: 0 50px 100px rgba(0,0,0,0.9); border-radius: 4px; overflow: hidden; }
         header { text-align: center; padding: 80px 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2.5rem, 10vw, 5rem); color: #111; }
-
+        
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: rgba(0,0,0,0.1); }
         .char-card { background: #fff; padding: 30px; }
         .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 10px; }
@@ -81,23 +70,14 @@
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.8rem; margin-bottom: 12px; }
         .act-card .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #333; line-height: 1.6; font-style: italic; }
 
+        /* READER OVERLAY */
+        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
+        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 60px 25px; position: relative; }
+        .reader-body { font-family: 'Crimson Text'; font-size: 1.4rem; line-height: 1.8; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
+
         .btn { padding: 12px 20px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 2px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-
-        /* READER OVERLAY WITH PARCHMENT TEXTURE */
-        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
-        .scroll-paper { 
-            width: 100%; min-height: 100%; 
-            background: var(--parchment); 
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            padding: 60px 25px; position: relative; 
-        }
-        .reader-body { font-family: 'Crimson Text'; font-size: 1.4rem; line-height: 1.8; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
-
-        @media (max-width: 768px) {
-            #architectHUD { bottom: 80px; right: 10px; left: 10px; width: auto; transform: none; }
-        }
     </style>
 </head>
 <body>
@@ -115,8 +95,8 @@
         <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; color: var(--gold); font-family: 'Uncial Antiqua';">DRY HANDS</span>
         <input type="range" id="volSlider" class="volume-slider" min="0" max="1" step="0.05" value="0.3">
     </div>
-    <audio id="bgAudio" loop preload="auto">
-        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Impact/Kevin_MacLeod_-_04_-_Long_Note_One.mp3" type="audio/mpeg">
+    <audio id="bgAudio" loop crossOrigin="anonymous">
+        <source src="https://www.chosic.com/wp-content/uploads/2021/04/Rainy-Day-Ambient-Piano.mp3" type="audio/mpeg">
     </audio>
 </div>
 
@@ -141,18 +121,9 @@
     </header>
 
     <div class="character-grid">
-        <div class="char-card">
-            <h3>Zyra Kade</h3>
-            <p>Volatile mind wrapped in red punk leather and raw fury. Her power is chaos given form—forged from a soul that refuses to be governed.</p>
-        </div>
-        <div class="char-card" style="border-left: 1px solid #eee; border-right: 1px solid #eee;">
-            <h3>Aelira Virex</h3>
-            <p>Known as the Heart of Aetherfall. She sustains the city's emotional flow through neon canals, turning feelings into stabilized arcane power.</p>
-        </div>
-        <div class="char-card">
-            <h3>Sylva Morren</h3>
-            <p>The Grand Grimoire herself. Unbound by the Lattice, she roams the underworld using blood-ink spells from an era long forgotten.</p>
-        </div>
+        <div class="char-card"><h3>Zyra Kade</h3><p>Volatile mind wrapped in red punk leather and raw fury.</p></div>
+        <div class="char-card" style="border-left: 1px solid #eee; border-right: 1px solid #eee;"><h3>Aelira Virex</h3><p>Known as the Heart of Aetherfall. Sustains the city's emotional flow.</p></div>
+        <div class="char-card"><h3>Sylva Morren</h3><p>The Grand Grimoire herself. Roams the underworld with blood-ink spells.</p></div>
     </div>
 
     <div class="chronicle-header">Chronicles</div>
@@ -197,30 +168,31 @@
     const db = getFirestore(app);
     const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-    // AUDIO LOGIC
     const audio = document.getElementById('bgAudio');
     const musicToggle = document.getElementById('musicToggle');
     const musicIcon = document.getElementById('musicIcon');
     const volSlider = document.getElementById('volSlider');
 
     audio.volume = 0.3;
-    musicToggle.onclick = () => {
+    musicToggle.addEventListener('click', () => {
         if (audio.paused) {
-            audio.play().catch(e => console.log("User interaction required."));
-            musicIcon.innerText = "⏸";
+            audio.play().then(() => {
+                musicIcon.innerText = "⏸";
+            }).catch(e => {
+                console.error("Audio failed:", e);
+                alert("Please click anywhere on the page first, then press play!");
+            });
         } else {
             audio.pause();
             musicIcon.innerText = "▶";
         }
-    };
+    });
     volSlider.oninput = (e) => { audio.volume = e.target.value; };
 
-    // HUD & DATA SYNC
     window.toggleHudSize = () => {
         const content = document.getElementById('hudContent');
-        const toggleBtn = document.getElementById('hudToggle');
+        document.getElementById('hudToggle').innerText = (content.style.display === "none") ? "[—]" : "[+]";
         content.style.display = (content.style.display === "none") ? "block" : "none";
-        toggleBtn.innerText = (content.style.display === "none") ? "[+]" : "[—]";
     };
 
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
@@ -232,12 +204,10 @@
             window[`act_${id}`] = act;
             let controls = (auth.currentUser && auth.currentUser.uid === ADMIN_UID) ? 
                 `<div style="margin-top:10px;"><button class="btn btn-outline" onclick="editAct('${id}')">EDIT</button> <button class="btn" onclick="deleteAct('${id}')" style="color:red;">ERASE</button></div>` : "";
-            
             container.innerHTML += `<div class="act-card"><h2>${act.title}</h2><span class="preview-text">${act.preview}</span><br><br><button class="btn btn-gold" onclick="openReader('${id}')">UNROLL SCROLL</button>${controls}</div>`;
         });
     });
 
-    // CRUD
     document.getElementById('saveBtn').onclick = async () => {
         const title = document.getElementById('actTitle').value;
         const preview = document.getElementById('actPreview').value;
@@ -258,9 +228,8 @@
         document.getElementById('hudContent').style.display = "block";
     };
 
-    window.deleteAct = async (id) => { if(confirm("Erase from the Grimoire?")) await deleteDoc(doc(db, "acts", id)); };
+    window.deleteAct = async (id) => { if(confirm("Erase?")) await deleteDoc(doc(db, "acts", id)); };
 
-    // AUTH
     document.getElementById('authBtn').onclick = () => {
         if(auth.currentUser) signOut(auth).then(() => location.reload());
         else document.getElementById('authModal').style.display = "flex";
@@ -274,7 +243,6 @@
         document.getElementById('authBtn').innerText = user ? "SIGNOUT" : "ARCHITECT LOGIN";
     });
 
-    // READER
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
