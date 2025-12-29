@@ -12,7 +12,7 @@
             --parchment: #fdfaf3;
             --ink: #1a1a1a;
             --gold: #b8924e;
-            --gold-glow: rgba(184, 146, 78, 0.4);
+            --gold-glow: rgba(184, 146, 78, 0.6);
             --glass: rgba(10, 10, 10, 0.98);
         }
 
@@ -28,11 +28,11 @@
             min-height: 100vh;
         }
 
-        /* UNIFIED NAVIGATION (FB STYLE ICON) */
+        /* UNIFIED NAVIGATION */
         nav {
-            position: fixed; top: 0; width: 100%; height: 65px;
+            position: fixed; top: 0; width: 100%; height: 75px;
             background: var(--glass); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(184, 146, 78, 0.2);
+            border-bottom: 1px solid rgba(184, 146, 78, 0.3);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
         }
@@ -40,33 +40,27 @@
         .nav-branding {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             text-decoration: none;
-            cursor: pointer;
         }
 
-        /* RESTORED LINKS ICON */
+        /* FIXED ICON - SEEABLE & CLEAR */
         .brand-icon {
-            width: 42px;
-            height: 42px;
+            width: 80px; /* Wider to show the full image */
+            height: 45px;
             background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=NOSzaFl6cNwIYGHeJVAYEA&oh=00_AfngpKzFyblJVfeaZ_b_b1pt-kP0up7l0jqYLXIdo7i76Q&oe=6958337C');
-            background-size: cover;
+            background-size: contain; /* Ensures the whole image fits without cropping */
+            background-repeat: no-repeat;
             background-position: center;
-            border-radius: 8px; /* Slightly rounded corners like modern app icons */
             border: 1px solid var(--gold);
-            box-shadow: 0 0 10px var(--gold-glow);
-            transition: transform 0.2s ease;
-        }
-
-        .nav-branding:hover .brand-icon {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--gold);
+            box-shadow: 0 0 15px var(--gold-glow);
+            border-radius: 4px;
         }
 
         .nav-title {
             color: var(--gold);
             font-family: 'Uncial Antiqua';
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             letter-spacing: 2px;
         }
 
@@ -74,7 +68,7 @@
         .grimoire {
             width: 100%;
             max-width: 900px;
-            margin-top: 90px;
+            margin-top: 100px;
             margin-bottom: 50px;
             background: var(--parchment);
             background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
@@ -85,33 +79,20 @@
 
         header { text-align: center; padding: 60px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2rem, 8vw, 4rem); color: #111; }
-        header p { color: var(--gold); letter-spacing: 4px; text-transform: uppercase; font-size: 0.7rem; margin-top: 10px; }
 
-        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); background: rgba(0,0,0,0.05); gap: 1px; }
-        .char-card { background: #fff; padding: 35px; }
-        .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.4rem; margin-bottom: 10px; }
-        .char-card p { font-family: 'Crimson Text'; font-size: 1.1rem; line-height: 1.6; color: #444; }
-
-        .chronicle-section { padding: 40px 5%; }
-        .act-card { padding: 35px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
-        .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 10px; }
-
-        /* BUTTONS & UI */
+        /* BUTTONS */
         .btn { padding: 12px 24px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 2px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 
-        /* READER */
+        /* READER OVERLAY */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; overflow-y: auto; }
         .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 80px 25px; }
 
-        /* ARCHITECT HUD */
-        #architectHUD { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 500px; background: var(--glass); border: 1px solid var(--gold); padding: 20px; z-index: 3000; border-radius: 8px; }
-        .input-field { width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(184, 146, 78, 0.3); color: #fff; }
-
         @media (max-width: 600px) {
-            .grimoire { margin-top: 65px; border-radius: 0; }
+            .brand-icon { width: 60px; height: 35px; }
             .nav-title { font-size: 0.9rem; }
+            .grimoire { margin-top: 85px; border-radius: 0; }
         }
     </style>
 </head>
@@ -127,20 +108,12 @@
 
 <div class="grimoire">
     <header>
-        <p>The Grand Grimoire</p>
+        <p style="color:var(--gold); letter-spacing:4px; text-transform:uppercase; font-size:0.7rem;">The Grand Grimoire</p>
         <h1>Aetherfall</h1>
     </header>
 
-    <div class="character-grid">
-        <div class="char-card"><h3>Zyra Kade</h3><p>Volatile mind wrapped in red punk leather and raw fury. Chaos given form.</p></div>
-        <div class="char-card"><h3>Aelira Virex</h3><p>Sustains the city's emotional flow through neon canals of arcane power.</p></div>
-        <div class="char-card"><h3>Sylva Morren</h3><p>Roams the underworld using blood-ink spells from a forgotten era.</p></div>
-    </div>
-
-    <div class="chronicle-section">
-        <h2 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:20px;">Chronicles</h2>
-        <div id="dynamic-acts"></div>
-    </div>
+    <div id="dynamic-acts" style="padding: 20px 5%;">
+        </div>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
@@ -153,11 +126,11 @@
     </div>
 </div>
 
-<div id="architectHUD">
+<div id="architectHUD" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:95%; max-width:500px; background:var(--glass); border:1px solid var(--gold); padding:20px; z-index:3000; border-radius:8px;">
     <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:15px;">LATTICE CMD</h4>
-    <input type="text" id="actTitle" placeholder="Act Title" class="input-field">
-    <textarea id="actPreview" placeholder="Preview..." class="input-field" style="height:50px;"></textarea>
-    <textarea id="actContent" placeholder="Content..." class="input-field" style="height:150px;"></textarea>
+    <input type="text" id="actTitle" placeholder="Act Title" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff;">
+    <textarea id="actPreview" placeholder="Preview..." style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff; height:50px;"></textarea>
+    <textarea id="actContent" placeholder="Content..." style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff; height:100px;"></textarea>
     <button class="btn btn-gold click-sound" id="saveBtn" style="width:100%;">COMMIT</button>
 </div>
 
@@ -183,7 +156,6 @@
     // CLICK SOUNDS
     const clickSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
     clickSfx.volume = 0.4;
-
     document.addEventListener('click', (e) => {
         if (e.target.closest('.click-sound, button, a')) {
             clickSfx.currentTime = 0;
@@ -191,7 +163,7 @@
         }
     });
 
-    // DATA LOADING
+    // SYNC DATA
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
         const container = document.getElementById('dynamic-acts');
         container.innerHTML = "";
@@ -199,15 +171,15 @@
             const act = s.data();
             const id = s.id;
             window[`act_${id}`] = act;
-            let controls = (auth.currentUser && auth.currentUser.uid === ADMIN_UID) ? 
+            let adminBtns = (auth.currentUser && auth.currentUser.uid === ADMIN_UID) ? 
                 `<button class="btn click-sound" onclick="deleteAct('${id}')" style="color:red; font-size:0.6rem;">[ERASE]</button>` : "";
             
             container.innerHTML += `
-                <div class="act-card">
-                    <h2>${act.title}</h2>
-                    <p style="font-family:'Crimson Text'; font-size:1.2rem; font-style:italic; margin-bottom:20px;">${act.preview}</p>
+                <div style="padding:30px 0; border-bottom:1px solid rgba(0,0,0,0.1);">
+                    <h2 style="font-family:'Uncial Antiqua'; font-size:1.6rem; margin-bottom:10px;">${act.title}</h2>
+                    <p style="font-family:'Crimson Text'; font-size:1.2rem; font-style:italic; margin-bottom:15px;">${act.preview}</p>
                     <button class="btn btn-gold click-sound" onclick="openReader('${id}')">UNROLL SCROLL</button>
-                    ${controls}
+                    ${adminBtns}
                 </div>`;
         });
     });
@@ -216,13 +188,11 @@
         const title = document.getElementById('actTitle').value;
         const preview = document.getElementById('actPreview').value;
         const content = document.getElementById('actContent').value;
-        if(!title || !content) return;
-        await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
+        if(title && content) await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
         document.getElementById('actTitle').value = ""; document.getElementById('actPreview').value = ""; document.getElementById('actContent').value = "";
     };
 
     window.deleteAct = async (id) => { if(confirm("Erase?")) await deleteDoc(doc(db, "acts", id)); };
-
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
@@ -230,7 +200,6 @@
         document.getElementById('readerOverlay').style.display = "block";
         document.body.style.overflow = "hidden";
     };
-
     window.closeReader = () => {
         document.getElementById('readerOverlay').style.display = "none";
         document.body.style.overflow = "auto";
