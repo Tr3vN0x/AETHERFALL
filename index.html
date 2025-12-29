@@ -41,17 +41,17 @@
 
         .section-label { background: #111; color: var(--gold); text-align: center; font-family: 'Uncial Antiqua'; padding: 15px; font-size: 1.4rem; letter-spacing: 3px; }
 
-        /* CHARACTER GRID */
+        /* CHARACTER GRID - STRICT SECTION */
         .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); background: rgba(0,0,0,0.05); gap: 1px; }
         .char-card { background: #fff; padding: 25px; border-bottom: 1px solid #eee; }
         .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
-        .char-card p { font-family: 'Crimson Text'; font-size: 1.1rem; line-height: 1.5; color: #333; }
+        .char-card p { font-family: 'Crimson Text'; font-size: 1.1rem; line-height: 1.5; color: #333; white-space: pre-wrap; }
 
-        /* CHRONICLES */
+        /* CHRONICLES - STRICT SECTION */
         .chronicle-container { padding: 30px 5%; }
         .act-card { margin-bottom: 30px; padding: 25px; background: rgba(0,0,0,0.02); border-left: 4px solid var(--gold); border-radius: 0 4px 4px 0; }
         .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 1.7rem; margin-bottom: 10px; color: #111; }
-        .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #222; font-style: italic; display: block; margin-bottom: 15px; border-top: 1px solid rgba(184,146,78,0.2); padding-top: 10px; }
+        .preview-text { font-family: 'Crimson Text'; font-size: 1.25rem; color: #222; font-style: italic; display: block; margin-bottom: 15px; border-top: 1px solid rgba(184, 146, 78, 0.2); padding-top: 10px; }
 
         /* ARCHITECT HUD */
         #architectHUD { display: none; position: fixed; right: 20px; top: 85px; width: 320px; background: var(--glass); border: 1px solid var(--gold); padding: 20px; z-index: 2000; border-radius: 4px; color: #fff; }
@@ -89,7 +89,7 @@
         <p style="color:var(--gold); letter-spacing:4px; font-weight:600; font-size:0.7rem;">EST. IN NEON & BLOOD</p>
         <h1>Aetherfall</h1>
         <div class="search-wrap">
-            <input type="text" id="gSearch" class="search-input" placeholder="Search the Lattice...">
+            <input type="text" id="gSearch" class="search-input" placeholder="Filter Dossiers & Chronicles...">
         </div>
     </header>
 
@@ -107,9 +107,9 @@
         <option value="acts">New Chronicle (Act)</option>
         <option value="chars">New Character Dossier</option>
     </select>
-    <input type="text" id="postTitle" placeholder="Title or Name" class="input-field">
-    <textarea id="postPreview" placeholder="Brief Preview Summary..." class="input-field" style="height:60px;"></textarea>
-    <textarea id="postContent" placeholder="Full Details (Acts only)..." class="input-field" style="height:100px;"></textarea>
+    <input type="text" id="postTitle" placeholder="Name or Act Title" class="input-field">
+    <textarea id="postPreview" placeholder="Brief Summary (Shows on Main Page)" class="input-field" style="height:60px;"></textarea>
+    <textarea id="postContent" placeholder="Full Story Text (Acts Only)" class="input-field" style="height:100px;"></textarea>
     <button class="btn btn-gold" id="saveBtn" style="width:100%;">COMMIT TO GRIMOIRE</button>
 </div>
 
@@ -145,7 +145,6 @@
     let allActs = [];
     let allChars = [];
 
-    // REAL-TIME SYNC
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
         allActs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderAll();
@@ -161,6 +160,7 @@
         const charCont = document.getElementById('dynamic-chars');
         actCont.innerHTML = ""; charCont.innerHTML = "";
 
+        // STRICT CHARACTER FILTER
         allChars.filter(c => c.title.toLowerCase().includes(searchVal)).forEach(char => {
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
                 <div class="admin-controls">
@@ -170,6 +170,7 @@
             charCont.innerHTML += `<div class="char-card"><h3>${char.title}</h3><p>${char.preview}</p>${adminUI}</div>`;
         });
 
+        // STRICT ACT FILTER
         allActs.filter(a => a.title.toLowerCase().includes(searchVal)).forEach(act => {
             window[`act_${act.id}`] = act;
             let adminUI = (auth.currentUser?.uid === ADMIN_UID) ? `
@@ -191,7 +192,6 @@
 
     document.getElementById('gSearch').oninput = renderAll;
 
-    // SAVE / UPDATE
     document.getElementById('saveBtn').onclick = async () => {
         const id = document.getElementById('editId').value;
         const type = document.getElementById('postType').value;
@@ -209,7 +209,6 @@
             await updateDoc(doc(db, type, id), data);
         }
         
-        // Reset HUD
         document.getElementById('editId').value = "";
         document.getElementById('postTitle').value = "";
         document.getElementById('postPreview').value = "";
@@ -225,10 +224,9 @@
         document.getElementById('postPreview').value = item.preview;
         document.getElementById('postContent').value = item.content || "";
         document.getElementById('saveBtn').innerText = "UPDATE ENTRY";
-        window.scrollTo(0, document.body.scrollHeight);
     };
 
-    window.deleteEntry = async (col, id) => { if(confirm("Erase from Lattice?")) await deleteDoc(doc(db, col, id)); };
+    window.deleteEntry = async (col, id) => { if(confirm("Erase entry?")) await deleteDoc(doc(db, col, id)); };
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
