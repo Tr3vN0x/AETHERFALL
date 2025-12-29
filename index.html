@@ -41,7 +41,7 @@
             box-shadow: 0 0 10px var(--gold-glow);
         }
 
-        /* MEDIEVAL MUSIC PLAYER */
+        /* MUSIC PLAYER (Medieval Style) */
         .music-player {
             position: fixed; bottom: 20px; right: 20px; z-index: 1001;
             background: rgba(20, 18, 15, 0.95); border: 1px solid var(--gold);
@@ -85,9 +85,14 @@
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 
-        /* READER */
+        /* READER OVERLAY WITH PARCHMENT TEXTURE */
         .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
-        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); padding: 60px 25px; position: relative; }
+        .scroll-paper { 
+            width: 100%; min-height: 100%; 
+            background: var(--parchment); 
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
+            padding: 60px 25px; position: relative; 
+        }
         .reader-body { font-family: 'Crimson Text'; font-size: 1.4rem; line-height: 1.8; color: #222; white-space: pre-wrap; max-width: 800px; margin: 0 auto; }
 
         @media (max-width: 768px) {
@@ -107,11 +112,11 @@
         <span id="musicIcon">▶</span>
     </button>
     <div style="display: flex; flex-direction: column; gap: 2px;">
-        <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; color: var(--gold); font-family: 'Uncial Antiqua';">COURT MELODY</span>
+        <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; color: var(--gold); font-family: 'Uncial Antiqua';">DRY HANDS</span>
         <input type="range" id="volSlider" class="volume-slider" min="0" max="1" step="0.05" value="0.3">
     </div>
     <audio id="bgAudio" loop preload="auto">
-        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Old-Tower-Inn.mp3" type="audio/mpeg">
+        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Impact/Kevin_MacLeod_-_04_-_Long_Note_One.mp3" type="audio/mpeg">
     </audio>
 </div>
 
@@ -201,7 +206,7 @@
     audio.volume = 0.3;
     musicToggle.onclick = () => {
         if (audio.paused) {
-            audio.play().catch(e => console.log("Interaction required."));
+            audio.play().catch(e => console.log("User interaction required."));
             musicIcon.innerText = "⏸";
         } else {
             audio.pause();
@@ -210,7 +215,7 @@
     };
     volSlider.oninput = (e) => { audio.volume = e.target.value; };
 
-    // HUD & DATA LOGIC
+    // HUD & DATA SYNC
     window.toggleHudSize = () => {
         const content = document.getElementById('hudContent');
         const toggleBtn = document.getElementById('hudToggle');
@@ -232,6 +237,7 @@
         });
     });
 
+    // CRUD
     document.getElementById('saveBtn').onclick = async () => {
         const title = document.getElementById('actTitle').value;
         const preview = document.getElementById('actPreview').value;
@@ -252,8 +258,9 @@
         document.getElementById('hudContent').style.display = "block";
     };
 
-    window.deleteAct = async (id) => { if(confirm("Erase?")) await deleteDoc(doc(db, "acts", id)); };
+    window.deleteAct = async (id) => { if(confirm("Erase from the Grimoire?")) await deleteDoc(doc(db, "acts", id)); };
 
+    // AUTH
     document.getElementById('authBtn').onclick = () => {
         if(auth.currentUser) signOut(auth).then(() => location.reload());
         else document.getElementById('authModal').style.display = "flex";
@@ -267,6 +274,7 @@
         document.getElementById('authBtn').innerText = user ? "SIGNOUT" : "ARCHITECT LOGIN";
     });
 
+    // READER
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
