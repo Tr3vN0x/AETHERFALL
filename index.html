@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aetherfall | The Grand Grimoire</title>
     
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/sparkling-diamond.png">
+    <link rel="icon" type="image/jpeg" href="https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=cwUrwh7_HN-PevvMk1uivQ&oh=00_AflHxCq99fTsNYFJMZiX7JYWJLAcyhndvNorWnJq-8o13A&oe=6957FB3C">
     
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -15,6 +15,7 @@
             --ink: #1a1a1a;
             --gold: #b8924e;
             --gold-glow: rgba(184, 146, 78, 0.6);
+            --solar-glow: rgba(255, 215, 0, 0.3);
             --riot-red: #9e0101;       
             --aether-blue: #0077be;    
             --glass: rgba(10, 10, 10, 0.9);
@@ -36,6 +37,7 @@
             border-bottom: 1px solid rgba(184, 146, 78, 0.2);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
+            box-shadow: 0 5px 20px var(--solar-glow); /* Subtle solar bloom */
         }
         .nav-logo { 
             color: var(--gold); 
@@ -43,16 +45,24 @@
             font-size: 1.4rem; 
             letter-spacing: 2px; 
             text-decoration: none;
-            /* Added Magic Glow Effect */
             text-shadow: 0 0 10px var(--gold-glow);
             transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        .nav-logo:hover {
-            text-shadow: 0 0 20px var(--gold);
-            transform: scale(1.05);
+        /* Mini version of your icon next to the name */
+        .nav-logo::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=cwUrwh7_HN-PevvMk1uivQ&oh=00_AflHxCq99fTsNYFJMZiX7JYWJLAcyhndvNorWnJq-8o13A&oe=6957FB3C');
+            background-size: cover;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
         }
 
-        /* ARCHITECT HUD (COMMAND CENTER) */
+        /* ARCHITECT HUD */
         #architectHUD {
             display: none; position: fixed; bottom: 30px; right: 30px;
             background: var(--glass); border: 1px solid var(--gold);
@@ -74,7 +84,7 @@
         header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(3rem, 10vw, 5.5rem); color: #111; line-height: 1; }
         header p { color: var(--gold); letter-spacing: 12px; font-weight: 600; text-transform: uppercase; margin-top: 15px; font-size: 0.9rem; }
 
-        /* INTERACTIVE TOPOGRAPHY */
+        /* MAP SECTION */
         .map-section { padding: 60px 10%; background: rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .map-layer {
             background: #fff; border: 1px solid rgba(0,0,0,0.1); padding: 25px; 
@@ -106,7 +116,6 @@
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-gold:hover { background: #96753d; box-shadow: 0 0 20px var(--gold-glow); }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-        .btn-danger { background: transparent; border: 1px solid var(--riot-red); color: var(--riot-red); margin-left: 10px; }
 
         /* AUTH MODAL */
         #authModal {
@@ -132,8 +141,8 @@
 
         @media (max-width: 768px) {
             .chronicle-container { padding: 60px 8%; }
-            .scroll-paper { padding: 60px 30px; }
             #architectHUD { width: 90%; right: 5%; left: 5%; }
+            .nav-logo::before { display: none; }
         }
     </style>
 </head>
@@ -179,8 +188,7 @@
     </section>
 
     <div class="chronicle-container">
-        <div id="dynamic-acts">
-            </div>
+        <div id="dynamic-acts"></div>
     </div>
 
     <section style="padding: 100px 10%; background: rgba(184, 146, 78, 0.05); text-align: center;">
@@ -238,7 +246,6 @@
     const db = getFirestore(app);
     const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-    // --- DATA STREAM ---
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "desc")), (snap) => {
         const container = document.getElementById('dynamic-acts');
         container.innerHTML = "";
@@ -246,43 +253,33 @@
             const act = s.data();
             const id = s.id;
             window[`act_${id}`] = act;
-            
             let controls = "";
             if(auth.currentUser && auth.currentUser.uid === ADMIN_UID) {
-                controls = `
-                    <div style="margin-top:20px; border-top:1px dashed #ddd; padding-top:20px;">
-                        <button class="btn btn-outline" onclick="editAct('${id}')">REWRITE</button>
-                        <button class="btn btn-danger" onclick="deleteAct('${id}')">ERASE</button>
-                    </div>`;
-            }
-
-            container.innerHTML += `
-                <div class="act-card">
-                    <h2>${act.title}</h2>
-                    <p>${act.preview}</p>
-                    <button class="btn btn-gold" onclick="openReader('${id}')">READ FULL CHRONICLE</button>
-                    ${controls}
+                controls = `<div style="margin-top:20px; border-top:1px dashed #ddd; padding-top:20px;">
+                    <button class="btn btn-outline" onclick="editAct('${id}')">REWRITE</button>
+                    <button class="btn btn-danger" onclick="deleteAct('${id}')" style="border:1px solid #9e0101; color:#9e0101; margin-left:10px; background:none;">ERASE</button>
                 </div>`;
+            }
+            container.innerHTML += `<div class="act-card">
+                <h2>${act.title}</h2>
+                <p>${act.preview}</p>
+                <button class="btn btn-gold" onclick="openReader('${id}')">READ FULL CHRONICLE</button>
+                ${controls}
+            </div>`;
         });
     });
 
-    // --- ARCHITECT COMMANDS ---
     document.getElementById('saveBtn').onclick = async () => {
         const title = document.getElementById('actTitle').value;
         const preview = document.getElementById('actPreview').value;
         const content = document.getElementById('actContent').value;
         const id = document.getElementById('editId').value;
-
-        if(!title || !content) return alert("Manifestation incomplete.");
-
+        if(!title || !content) return;
         try {
-            if(id) {
-                await updateDoc(doc(db, "acts", id), { title, preview, content });
-            } else {
-                await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
-            }
+            if(id) await updateDoc(doc(db, "acts", id), { title, preview, content });
+            else await addDoc(collection(db, "acts"), { title, preview, content, createdAt: serverTimestamp() });
             resetHUD();
-        } catch(e) { alert("Lattice Error: " + e.message); }
+        } catch(e) { alert(e.message); }
     };
 
     window.editAct = (id) => {
@@ -296,9 +293,7 @@
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     };
 
-    window.deleteAct = async (id) => {
-        if(confirm("Erase this timeline?")) await deleteDoc(doc(db, "acts", id));
-    };
+    window.deleteAct = async (id) => { if(confirm("Erase this timeline?")) await deleteDoc(doc(db, "acts", id)); };
 
     const resetHUD = () => {
         document.getElementById('editId').value = "";
@@ -310,27 +305,22 @@
     };
     document.getElementById('cancelBtn').onclick = resetHUD;
 
-    // --- AUTHENTICATION ---
     document.getElementById('authBtn').onclick = () => {
         if(auth.currentUser) signOut(auth).then(() => location.reload());
         else document.getElementById('authModal').style.display = "flex";
     };
     
     document.getElementById('doLogin').onclick = () => {
-        const e = document.getElementById('loginEmail').value;
-        const p = document.getElementById('loginPass').value;
-        signInWithEmailAndPassword(auth, e, p)
+        signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value)
             .then(() => document.getElementById('authModal').style.display = "none")
             .catch(() => alert("Access Denied."));
     };
 
     onAuthStateChanged(auth, (user) => {
-        const isAdmin = user && user.uid === ADMIN_UID;
-        document.getElementById('architectHUD').style.display = isAdmin ? "block" : "none";
+        document.getElementById('architectHUD').style.display = (user && user.uid === ADMIN_UID) ? "block" : "none";
         document.getElementById('authBtn').innerText = user ? "SIGNOUT" : "ARCHITECT LOGIN";
     });
 
-    // --- UTILITIES ---
     window.openReader = (id) => {
         const act = window[`act_${id}`];
         document.getElementById('readerTitle').innerText = act.title;
@@ -347,11 +337,9 @@
         const email = document.getElementById('subEmail').value;
         if(!email.includes('@')) return;
         await addDoc(collection(db, "subscribers"), { email, date: serverTimestamp() });
-        const m = document.getElementById('subMsg');
-        m.innerText = "Tether Established."; m.style.display="block"; m.style.color="var(--gold)";
+        document.getElementById('subMsg').style.display="block";
         document.getElementById('subEmail').value = "";
     };
-
     document.getElementById('closeAuth').onclick = () => document.getElementById('authModal').style.display = "none";
 </script>
 </body>
