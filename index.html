@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aetherfall | The Grand Grimoire</title>
     
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/gold-bars.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/sparkling-diamond.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -13,7 +14,7 @@
             --parchment: #fdfaf3;
             --ink: #1a1a1a;
             --gold: #b8924e;
-            --gold-glow: rgba(184, 146, 78, 0.4);
+            --gold-glow: rgba(184, 146, 78, 0.6);
             --riot-red: #9e0101;       
             --aether-blue: #0077be;    
             --glass: rgba(10, 10, 10, 0.9);
@@ -36,7 +37,20 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
         }
-        .nav-logo { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.4rem; letter-spacing: 2px; text-decoration: none; }
+        .nav-logo { 
+            color: var(--gold); 
+            font-family: 'Uncial Antiqua'; 
+            font-size: 1.4rem; 
+            letter-spacing: 2px; 
+            text-decoration: none;
+            /* Added Magic Glow Effect */
+            text-shadow: 0 0 10px var(--gold-glow);
+            transition: 0.3s;
+        }
+        .nav-logo:hover {
+            text-shadow: 0 0 20px var(--gold);
+            transform: scale(1.05);
+        }
 
         /* ARCHITECT HUD (COMMAND CENTER) */
         #architectHUD {
