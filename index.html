@@ -12,126 +12,125 @@
             --parchment: #fdfaf3;
             --ink: #1a1a1a;
             --gold: #b8924e;
-            --gold-glow: rgba(184, 146, 78, 0.6);
-            --glass: rgba(10, 10, 10, 0.98);
+            --glass: rgba(10, 10, 10, 0.95);
         }
 
-        /* RESET & BASE */
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: #050505; 
-            color: var(--ink); 
-            font-family: 'Inter', sans-serif; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: #050505; color: var(--ink); font-family: 'Inter', sans-serif; }
 
-        /* UNIFIED NAVIGATION */
+        /* NAVIGATION */
         nav {
-            position: fixed; top: 0; width: 100%; height: 75px;
+            position: fixed; top: 0; width: 100%; height: 70px;
             background: var(--glass); backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(184, 146, 78, 0.3);
+            border-bottom: 1px solid rgba(184, 146, 78, 0.2);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 5%; z-index: 1000;
         }
         
-        .nav-branding {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-        }
-
-        /* FIXED ICON - SEEABLE & CLEAR */
+        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        
+        /* FIXED SQUARE ICON */
         .brand-icon {
-            width: 80px; /* Wider to show the full image */
-            height: 45px;
+            width: 45px; height: 45px;
             background: url('https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/607994123_854763010492066_1121355677664127191_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6QpBxZlkriQQ7kNvwEbbrbK&_nc_oc=AdmiAIgsO82U6ZNqEfAyj5CAh0ZTm68PtL2ac7updSFy2nwTT8FGqc-iIFbnriKkj86Pru8_rGbkWFj8DRcWstVO&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=NOSzaFl6cNwIYGHeJVAYEA&oh=00_AfngpKzFyblJVfeaZ_b_b1pt-kP0up7l0jqYLXIdo7i76Q&oe=6958337C');
-            background-size: contain; /* Ensures the whole image fits without cropping */
-            background-repeat: no-repeat;
+            background-size: cover;
             background-position: center;
             border: 1px solid var(--gold);
-            box-shadow: 0 0 15px var(--gold-glow);
-            border-radius: 4px;
+            border-radius: 2px; /* Sharp square feel */
         }
 
-        .nav-title {
-            color: var(--gold);
-            font-family: 'Uncial Antiqua';
-            font-size: 1.2rem;
-            letter-spacing: 2px;
+        .nav-title { color: var(--gold); font-family: 'Uncial Antiqua'; font-size: 1.2rem; letter-spacing: 2px; }
+
+        .nav-right { display: flex; gap: 20px; align-items: center; }
+        .discord-link { color: #5865F2; text-decoration: none; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; }
+
+        /* SIDE PANEL (ARCHITECT HUD) */
+        #architectHUD {
+            display: none; position: fixed; right: 20px; top: 100px;
+            width: 300px; background: var(--glass); border: 1px solid var(--gold);
+            padding: 20px; z-index: 2000; border-radius: 4px;
         }
 
-        /* THE GRIMOIRE CONTAINER */
+        /* GRIMOIRE */
         .grimoire {
-            width: 100%;
-            max-width: 900px;
-            margin-top: 100px;
-            margin-bottom: 50px;
-            background: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            border-radius: 4px;
-            overflow: hidden;
+            width: 95%; max-width: 1000px; margin: 100px auto 50px;
+            background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png');
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8); min-height: 80vh;
         }
 
-        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2rem, 8vw, 4rem); color: #111; }
+        header { text-align: center; padding: 80px 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        header h1 { font-family: 'Uncial Antiqua'; font-size: clamp(2.5rem, 10vw, 5rem); color: #111; }
+        
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border-bottom: 1px solid #ddd; }
+        .char-card { padding: 40px; border: 0.5px solid #eee; background: #fff; }
+        .char-card h3 { font-family: 'Uncial Antiqua'; font-size: 1.6rem; margin-bottom: 15px; }
+        .char-card p { font-family: 'Crimson Text'; font-size: 1.2rem; line-height: 1.6; color: #333; }
+
+        .chronicle-container { padding: 50px 8%; }
+        .act-card { padding: 40px 0; border-bottom: 1px solid #eee; }
+        .act-card h2 { font-family: 'Uncial Antiqua'; font-size: 2rem; margin-bottom: 15px; }
+        .preview-text { font-family: 'Crimson Text'; font-size: 1.3rem; color: #444; font-style: italic; display: block; margin-bottom: 20px; }
 
         /* BUTTONS */
-        .btn { padding: 12px 24px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 2px; }
+        .btn { padding: 12px 25px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-gold { background: var(--gold); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 
-        /* READER OVERLAY */
-        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; overflow-y: auto; }
-        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 80px 25px; }
+        /* READER */
+        .reader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 4000; overflow-y: auto; }
+        .scroll-paper { width: 100%; min-height: 100%; background: var(--parchment); background-image: url('https://www.transparenttextures.com/patterns/old-paper-2.png'); padding: 80px 20px; }
+
+        .input-field { width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--gold); color: #fff; }
 
         @media (max-width: 600px) {
-            .brand-icon { width: 60px; height: 35px; }
-            .nav-title { font-size: 0.9rem; }
-            .grimoire { margin-top: 85px; border-radius: 0; }
+            #architectHUD { position: fixed; top: auto; bottom: 0; right: 0; width: 100%; border-radius: 0; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <a href="/" class="nav-branding click-sound">
+    <a href="#" class="nav-left click-sound">
         <div class="brand-icon"></div>
         <span class="nav-title">AETHERFALL</span>
     </a>
-    <button class="btn btn-outline click-sound" id="authBtn">LOGIN</button>
+    <div class="nav-right">
+        <a href="https://discord.gg/YOUR_LINK" class="discord-link click-sound" target="_blank">DISCORD</a>
+        <button class="btn btn-outline click-sound" id="authBtn">LOGIN</button>
+    </div>
 </nav>
 
 <div class="grimoire">
     <header>
-        <p style="color:var(--gold); letter-spacing:4px; text-transform:uppercase; font-size:0.7rem;">The Grand Grimoire</p>
+        <p style="color:var(--gold); letter-spacing:6px; font-weight:600;">THE GRAND GRIMOIRE</p>
         <h1>Aetherfall</h1>
     </header>
 
-    <div id="dynamic-acts" style="padding: 20px 5%;">
-        </div>
+    <div class="character-grid">
+        <div class="char-card"><h3>Zyra Kade</h3><p>Volatile mind wrapped in red punk leather and raw fury. Chaos given form.</p></div>
+        <div class="char-card"><h3>Aelira Virex</h3><p>Sustains the city's emotional flow through neon canals of arcane power.</p></div>
+        <div class="char-card"><h3>Sylva Morren</h3><p>Roams the underworld using blood-ink spells from a forgotten era.</p></div>
+    </div>
+
+    <div class="chronicle-container" id="dynamic-acts"></div>
+</div>
+
+<div id="architectHUD">
+    <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:15px;">LATTICE COMMAND</h4>
+    <input type="text" id="actTitle" placeholder="Act Title" class="input-field">
+    <textarea id="actPreview" placeholder="Preview..." class="input-field" style="height:60px;"></textarea>
+    <textarea id="actContent" placeholder="Main Content..." class="input-field" style="height:120px;"></textarea>
+    <button class="btn btn-gold click-sound" id="saveBtn" style="width:100%;">COMMIT TO LATTICE</button>
 </div>
 
 <div id="readerOverlay" class="reader-overlay">
     <div class="scroll-paper">
         <button onclick="closeReader()" class="click-sound" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:2.5rem; cursor:pointer;">&times;</button>
         <div style="max-width: 800px; margin: 0 auto;">
-            <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; font-size: 2.5rem; color:var(--gold); margin-bottom:25px;"></h2>
+            <h2 id="readerTitle" style="font-family:'Uncial Antiqua'; font-size: 2.5rem; color:var(--gold); margin-bottom:20px;"></h2>
             <div id="readerBody" style="font-family:'Crimson Text'; font-size:1.4rem; line-height:1.8; white-space:pre-wrap;"></div>
         </div>
     </div>
-</div>
-
-<div id="architectHUD" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:95%; max-width:500px; background:var(--glass); border:1px solid var(--gold); padding:20px; z-index:3000; border-radius:8px;">
-    <h4 style="font-family:'Uncial Antiqua'; color:var(--gold); margin-bottom:15px;">LATTICE CMD</h4>
-    <input type="text" id="actTitle" placeholder="Act Title" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff;">
-    <textarea id="actPreview" placeholder="Preview..." style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff; height:50px;"></textarea>
-    <textarea id="actContent" placeholder="Content..." style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid var(--gold); color:#fff; height:100px;"></textarea>
-    <button class="btn btn-gold click-sound" id="saveBtn" style="width:100%;">COMMIT</button>
 </div>
 
 <script type="module">
@@ -153,17 +152,15 @@
     const db = getFirestore(app);
     const ADMIN_UID = "RJUAtLpVpoacDbdYORcUiSIU20v2";
 
-    // CLICK SOUNDS
     const clickSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
     clickSfx.volume = 0.4;
-    document.addEventListener('click', (e) => {
+    document.addEventListener('mousedown', (e) => {
         if (e.target.closest('.click-sound, button, a')) {
             clickSfx.currentTime = 0;
             clickSfx.play().catch(() => {});
         }
     });
 
-    // SYNC DATA
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "asc")), (snap) => {
         const container = document.getElementById('dynamic-acts');
         container.innerHTML = "";
@@ -175,9 +172,9 @@
                 `<button class="btn click-sound" onclick="deleteAct('${id}')" style="color:red; font-size:0.6rem;">[ERASE]</button>` : "";
             
             container.innerHTML += `
-                <div style="padding:30px 0; border-bottom:1px solid rgba(0,0,0,0.1);">
-                    <h2 style="font-family:'Uncial Antiqua'; font-size:1.6rem; margin-bottom:10px;">${act.title}</h2>
-                    <p style="font-family:'Crimson Text'; font-size:1.2rem; font-style:italic; margin-bottom:15px;">${act.preview}</p>
+                <div class="act-card">
+                    <h2>${act.title}</h2>
+                    <span class="preview-text">${act.preview}</span>
                     <button class="btn btn-gold click-sound" onclick="openReader('${id}')">UNROLL SCROLL</button>
                     ${adminBtns}
                 </div>`;
