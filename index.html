@@ -181,6 +181,12 @@
         .btn-gold:hover { background: #c9a514; transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 
+        .pagination-controls {
+            display: flex; justify-content: center; align-items: center;
+            gap: 20px; margin-top: 20px; font-family: 'IM Fell English SC', serif;
+        }
+        .page-num { font-size: 1.1rem; color: var(--gold); }
+
         .admin-controls { margin-top: 10px; font-size: 0.8rem; display: flex; gap: 10px;}
         .btn-edit, .btn-erase { background: none; border: none; cursor: pointer; text-decoration: underline; font-weight: 700; }
         .btn-edit { color: var(--gold); } .btn-erase { color: #cc0000; }
@@ -280,6 +286,8 @@
 
     let allActs = [];
     let allChars = [];
+    let currentActPage = 0;
+    const ACTS_PER_PAGE = 3;
 
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "desc")), (snap) => {
         allActs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -301,7 +309,12 @@
             charCont.innerHTML += `<div class="char-card"><h3>${char.title}</h3><p>${char.preview}</p>${adminUI}</div>`;
         });
 
-        allActs.forEach(act => {
+        // Pagination Logic
+        const start = currentActPage * ACTS_PER_PAGE;
+        const end = start + ACTS_PER_PAGE;
+        const pageItems = allActs.slice(start, end);
+
+        pageItems.forEach(act => {
             window[`act_${act.id}`] = act;
             let adminUI = isAdmin ? `<div class="admin-controls" style="margin-left:15px;"><button class="btn-edit" onclick="editEntry('acts', '${act.id}')">[EDIT]</button><button class="btn-erase" onclick="deleteEntry('acts', '${act.id}')">[ERASE]</button></div>` : "";
             actCont.innerHTML += `
@@ -314,7 +327,18 @@
                     </div>
                 </div>`;
         });
+
+        if (allActs.length > ACTS_PER_PAGE) {
+            actCont.innerHTML += `
+                <div class="pagination-controls">
+                    <button class="btn btn-outline" onclick="changePage(-1)" ${currentActPage === 0 ? 'style="visibility:hidden"' : ''}>← Previous</button>
+                    <span class="page-num">Page ${currentActPage + 1}</span>
+                    <button class="btn btn-outline" onclick="changePage(1)" ${end >= allActs.length ? 'style="visibility:hidden"' : ''}>Next →</button>
+                </div>`;
+        }
     }
+
+    window.changePage = (dir) => { currentActPage += dir; renderAll(); };
 
     document.getElementById('saveBtn').onclick = async () => {
         const id = document.getElementById('editId').value;
