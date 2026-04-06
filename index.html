@@ -1,186 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aetherfall | The Grand Grimoire</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@0;1&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --page-bg: #fdfaf3;
-            --ink: #1c1917;
-            --gold: #b59410;
-            --gold-dim: rgba(181, 148, 16, 0.2);
-            --binding: #3f1d0b;
-            --void: #030303;
-            --discord: #5865F2;
-            --nav-height: 70px;
-            --book-max-width: 1200px;
-        }
-
-        * { margin:0; padding:0; box-sizing:border-box; outline: none; }
-        
-        body { 
-            background-color: var(--void);
-            color: var(--ink); 
-            font-family: 'IM Fell DW Pica', serif;
-            font-size: 18px;
-            line-height: 1.7;
-            overflow: hidden; /* Prevents the whole website from scrolling */
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        /* --- Fixed Height Book Container --- */
-        .grimoire-container {
-            flex: 1;
-            width: 95%;
-            max-width: var(--book-max-width);
-            margin: calc(var(--nav-height) + 20px) auto 30px;
-            background-color: var(--binding);
-            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.8);
-            display: flex;
-            min-height: 0; /* Critical for flex scrolling */
-        }
-
-        .book-pages {
-            flex: 1;
-            background-color: var(--page-bg);
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
-            border-radius: 4px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            position: relative;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-
-        /* Spine Shadow */
-        .book-pages::after {
-            content: "";
-            position: absolute; top: 0; left: 50%; width: 40px; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
-            transform: translateX(-50%);
-            pointer-events: none;
-        }
-
-        .page { 
-            padding: 40px; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            overflow: hidden; 
-        }
-        
-        .left-page { border-right: 1px solid rgba(0,0,0,0.1); }
-
-        /* --- Scrollable Areas inside the book --- */
-        #dynamic-chars, #dynamic-acts {
-            flex: 1;
-            overflow-y: auto; /* Allows scrolling inside the page if items are too many */
-            padding-right: 10px;
-        }
-
-        /* Custom Scrollbar for the "Vintage" feel */
-        #dynamic-acts::-webkit-scrollbar, #dynamic-chars::-webkit-scrollbar { width: 5px; }
-        #dynamic-acts::-webkit-scrollbar-thumb, #dynamic-chars::-webkit-scrollbar-thumb { background: var(--gold-dim); }
-
-        /* --- UI Elements --- */
-        .section-label { font-family: 'Cinzel Decorative', serif; color: var(--gold); border-bottom: 1px solid var(--gold); margin-bottom: 20px; }
-        
-        .act-card { 
-            margin-bottom: 20px; 
-            padding: 15px;
-            border: 1px solid transparent;
-            transition: 0.3s;
-        }
-        .act-card:hover { background: rgba(181, 148, 16, 0.05); border-color: var(--gold-dim); }
-
-        .pagination-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            font-family: 'IM Fell English SC', serif;
-        }
-
-        .btn-turn {
-            background: none; border: 1px solid var(--gold); color: var(--gold);
-            padding: 5px 15px; cursor: pointer; transition: 0.3s;
-        }
-        .btn-turn:hover { background: var(--gold); color: white; }
-        .btn-turn:disabled { opacity: 0.2; cursor: default; }
-
-        /* Standard Navbar from previous steps */
-        nav {
-            position: fixed; top: 0; width: 100%; height: var(--nav-height);
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--gold);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 1000;
-        }
-        .nav-title { color: var(--gold); font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; letter-spacing: 3px; text-decoration:none;}
-        .discord-link { color: var(--discord); text-decoration: none; font-weight: bold; font-family: sans-serif; font-size: 0.9rem;}
-
-        /* Admin HUD */
-        #architectHUD { 
-            display: none; position: fixed; right: 20px; top: 80px; 
-            width: 300px; background: #111; color: white; padding: 20px; border: 1px solid var(--gold); z-index: 2000;
-        }
-        .hud-input { width: 100%; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; padding: 5px; }
-
-    </style>
-</head>
-<body>
-
-<nav>
-    <a href="index.html" class="nav-title">AETHERFALL</a>
-    <div style="display:flex; gap:20px; align-items:center;">
-        <a href="https://discord.gg/yq2DdHhG" target="_blank" class="discord-link">DISCORD</a>
-        <button id="authBtn" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 10px; cursor:pointer;">OWNER</button>
-    </div>
-</nav>
-
-<div class="grimoire-container">
-    <div class="book-pages">
-        <div class="page left-page">
-            <h2 class="section-label">Dossiers</h2>
-            <div id="dynamic-chars"></div>
-        </div>
-
-        <div class="page right-page">
-            <h2 class="section-label">Chronicles</h2>
-            <div id="dynamic-acts"></div>
-            
-            <div class="pagination-footer">
-                <button class="btn-turn" id="prevPage" onclick="changePage(-1)">← Prev</button>
-                <span id="pageIndicator" style="color: var(--gold)">Page 1</span>
-                <button class="btn-turn" id="nextPage" onclick="changePage(1)">Next →</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="architectHUD">
-    <h3 style="color:var(--gold); margin-bottom:10px;">Lattice Command</h3>
-    <select id="postType" class="hud-input">
-        <option value="acts">New Act</option>
-        <option value="chars">New Character</option>
-    </select>
-    <input type="text" id="postTitle" placeholder="Title (e.g. Act IV)" class="hud-input">
-    <textarea id="postPreview" placeholder="Short Summary" class="hud-input"></textarea>
-    <textarea id="postContent" placeholder="Full Story Text" class="hud-input" style="height:100px;"></textarea>
-    <button onclick="saveToFirebase()" style="width:100%; background:var(--gold); border:none; padding:10px; cursor:pointer; color:white;">UPLOAD</button>
-</div>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -202,12 +19,12 @@
 
     let actsArray = [];
     let currentPage = 0;
-    const itemsPerPage = 3; // Keep exactly 3 acts per page
+    const itemsPerPage = 3; 
 
-    // 1. Fetch and Sync Data
+    // --- 1. DATA SYNC ---
     onSnapshot(query(collection(db, "acts"), orderBy("createdAt", "desc")), (snap) => {
         actsArray = snap.docs.map(d => ({id: d.id, ...d.data()}));
-        renderActs();
+        renderActs(); // Re-render whenever a new Act (like Act IV) is added
     });
 
     onSnapshot(query(collection(db, "chars"), orderBy("createdAt", "asc")), (snap) => {
@@ -215,11 +32,15 @@
         charCont.innerHTML = "";
         snap.forEach(d => {
             const c = d.data();
-            charCont.innerHTML += `<div class="act-card"><strong>${c.title}</strong><br><small>${c.preview}</small></div>`;
+            charCont.innerHTML += `
+                <div class="char-card" style="margin-bottom:15px; padding:10px; border-left: 2px solid var(--gold);">
+                    <strong style="font-family:'IM Fell English SC'">${c.title}</strong><br>
+                    <small>${c.preview}</small>
+                </div>`;
         });
     });
 
-    // 2. Pagination Logic
+    // --- 2. THE PAGE TURNER ---
     window.renderActs = () => {
         const container = document.getElementById('dynamic-acts');
         container.innerHTML = "";
@@ -228,20 +49,29 @@
         const end = start + itemsPerPage;
         const paginatedItems = actsArray.slice(start, end);
 
+        if (paginatedItems.length === 0) {
+            container.innerHTML = "<p style='opacity:0.5'>The ink has not yet reached this page...</p>";
+        }
+
         paginatedItems.forEach(act => {
-            container.innerHTML += `
-                <div class="act-card">
-                    <h3 style="font-family:'Cinzel Decorative'">${act.title}</h3>
-                    <p style="font-size: 0.9rem; font-style: italic; opacity: 0.8;">${act.preview}</p>
-                    <button style="background:none; border:none; color:var(--gold); cursor:pointer; text-decoration:underline; font-family:serif;" onclick="alert('${act.content.replace(/\n/g, "\\n")}')">READ MORE</button>
-                </div>
+            // Create the card
+            const card = document.createElement('div');
+            card.className = 'act-card';
+            card.innerHTML = `
+                <h3 style="font-family:'Cinzel Decorative'; margin-bottom:5px;">${act.title}</h3>
+                <p style="font-size: 0.9rem; font-style: italic; margin-bottom:10px;">${act.preview}</p>
+                <button class="btn-read" style="background:var(--gold); color:white; border:none; padding:5px 12px; cursor:pointer; font-family:serif;">READ FULL CHRONICLE</button>
             `;
+            
+            // Fix: Clicking this button opens the Actual Reader Overlay
+            card.querySelector('.btn-read').onclick = () => openReader(act);
+            container.appendChild(card);
         });
 
-        // Update UI
+        // Update Page Number and Buttons
         document.getElementById('pageIndicator').innerText = `Page ${currentPage + 1}`;
-        document.getElementById('prevPage').disabled = (currentPage === 0);
-        document.getElementById('nextPage').disabled = (end >= actsArray.length);
+        document.getElementById('prevPage').style.visibility = (currentPage === 0) ? "hidden" : "visible";
+        document.getElementById('nextPage').style.visibility = (end >= actsArray.length) ? "hidden" : "visible";
     };
 
     window.changePage = (dir) => {
@@ -249,28 +79,43 @@
         renderActs();
     };
 
-    // 3. Admin Upload Logic
-    window.saveToFirebase = async () => {
-        const type = document.getElementById('postType').value;
-        const data = {
-            title: document.getElementById('postTitle').value,
-            preview: document.getElementById('postPreview').value,
-            content: document.getElementById('postContent').value,
-            createdAt: serverTimestamp()
-        };
-        try {
-            await addDoc(collection(db, type), data);
-            alert("Entry Recorded in the Aether.");
-            document.getElementById('postTitle').value = "";
-            document.getElementById('postPreview').value = "";
-            document.getElementById('postContent').value = "";
-        } catch (e) { alert("Failed to upload."); }
+    // --- 3. THE FULL TEXT READER ---
+    // This connects to the 'readerOverlay' div in your HTML
+    window.openReader = (act) => {
+        const overlay = document.getElementById('readerOverlay');
+        document.getElementById('readerTitle').innerText = act.title;
+        document.getElementById('readerBody').innerText = act.content;
+        overlay.style.display = "block";
     };
 
-    // 4. Auth Logic
+    window.closeReader = () => {
+        document.getElementById('readerOverlay').style.display = "none";
+    };
+
+    // --- 4. ADMIN & AUTH ---
+    window.saveToFirebase = async () => {
+        const title = document.getElementById('postTitle').value;
+        const preview = document.getElementById('postPreview').value;
+        const content = document.getElementById('postContent').value;
+        const type = document.getElementById('postType').value;
+
+        if(!title || !content) return alert("The Aether requires a Title and Content.");
+
+        await addDoc(collection(db, type), {
+            title, preview, content,
+            createdAt: serverTimestamp()
+        });
+        
+        // Reset fields
+        document.getElementById('postTitle').value = "";
+        document.getElementById('postPreview').value = "";
+        document.getElementById('postContent').value = "";
+        alert("The Grimoire has been updated.");
+    };
+
     onAuthStateChanged(auth, (user) => {
-        const isAdmin = user && user.uid === ADMIN_UID;
-        document.getElementById('architectHUD').style.display = isAdmin ? 'block' : 'none';
+        const isOwner = user && user.uid === ADMIN_UID;
+        document.getElementById('architectHUD').style.display = isOwner ? 'block' : 'none';
         document.getElementById('authBtn').innerText = user ? "LOGOUT" : "OWNER";
     });
 
@@ -278,9 +123,7 @@
         if(auth.currentUser) signOut(auth);
         else {
             const e = prompt("Email:"), p = prompt("Password:");
-            if(e && p) signInWithEmailAndPassword(auth, e, p);
+            if(e && p) signInWithEmailAndPassword(auth, e, p).catch(() => alert("Access Denied."));
         }
     };
 </script>
-</body>
-</html>
